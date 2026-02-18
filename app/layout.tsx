@@ -1,0 +1,64 @@
+import type { Metadata } from "next";
+import { Geist, Geist_Mono, Playfair } from "next/font/google";
+import "./globals.css";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const playfair = Playfair({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: "Temp - File Sharing Made Easy",
+  description: "Secure ephemeral file sharing made easy.",
+  keywords: [
+    "temp",
+    "temporary",
+    "ephemeral",
+    "file sharing",
+    "secure",
+    "easy",
+  ],
+  authors: [{ name: "Fashakin Olashubomi" }],
+  creator: "Fashakin Olashubomi",
+  category: "technology",
+  publisher: "Fashakin Olashubomi",
+  openGraph: {
+    type: "website",
+    siteName: "Temp - File Sharing Made Easy",
+    url: "https://temp.545plea.xyz",
+    images: "", //FIXME: Add image
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Temp - File Sharing Made Easy",
+    description: "Secure ephemeral file sharing made easy.",
+    creator: "@545plea",
+    images: "", //FIXME: Add image
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} antialiased`}
+      >
+        {children}
+      </body>
+    </html>
+  );
+}
