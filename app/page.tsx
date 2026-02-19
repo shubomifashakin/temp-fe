@@ -3,8 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
-import { Feature } from "@/components/ui/features";
 import {
   LinkIcon,
   LockIcon,
@@ -13,6 +11,9 @@ import {
   FolderIcon,
   ChartBarIcon,
 } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Feature } from "@/components/ui/features";
 
 export default function Home() {
   const [activeNav, setActiveNav] = useState("home");
@@ -27,7 +28,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-background dark font-mono">
+    <main className="min-h-screen bg-background font-mono">
       <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <h2 className="text-2xl font-playfair font-bold text-foreground">
@@ -169,7 +170,7 @@ export default function Home() {
               <Link
                 href="#features"
                 onClick={() => scrollToSection("features")}
-                className="border-b hover:text-orange-500 hover:border-orange-500 border-dashed transition-colors duration-300"
+                className="border-b text-orange-500 border-orange-500 border-dashed transition-colors duration-300"
               >
                 supported file type
               </Link>
@@ -361,7 +362,7 @@ export default function Home() {
 
               <Button
                 asChild
-                className="w-full bg-secondary cursor-pointer hover:bg-secondary/80 text-foreground font-medium"
+                className="w-full bg-orange-500 cursor-pointer hover:bg-secondary/80 text-foreground font-medium"
               >
                 <Link href="/sign-in">Subscribe Now</Link>
               </Button>
@@ -404,13 +405,29 @@ export default function Home() {
             </span>
           </div>
 
+          <div className="flex items-center gap-4">
+            <Link
+              href="/terms-of-service"
+              className="text-xs text-muted-foreground hover:text-orange-500 hover:border-orange-500 border-b border-transparent duration-150 border-dashed transition-colors"
+            >
+              Terms of Service
+            </Link>
+
+            <Link
+              href="/privacy-policy"
+              className="text-xs text-muted-foreground hover:text-orange-500 hover:border-orange-500 border-b border-transparent duration-150 border-dashed transition-colors"
+            >
+              Privacy Policy
+            </Link>
+          </div>
+
           <div className="flex items-center gap-6">
             <p className="text-xs text-muted-foreground">
               Built with ❤️ by{" "}
               <a
                 target="_blank"
                 href="https://545plea.xyz"
-                className="no-underline! border-dashed border-b hover:text-orange-500 hover:border-orange-500 transition-colors duration-150"
+                className="no-underline! border-dashed border-b text-orange-500 border-orange-500 transition-colors duration-150"
               >
                 Fashakin Olashubomi
               </a>
