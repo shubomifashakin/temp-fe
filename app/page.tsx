@@ -362,7 +362,7 @@ export default function Home() {
 
               <Button
                 asChild
-                className="w-full bg-orange-500 cursor-pointer hover:bg-secondary/80 text-foreground font-medium"
+                className="w-full bg-orange-500 hover:bg-orange-500/80 cursor-pointer text-foreground font-medium"
               >
                 <Link href="/sign-in">Subscribe Now</Link>
               </Button>

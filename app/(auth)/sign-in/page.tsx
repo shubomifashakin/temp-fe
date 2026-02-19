@@ -26,7 +26,7 @@ export default function SignInPage() {
 
           <Button
             onClick={handleGoogleSignIn}
-            className="w-full h-12 cursor-pointer bg-secondary hover:bg-secondary/80 text-foreground font-medium rounded-lg transition-all flex items-center justify-center gap-3"
+            className="w-full h-12 cursor-pointer bg-orange-500 hover:bg-orange-500/80 text-foreground font-medium rounded-lg transition-all flex items-center justify-center gap-3"
           >
             <svg
               width="20"
