@@ -36,14 +36,12 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Temp - File Sharing Made Easy",
     url: "https://temp.545plea.xyz",
-    images: "", //FIXME: Add image
   },
   twitter: {
     card: "summary_large_image",
     title: "Temp - File Sharing Made Easy",
     description: "Secure ephemeral file sharing made easy.",
     creator: "@545plea",
-    images: "", //FIXME: Add image
   },
 };
 
