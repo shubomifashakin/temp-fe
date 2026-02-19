@@ -8,7 +8,19 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { refetchOnWindowFocus: false, refetchOnReconnect: false },
+    queries: {
+      retry: (failureCount, error) => {
+        if ([401, 404, 400].includes(error.cause as number)) {
+          return false;
+        }
+
+        return failureCount < 3;
+      },
+      retryDelay: 3000,
+      staleTime: 5 * 60 * 1000,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+    },
   },
 });
 
