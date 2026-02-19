@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Settings, FileText } from "lucide-react";
+import { Settings, FileText, CreditCard } from "lucide-react";
 
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 
 const navItems = [
   { title: "Files", url: "/dashboard", icon: FileText },
+  { title: "Billing", url: "/dashboard/billing", icon: CreditCard },
   { title: "Settings", url: "/dashboard/settings", icon: Settings },
 ];
 

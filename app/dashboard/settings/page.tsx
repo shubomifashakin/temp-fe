@@ -125,21 +125,15 @@ function AccountInfo({
 
         <div className="space-y-6">
           <div>
-            <label className="block text-sm font-light text-heading mb-3">
-              Profile Picture
-            </label>
-
-            <div className="flex items-center gap-4">
-              <div className="relative size-16 rounded-full overflow-hidden">
-                <Image
-                  fill
-                  alt={"Profile Picture"}
-                  src={
-                    data?.picture ||
-                    "https://avatars.githubusercontent.com/u/12345?v=4"
-                  }
-                />
-              </div>
+            <div className="relative size-16 rounded-full overflow-hidden">
+              <Image
+                fill
+                alt={"Avatar"}
+                src={
+                  data?.picture ||
+                  "https://avatars.githubusercontent.com/u/12345?v=4"
+                }
+              />
             </div>
           </div>
 
@@ -292,18 +286,18 @@ function ErrorState({ onRetry }: { onRetry: () => void }) {
   return (
     <Card className="p-6 bg-card border border-border border-dashed shadow-none font-mono">
       <div className="text-center space-y-1">
-        <AlertTriangle className="size-10 text-destructive mx-auto" />
+        <AlertTriangle className="size-10 mx-auto" />
 
-        <h3 className="text-3xl tracking-tighter font-playfair font-medium text-heading">
-          Failed to load account information
+        <h3 className="text-xl md:text-3xl tracking-tighter font-playfair font-medium text-heading">
+          Oops! Something went wrong...
         </h3>
 
         <p className="text-leading text-sm tracking-tight">
           We couldn&apos;t load your account details. Please try again.
         </p>
 
-        <Button variant="outline" onClick={onRetry} className="mt-4">
-          Retry
+        <Button variant="secondary" onClick={onRetry} className="mt-4">
+          Try Again
         </Button>
       </div>
     </Card>
