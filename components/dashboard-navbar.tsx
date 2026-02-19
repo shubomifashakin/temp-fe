@@ -101,9 +101,9 @@ export function DashboardNavbar({
 
             <DropdownMenuContent
               align="end"
-              className="w-56 bg-muted border-border font-mono border-dashed px-0"
+              className="w-60 bg-card border-border font-mono border-dashed px-0 py-2"
             >
-              <DropdownMenuLabel className="font-normal font-mono">
+              <DropdownMenuLabel className="font-normal font-mono px-4">
                 <div className="flex flex-col gap-1">
                   <p className="text-sm font-medium text-foreground tracking-tight">
                     {user?.name}
@@ -118,7 +118,7 @@ export function DashboardNavbar({
               <div className="border-t border-border my-2 border-dashed" />
 
               <DropdownMenuItem
-                className="cursor-pointer gap-2 text-sm font-light tracking-tight hover:text-orange-500! duration-150 transition-colors"
+                className="cursor-pointer gap-2 px-4 text-sm hover:bg-transparent! font-light tracking-tight hover:text-orange-500! duration-150 transition-colors"
                 asChild
               >
                 <Link href="/dashboard/settings">
@@ -132,7 +132,7 @@ export function DashboardNavbar({
               <DropdownMenuItem
                 onClick={handleLogout}
                 disabled={isPending}
-                className="cursor-pointer gap-2 text-sm font-light tracking-tight hover:text-orange-500! duration-150 transition-colors"
+                className="cursor-pointer gap-2 px-4 text-sm! hover:bg-transparent! font-light tracking-tight hover:text-orange-500! duration-150 transition-colors"
               >
                 <LogOut className="h-4 w-4 hover:text-orange-500! duration-150 transition-colors" />
                 Log out

@@ -17,7 +17,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="h-screen flex flex-col bg-background">
+    <div className="flex grow flex-col bg-background">
       <DashboardNavbar
         sidebarOpen={sidebarOpen}
         onMenuToggle={() => setSidebarOpen(true)}

@@ -1,5 +1,19 @@
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL!;
 
+export type UserInfo = {
+  name: string;
+  email: string;
+  created_at: string;
+  picture: string | null;
+  updated_at: string;
+  subscription: {
+    plan: string;
+    current_period_end: string;
+    current_period_start: string;
+    cancel_at_period_end: boolean;
+  };
+};
+
 async function handleRequestError(response: Response) {
   if ([404, 400, 413].includes(response.status)) {
     const message = (await response.json()) as { message: string };
@@ -11,6 +25,10 @@ async function handleRequestError(response: Response) {
     return new Error("Unauthorized", { cause: 401 });
   }
 
+  if (response.status === 403) {
+    return new Error("Forbidden", { cause: 403 });
+  }
+
   if (response.status === 429) {
     return new Error("Too many Requests", { cause: 429 });
   }
@@ -20,6 +38,18 @@ async function handleRequestError(response: Response) {
 
 export async function getUserInfo() {
   const response = await fetchWithAuth(`${backendUrl}/users/me`);
+
+  if (!response.ok) {
+    throw await handleRequestError(response);
+  }
+
+  return response.json() as Promise<UserInfo>;
+}
+
+export async function deleteAccount() {
+  const response = await fetchWithAuth(`${backendUrl}/users/me`, {
+    method: "DELETE",
+  });
 
   if (!response.ok) {
     throw await handleRequestError(response);
@@ -40,9 +70,13 @@ export async function getUserInfo() {
   }>;
 }
 
-export async function deleteAccount() {
+export async function updateAccountInfo({ name }: { name: string }) {
   const response = await fetchWithAuth(`${backendUrl}/users/me`, {
-    method: "DELETE",
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name }),
   });
 
   if (!response.ok) {
