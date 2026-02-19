@@ -19,8 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Hamburger from "@/components/ui/hamburger";
 
-import { MESSAGES } from "@/lib/constants";
-import { getUserInfo, logout } from "@/data-service";
+import { getUserInfo, logout } from "@/data-service/mutations";
 
 interface DashboardNavbarProps {
   onMenuToggle: () => void;
@@ -42,13 +41,10 @@ export function DashboardNavbar({
     },
 
     onError: (error) => {
+      toast.error(error.message);
       if (error.cause === 401) {
-        toast.error("Unauthorized");
-
-        router.replace("/auth/sign-in");
+        return router.replace("/auth/sign-in");
       }
-
-      toast.error(MESSAGES.INTERNAL_SERVER_ERROR);
     },
   });
 
@@ -62,6 +58,7 @@ export function DashboardNavbar({
     data: user,
   } = useQuery({
     queryKey: ["user"],
+    staleTime: Infinity,
     queryFn: getUserInfo,
     refetchOnReconnect: true,
     refetchOnWindowFocus: true,

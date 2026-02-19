@@ -1,12 +1,52 @@
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL!;
 
+async function handleRequestError(response: Response) {
+  if ([404, 400, 413].includes(response.status)) {
+    const message = (await response.json()) as { message: string };
+
+    return new Error(message.message, { cause: response.status });
+  }
+
+  if (response.status === 401) {
+    return new Error("Unauthorized", { cause: 401 });
+  }
+
+  if (response.status === 429) {
+    return new Error("Too many Requests", { cause: 429 });
+  }
+
+  return new Error("Internal Server Error", { cause: 500 });
+}
+
 export async function getUserInfo() {
   const response = await fetchWithAuth(`${backendUrl}/users/me`);
 
   if (!response.ok) {
-    throw new Error("Failed to fetch user info", {
-      cause: response.status,
-    });
+    throw await handleRequestError(response);
+  }
+
+  return response.json() as Promise<{
+    name: string;
+    email: string;
+    created_at: string;
+    picture: string | null;
+    updated_at: string;
+    subscription: {
+      plan: string;
+      current_period_end: string;
+      current_period_start: string;
+      cancel_at_period_end: boolean;
+    };
+  }>;
+}
+
+export async function deleteAccount() {
+  const response = await fetchWithAuth(`${backendUrl}/users/me`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw await handleRequestError(response);
   }
 
   return response.json() as Promise<{
@@ -30,9 +70,7 @@ export async function logout() {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to logout", {
-      cause: response.status,
-    });
+    throw await handleRequestError(response);
   }
 
   return response.json();
