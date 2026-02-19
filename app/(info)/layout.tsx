@@ -46,7 +46,7 @@ export default function InfoLayout({ children }: { children: ReactNode }) {
               asChild
               className="w-fit font-medium! cursor-pointer text-sm no-underline! border-b rounded-none p-0! h-fit border-dashed border-transparent hover:border-orange-500 hover:text-orange-500 transition-colors"
             >
-              <Link href="/sign-in">Sign In</Link>
+              <Link href="/auth/sign-in">Sign In</Link>
             </Button>
           </div>
 
@@ -87,7 +87,7 @@ export default function InfoLayout({ children }: { children: ReactNode }) {
               onClick={() => setMobileMenuOpen(false)}
               className="w-full text-left! justify-start font-medium! cursor-pointer text-sm no-underline! rounded-none p-0! hover:text-orange-500 transition-colors"
             >
-              <Link href="/sign-in">Sign In</Link>
+              <Link href="/auth/sign-in">Sign In</Link>
             </Button>
           </div>
         </div>

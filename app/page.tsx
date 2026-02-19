@@ -77,7 +77,7 @@ export default function Home() {
               asChild
               className="w-fit font-medium! cursor-pointer text-sm no-underline! border-b rounded-none p-0! h-fit border-dashed border-transparent hover:border-orange-500 hover:text-orange-500 transition-colors"
             >
-              <Link href="/sign-in">Sign In</Link>
+              <Link href="/auth/sign-in">Sign In</Link>
             </Button>
           </div>
 
@@ -130,7 +130,7 @@ export default function Home() {
               onClick={() => setMobileMenuOpen(false)}
               className="w-full text-left! justify-start font-medium! cursor-pointer text-sm no-underline! rounded-none p-0! hover:text-orange-500 transition-colors"
             >
-              <Link href="/sign-in">Sign In</Link>
+              <Link href="/auth/sign-in">Sign In</Link>
             </Button>
           </div>
         </div>
@@ -169,7 +169,7 @@ export default function Home() {
               asChild
               className="w-fit font-mono font-semibold! bg-foreground text-background h-12 cursor-pointer text-base rounded-full transition-colors"
             >
-              <Link href="/sign-in">Get Started for Free</Link>
+              <Link href="/auth/sign-in">Get Started for Free</Link>
             </Button>
 
             <p className="text-xs text-muted-foreground font-mono">
@@ -292,7 +292,7 @@ export default function Home() {
                 asChild
                 className="w-full cursor-pointer hover:bg-secondary/80 text-foreground font-medium"
               >
-                <Link href="/sign-in">Get Started</Link>
+                <Link href="/auth/sign-in">Get Started</Link>
               </Button>
             </div>
 
@@ -349,7 +349,7 @@ export default function Home() {
                 asChild
                 className="w-full bg-orange-500 hover:bg-orange-500/80 cursor-pointer text-white font-medium"
               >
-                <Link href="/sign-in">Subscribe Now</Link>
+                <Link href="/auth/sign-in">Subscribe Now</Link>
               </Button>
             </div>
           </div>
@@ -371,7 +371,7 @@ export default function Home() {
             asChild
             className="w-fit font-mono bg-foreground text-background h-12 cursor-pointer text-base rounded-full transition-colors"
           >
-            <Link href="/sign-in" className="font-semibold!">
+            <Link href="/auth/sign-in" className="font-semibold!">
               Get Started for Free
             </Link>
           </Button>
