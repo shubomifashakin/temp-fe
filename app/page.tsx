@@ -14,6 +14,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Feature } from "@/components/ui/features";
+import Hamburger from "@/components/ui/hamburger";
 
 export default function Home() {
   const [activeNav, setActiveNav] = useState("home");
@@ -80,27 +81,10 @@ export default function Home() {
             </Button>
           </div>
 
-          <button
-            aria-label="Toggle menu"
-            className="md:hidden cursor-pointer group  flex flex-col gap-1.5 p-2"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            <div
-              className={`w-6 h-0.5 bg-foreground group-hover:bg-orange-500 transition-all ${
-                mobileMenuOpen ? "rotate-45 translate-y-2" : ""
-              }`}
-            ></div>
-            <div
-              className={`w-6 h-0.5 bg-foreground group-hover:bg-orange-500 transition-all ${
-                mobileMenuOpen ? "opacity-0" : ""
-              }`}
-            ></div>
-            <div
-              className={`w-6 h-0.5 bg-foreground group-hover:bg-orange-500 transition-all ${
-                mobileMenuOpen ? "-rotate-45 -translate-y-2" : ""
-              }`}
-            ></div>
-          </button>
+          <Hamburger
+            opened={mobileMenuOpen}
+            onMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)}
+          />
         </div>
 
         <div
@@ -304,8 +288,9 @@ export default function Home() {
               </ul>
 
               <Button
+                variant={"secondary"}
                 asChild
-                className="w-full bg-secondary cursor-pointer hover:bg-secondary/80 text-foreground font-medium"
+                className="w-full cursor-pointer hover:bg-secondary/80 text-foreground font-medium"
               >
                 <Link href="/sign-in">Get Started</Link>
               </Button>

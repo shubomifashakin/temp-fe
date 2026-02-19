@@ -29,10 +29,8 @@ export function DashboardNavbar({
 
   return (
     <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
-      <div className="mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="mx-auto px-6 py-4 flex items-center justify-between max-w-6xl w-full">
         <div className="flex items-center gap-3">
-          <Hamburger onMenuToggle={onMenuToggle} opened={sidebarOpen} />
-
           <h2 className="text-2xl font-playfair font-bold text-foreground">
             Temp
           </h2>
@@ -91,6 +89,8 @@ export function DashboardNavbar({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <Hamburger onMenuToggle={onMenuToggle} opened={sidebarOpen} />
         </div>
       </div>
     </nav>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ReactNode, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import Hamburger from "@/components/ui/hamburger";
 
 export default function InfoLayout({ children }: { children: ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -49,27 +50,10 @@ export default function InfoLayout({ children }: { children: ReactNode }) {
             </Button>
           </div>
 
-          <button
-            aria-label="Toggle menu"
-            className="md:hidden cursor-pointer group  flex flex-col gap-1.5 p-2"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            <div
-              className={`w-6 h-0.5 bg-foreground group-hover:bg-orange-500 transition-all ${
-                mobileMenuOpen ? "rotate-45 translate-y-2" : ""
-              }`}
-            ></div>
-            <div
-              className={`w-6 h-0.5 bg-foreground group-hover:bg-orange-500 transition-all ${
-                mobileMenuOpen ? "opacity-0" : ""
-              }`}
-            ></div>
-            <div
-              className={`w-6 h-0.5 bg-foreground group-hover:bg-orange-500 transition-all ${
-                mobileMenuOpen ? "-rotate-45 -translate-y-2" : ""
-              }`}
-            ></div>
-          </button>
+          <Hamburger
+            opened={mobileMenuOpen}
+            onMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)}
+          />
         </div>
 
         <div
