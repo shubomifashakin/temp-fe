@@ -1,6 +1,13 @@
+"use client";
+
+import { useEffect } from "react";
+
 import Link from "next/link";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 import { LogOut, Settings } from "lucide-react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -10,7 +17,10 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Hamburger from "./ui/hamburger";
+import Hamburger from "@/components/ui/hamburger";
+
+import { MESSAGES } from "@/lib/constants";
+import { getUserInfo, logout } from "@/data-service";
 
 interface DashboardNavbarProps {
   onMenuToggle: () => void;
@@ -21,10 +31,50 @@ export function DashboardNavbar({
   onMenuToggle,
   sidebarOpen,
 }: DashboardNavbarProps) {
-  //FIXME: FETCH USER DATA
+  const router = useRouter();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: logout,
+    mutationKey: ["logout"],
+
+    onSuccess: () => {
+      router.replace("/auth/sign-in");
+    },
+
+    onError: (error) => {
+      if (error.cause === 401) {
+        toast.error("Unauthorized");
+
+        router.replace("/auth/sign-in");
+      }
+
+      toast.error(MESSAGES.INTERNAL_SERVER_ERROR);
+    },
+  });
+
   function handleLogout() {
-    console.log("Logged out");
+    mutate();
   }
+
+  const {
+    status,
+    error,
+    data: user,
+  } = useQuery({
+    queryKey: ["user"],
+    queryFn: getUserInfo,
+    refetchOnReconnect: true,
+    refetchOnWindowFocus: true,
+  });
+
+  useEffect(
+    function () {
+      if (error && error.cause === 401) {
+        router.replace("/auth/sign-in");
+      }
+    },
+    [error, router],
+  );
 
   return (
     <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
@@ -37,13 +87,16 @@ export function DashboardNavbar({
 
         <div className="flex items-center gap-4">
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger asChild disabled={status !== "success"}>
               <button className="rounded-full outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring">
                 <Avatar className="h-8 w-8 cursor-pointer">
-                  <AvatarImage src="" alt="User avatar" />{" "}
-                  {/* FIXME: REPLACE WITH USER IMAGE and users name for alt */}
+                  <AvatarImage
+                    src={user?.picture || ""}
+                    alt={user?.name || "User avatar"}
+                  />
+
                   <AvatarFallback className="bg-primary text-primary-foreground text-sm">
-                    {/* FIXME: REPLACE WITH USER INITIALS */}
+                    {user?.name?.charAt(0).toUpperCase() || "U"}
                   </AvatarFallback>
                 </Avatar>
               </button>
@@ -56,11 +109,11 @@ export function DashboardNavbar({
               <DropdownMenuLabel className="font-normal font-mono">
                 <div className="flex flex-col gap-1">
                   <p className="text-sm font-medium text-foreground tracking-tight">
-                    John Doe
+                    {user?.name}
                   </p>
 
                   <p className="text-xs text-muted-foreground font-light">
-                    john@example.com
+                    {user?.email}
                   </p>
                 </div>
               </DropdownMenuLabel>
@@ -81,6 +134,7 @@ export function DashboardNavbar({
 
               <DropdownMenuItem
                 onClick={handleLogout}
+                disabled={isPending}
                 className="cursor-pointer gap-2 text-sm font-light tracking-tight hover:text-orange-500! duration-150 transition-colors"
               >
                 <LogOut className="h-4 w-4 hover:text-orange-500! duration-150 transition-colors" />
