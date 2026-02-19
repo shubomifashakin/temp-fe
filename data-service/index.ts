@@ -1,9 +1,7 @@
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL!;
 
 export async function getUserInfo() {
-  const response = await fetch(`${backendUrl}/users/me`, {
-    credentials: "include",
-  });
+  const response = await fetchWithAuth(`${backendUrl}/users/me`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch user info", {
@@ -27,9 +25,8 @@ export async function getUserInfo() {
 }
 
 export async function logout() {
-  const response = await fetch(`${backendUrl}/auth/logout`, {
+  const response = await fetchWithAuth(`${backendUrl}/auth/logout`, {
     method: "POST",
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -39,4 +36,28 @@ export async function logout() {
   }
 
   return response.json();
+}
+
+export async function fetchWithAuth(
+  url: string,
+  options: RequestInit = {},
+  retries = 0,
+): Promise<Response> {
+  const response = await fetch(url, {
+    ...options,
+    credentials: "include",
+  });
+
+  if ((response.status === 403 || response.status === 401) && retries < 1) {
+    const refreshRes = await fetch(`${backendUrl}/auth/refresh`, {
+      method: "POST",
+      credentials: "include",
+    });
+
+    if (refreshRes.ok) {
+      return fetchWithAuth(url, options, retries + 1);
+    }
+  }
+
+  return response;
 }
