@@ -44,7 +44,7 @@ export function DashboardSidebar({
 }: DashboardSidebarProps) {
   return (
     <>
-      <aside className="w-40 hidden md:flex font-mono border-r border-border/50 flex-col py-4 px-3">
+      <aside className="w-40 hidden md:flex font-mono border-r border-border/50 flex-col py-8 px-3">
         <SidebarNav />
       </aside>
 

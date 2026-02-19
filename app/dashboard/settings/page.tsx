@@ -74,7 +74,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <main className="w-full">
+    <div className="space-y-6 font-mono w-full">
       {status === "pending" && <LoadingState />}
 
       {status === "success" && (
@@ -82,15 +82,20 @@ export default function SettingsPage() {
           data={data}
           isDeleting={isDeleting}
           isUpdating={isUpdating}
-          showDeleteConfirm={showDeleteConfirm}
-          handleDeleteAccount={handleDeleteAccount}
-          setShowDeleteConfirm={setShowDeleteConfirm}
           handleUpdateAccountInfo={handleUpdateAccountInfo}
         />
       )}
 
+      <DeleteAccount
+        isDeleting={isDeleting}
+        isUpdating={isUpdating}
+        showDeleteConfirm={showDeleteConfirm}
+        handleDeleteAccount={handleDeleteAccount}
+        setShowDeleteConfirm={setShowDeleteConfirm}
+      />
+
       {status === "error" && <ErrorState onRetry={() => refetch()} />}
-    </main>
+    </div>
   );
 }
 
@@ -98,17 +103,11 @@ function AccountInfo({
   data,
   isUpdating,
   isDeleting,
-  showDeleteConfirm,
-  handleDeleteAccount,
-  setShowDeleteConfirm,
   handleUpdateAccountInfo,
 }: {
   data: UserInfo;
   isUpdating: boolean;
   isDeleting: boolean;
-  showDeleteConfirm: boolean;
-  handleDeleteAccount: () => void;
-  setShowDeleteConfirm: (value: boolean) => void;
   handleUpdateAccountInfo: ({ name }: { name: string }) => void;
 }) {
   const [name, setName] = useState(data.name);
@@ -118,141 +117,161 @@ function AccountInfo({
   }
 
   return (
-    <div className="space-y-6 font-mono">
-      <Card className="p-6 bg-card border-dashed border border-border shadow-none gap-y-6">
+    <Card className="p-6 bg-card border-dashed border border-border shadow-none gap-y-6">
+      <div className="space-y-0.5">
         <h2 className="text-3xl font-bold text-heading font-playfair tracking-tighter">
           Account Information
         </h2>
 
-        <div className="space-y-6">
-          <div>
-            <div className="relative size-16 rounded-full overflow-hidden">
-              <Image
-                fill
-                alt={"Avatar"}
-                src={data?.picture || generateProfileImage(data.name)}
-              />
-            </div>
-          </div>
+        <p className="text-sm text-leading tracking-tight font-light">
+          Manage your account information.
+        </p>
+      </div>
 
-          <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-light text-heading mb-2"
-            >
-              Name
-            </label>
-
-            <input
-              id="name"
-              type="text"
-              value={name}
-              minLength={3}
-              maxLength={30}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 border border-border text-sm rounded-lg bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+      <div className="space-y-6">
+        <div>
+          <div className="relative size-16 rounded-full overflow-hidden">
+            <Image
+              fill
+              alt={"Avatar"}
+              src={data?.picture || generateProfileImage(data.name)}
             />
           </div>
-
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-light text-heading mb-2"
-            >
-              Email
-            </label>
-
-            <input
-              id="email"
-              type="email"
-              disabled
-              value={data?.email}
-              className="w-full px-3 py-2 border text-sm border-border rounded-lg bg-muted text-muted-foreground cursor-not-allowed"
-            />
-
-            <p className="text-xs text-leading mt-1.5 font-light">
-              Email cannot be changed
-            </p>
-          </div>
-
-          {name !== data.name && (
-            <div className="flex gap-2 justify-end pt-4">
-              <Button
-                variant="secondary"
-                onClick={handleCancelUpdate}
-                className="cursor-pointer hover:bg-secondary/80 text-foreground font-medium"
-              >
-                Cancel
-              </Button>
-
-              <Button
-                disabled={isUpdating || isDeleting}
-                onClick={() => handleUpdateAccountInfo({ name })}
-                className="bg-primary text-primary-foreground cursor-pointer hover:bg-primary/90 tracking-tight font-medium"
-              >
-                {isUpdating ? "Saving..." : "Save Changes"}
-              </Button>
-            </div>
-          )}
         </div>
-      </Card>
 
-      <Card className="p-6 bg-destructive/5 border border-destructive/20 gap-y-4 shadow-none">
-        <div className="space-y-2">
-          <h2 className="text-2xl font-bold font-playfair text-heading tracking-tighter">
-            Danger Zone
-          </h2>
+        <div>
+          <label
+            htmlFor="name"
+            className="block text-sm font-light text-heading mb-2"
+          >
+            Name
+          </label>
 
-          <p className="text-sm text-leading font-light">
-            Permanently delete your account and all associated data. This action
-            cannot be undone.
+          <input
+            id="name"
+            type="text"
+            value={name}
+            minLength={3}
+            maxLength={30}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full px-3 py-2 border border-border text-sm rounded-lg bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="email"
+            className="block text-sm font-light text-heading mb-2"
+          >
+            Email
+          </label>
+
+          <input
+            id="email"
+            type="email"
+            disabled
+            value={data?.email}
+            className="w-full px-3 py-2 border text-sm border-border rounded-lg bg-muted text-muted-foreground cursor-not-allowed"
+          />
+
+          <p className="text-xs text-leading mt-1.5 font-light">
+            Email cannot be changed
           </p>
         </div>
 
-        {!showDeleteConfirm && (
-          <Button
-            variant="destructive"
-            className="cursor-pointer"
-            onClick={() => setShowDeleteConfirm(true)}
-          >
-            Delete Account
-          </Button>
-        )}
+        {name !== data.name && (
+          <div className="flex gap-2 justify-end pt-4">
+            <Button
+              variant="secondary"
+              onClick={handleCancelUpdate}
+              className="cursor-pointer hover:bg-secondary/80 text-foreground font-medium"
+            >
+              Cancel
+            </Button>
 
-        {showDeleteConfirm && (
-          <div className="space-y-4 p-4 bg-background border border-destructive/20 rounded-lg">
-            <p className="text-sm font-light text-heading">
-              Are you sure you want to delete your account?
-            </p>
-
-            <p className="text-xs text-leading font-light tracking-tight">
-              This will permanently delete your account and all your data. This
-              action cannot be undone.
-            </p>
-
-            <div className="flex gap-2">
-              <Button
-                variant={"secondary"}
-                disabled={isDeleting}
-                onClick={() => setShowDeleteConfirm(false)}
-                className="cursor-pointer hover:bg-secondary/80 text-foreground font-medium"
-              >
-                Cancel
-              </Button>
-
-              <Button
-                variant="destructive"
-                className="cursor-pointer font-medium"
-                onClick={handleDeleteAccount}
-                disabled={isDeleting || isUpdating}
-              >
-                {isDeleting ? "Deleting..." : "Delete"}
-              </Button>
-            </div>
+            <Button
+              disabled={isUpdating || isDeleting}
+              onClick={() => handleUpdateAccountInfo({ name })}
+              className="bg-primary text-primary-foreground cursor-pointer hover:bg-primary/90 tracking-tight font-medium"
+            >
+              {isUpdating ? "Saving..." : "Save Changes"}
+            </Button>
           </div>
         )}
-      </Card>
-    </div>
+      </div>
+    </Card>
+  );
+}
+
+function DeleteAccount({
+  isDeleting,
+  isUpdating,
+  showDeleteConfirm,
+  handleDeleteAccount,
+  setShowDeleteConfirm,
+}: {
+  isDeleting: boolean;
+  isUpdating: boolean;
+  showDeleteConfirm: boolean;
+  handleDeleteAccount: () => void;
+  setShowDeleteConfirm: (show: boolean) => void;
+}) {
+  return (
+    <Card className="p-6 bg-destructive/5 border border-destructive/20 gap-y-4 shadow-none">
+      <div className="space-y-2">
+        <h2 className="text-2xl font-bold font-playfair text-heading tracking-tighter">
+          Danger Zone
+        </h2>
+
+        <p className="text-sm text-leading font-light">
+          Permanently delete your account and all associated data. This action
+          cannot be undone.
+        </p>
+      </div>
+
+      {!showDeleteConfirm && (
+        <Button
+          variant="destructive"
+          className="cursor-pointer"
+          onClick={() => setShowDeleteConfirm(true)}
+        >
+          Delete Account
+        </Button>
+      )}
+
+      {showDeleteConfirm && (
+        <div className="space-y-4 p-4 bg-background border border-destructive/20 rounded-lg">
+          <p className="text-sm font-light text-heading">
+            Are you sure you want to delete your account?
+          </p>
+
+          <p className="text-xs text-leading font-light tracking-tight">
+            This will permanently delete your account and all your data. This
+            action cannot be undone.
+          </p>
+
+          <div className="flex gap-2">
+            <Button
+              variant={"secondary"}
+              disabled={isDeleting}
+              onClick={() => setShowDeleteConfirm(false)}
+              className="cursor-pointer hover:bg-secondary/80 text-foreground font-medium"
+            >
+              Cancel
+            </Button>
+
+            <Button
+              variant="destructive"
+              className="cursor-pointer font-medium"
+              onClick={handleDeleteAccount}
+              disabled={isDeleting || isUpdating}
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
+            </Button>
+          </div>
+        </div>
+      )}
+    </Card>
   );
 }
 

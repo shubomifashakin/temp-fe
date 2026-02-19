@@ -32,7 +32,7 @@ export default function Home() {
     <main className="min-h-screen bg-background font-mono">
       <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h2 className="text-2xl font-playfair font-bold text-foreground">
+          <h2 className="text-2xl font-playfair font-bold text-heading">
             Temp
           </h2>
 
@@ -142,14 +142,14 @@ export default function Home() {
       >
         <div className="w-full max-w-2xl text-center space-y-12 px-4">
           <div className="space-y-3">
-            <h1 className="text-7xl md:text-9xl font-playfair font-bold text-foreground text-balance tracking-tight">
+            <h1 className="text-7xl md:text-9xl font-playfair font-bold text-heading text-balance tracking-tight">
               Share With <br />
               <span className="text-shadow-white/20 text-shadow-lg inline-block text-foreground">
                 Confidence.
               </span>
             </h1>
 
-            <p className="text-muted-foreground font-mono text-sm md:text-base font-light">
+            <p className="text-leading! font-mono text-sm md:text-base font-light">
               Upload any{" "}
               <Link
                 href="#features"
@@ -172,7 +172,7 @@ export default function Home() {
               <Link href="/auth/sign-in">Get Started for Free</Link>
             </Button>
 
-            <p className="text-xs text-muted-foreground font-mono">
+            <p className="text-xs text-leading font-mono">
               No credit card required to get started.
             </p>
           </div>
@@ -185,11 +185,11 @@ export default function Home() {
       >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-6xl tracking-tight font-playfair font-bold text-foreground mb-4">
+            <h2 className="text-6xl tracking-tight font-playfair font-bold text-heading mb-4">
               Features
             </h2>
 
-            <p className="text-sm font-light text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-sm font-light text-leading max-w-2xl mx-auto">
               Everything you need for secure, temporary file sharing.
             </p>
           </div>
@@ -237,11 +237,11 @@ export default function Home() {
       <section id="pricing" className="py-24 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-6xl tracking-tight font-playfair font-bold text-foreground mb-4">
+            <h2 className="text-6xl tracking-tight font-playfair font-bold text-heading mb-4">
               Pricing
             </h2>
 
-            <p className="text-sm font-light text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-sm font-light text-leading max-w-2xl mx-auto">
               Start with our free plan. Upgrade anytime for premium features.
             </p>
           </div>
@@ -249,14 +249,14 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center justify-center gap-8">
             <div className="bg-card border-dashed border min-h-[500px] w-full md:w-[300px] border-border/50 rounded-lg p-8 flex flex-col hover:border-accent/50 transition-colors">
               <div className="mb-6">
-                <h3 className="text-2xl font-playfair font-bold text-foreground mb-2">
+                <h3 className="text-2xl font-playfair font-bold text-heading mb-2">
                   Free
                 </h3>
 
                 <div className="flex items-baseline gap-1 mb-4">
-                  <span className="text-3xl text-foreground font-bold">$0</span>
+                  <span className="text-3xl text-heading font-bold">$0</span>
 
-                  <span className="text-sm text-muted-foreground">/month</span>
+                  <span className="text-sm text-leading">/month</span>
                 </div>
 
                 <p className="text-sm text-muted-foreground">
@@ -265,24 +265,24 @@ export default function Home() {
               </div>
 
               <ul className="space-y-3 flex-1 mb-8">
-                <li className="text-sm text-foreground flex items-center gap-2">
+                <li className="text-sm text-heading flex items-center gap-2">
                   <span className="text-orange-500">✓</span> Max file size of
                   25mb
                 </li>
 
-                <li className="text-sm text-foreground flex items-center gap-2">
+                <li className="text-sm text-heading flex items-center gap-2">
                   <span className="text-orange-500">✓</span> 7 day retention
                 </li>
 
-                <li className="text-sm text-foreground flex items-center gap-2">
+                <li className="text-sm text-heading flex items-center gap-2">
                   <span className="text-orange-500">✓</span> 1 link per file
                 </li>
 
-                <li className="text-sm text-foreground flex items-center gap-2">
+                <li className="text-sm text-heading flex items-center gap-2">
                   <span className="text-orange-500">✓</span> Virus scanning
                 </li>
 
-                <li className="text-sm text-foreground flex items-center gap-2">
+                <li className="text-sm text-heading flex items-center gap-2">
                   <span className="text-orange-500">✓</span> Click tracking
                 </li>
               </ul>
@@ -298,49 +298,45 @@ export default function Home() {
 
             <div className="bg-card border-dashed border border-accent rounded-lg p-8 min-h-[500px] w-full md:w-[300px] flex flex-col relative">
               <div className="absolute -top-4 left-8 bg-accent text-orange-500 px-3 py-1 rounded-full text-xs font-medium">
-                Popular
+                Recommended
               </div>
 
               <div className="mb-6">
-                <h3 className="text-2xl font-playfair font-bold text-foreground mb-2">
+                <h3 className="text-2xl font-playfair font-bold text-heading mb-2">
                   Pro
                 </h3>
 
                 <div className="flex items-baseline gap-1 mb-4">
-                  <span className="text-3xl text-foreground font-bold">
-                    $1.99
-                  </span>
+                  <span className="text-3xl text-heading font-bold">$1.99</span>
 
-                  <span className="text-sm text-muted-foreground">/month</span>
+                  <span className="text-sm text-leading">/month</span>
                 </div>
 
-                <p className="text-sm text-muted-foreground">
-                  Best for regular sharing
-                </p>
+                <p className="text-sm text-leading">Best for regular sharing</p>
               </div>
 
               <ul className="space-y-3 flex-1 mb-8">
-                <li className="text-sm text-foreground flex items-center gap-2">
+                <li className="text-sm text-heading flex items-center gap-2">
                   <span className="text-orange-500">✓</span> Everything in free
                   plan
                 </li>
 
-                <li className="text-sm text-foreground flex items-center gap-2">
+                <li className="text-sm text-heading flex items-center gap-2">
                   <span className="text-orange-500">✓</span> 14 & 31 day
                   retention
                 </li>
 
-                <li className="text-sm text-foreground flex items-center gap-2">
+                <li className="text-sm text-heading flex items-center gap-2">
                   <span className="text-orange-500">✓</span> Unlimited links per
                   file
                 </li>
 
-                <li className="text-sm text-foreground flex items-center gap-2">
+                <li className="text-sm text-heading flex items-center gap-2">
                   <span className="text-orange-500">✓</span> Max file size of
                   150mb
                 </li>
 
-                <li className="text-sm text-foreground flex items-center gap-2">
+                <li className="text-sm text-heading flex items-center gap-2">
                   <span className="text-orange-500">✓</span>All new features
                 </li>
               </ul>
@@ -358,11 +354,11 @@ export default function Home() {
 
       <section className="py-16 px-4 border-t border-border/50 text-center min-h-[60vh] flex items-center justify-center">
         <div className="max-w-2xl mx-auto">
-          <h3 className="text-6xl tracking-tight font-playfair font-bold text-foreground mb-4">
+          <h3 className="text-6xl tracking-tight font-playfair font-bold text-heading mb-4">
             Start Sharing With Confidence!
           </h3>
 
-          <p className="text-sm font-light text-muted-foreground mb-8">
+          <p className="text-sm font-light text-leading mb-8">
             Join thousands of users who trust Temp for secure file sharing.
           </p>
 
@@ -381,11 +377,11 @@ export default function Home() {
       <footer className="border-t border-border/50 bg-background/50 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col md:flex-row  gap-4 items-center justify-between">
           <div className="flex items-center gap-x-3">
-            <h3 className="text-lg font-playfair font-bold text-foreground">
+            <h3 className="text-lg font-playfair font-bold text-heading">
               Temp
             </h3>
 
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-leading">
               © {new Date().getFullYear()} Temp. All rights reserved.
             </span>
           </div>
@@ -393,21 +389,21 @@ export default function Home() {
           <div className="flex items-center gap-4">
             <Link
               href="/terms-of-service"
-              className="text-xs text-muted-foreground hover:text-orange-500 hover:border-orange-500 border-b border-transparent duration-150 border-dashed transition-colors"
+              className="text-xs text-leading hover:text-orange-500 hover:border-orange-500 border-b border-transparent duration-150 border-dashed transition-colors"
             >
               Terms of Service
             </Link>
 
             <Link
               href="/privacy-policy"
-              className="text-xs text-muted-foreground hover:text-orange-500 hover:border-orange-500 border-b border-transparent duration-150 border-dashed transition-colors"
+              className="text-xs text-leading hover:text-orange-500 hover:border-orange-500 border-b border-transparent duration-150 border-dashed transition-colors"
             >
               Privacy Policy
             </Link>
           </div>
 
           <div className="flex items-center gap-6">
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-leading">
               Built with ❤️ by{" "}
               <a
                 target="_blank"
