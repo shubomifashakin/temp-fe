@@ -18,6 +18,7 @@ import {
   deleteAccount,
   updateAccountInfo,
 } from "@/data-service/mutations";
+import { generateProfileImage } from "@/lib/utils";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -129,10 +130,7 @@ function AccountInfo({
               <Image
                 fill
                 alt={"Avatar"}
-                src={
-                  data?.picture ||
-                  "https://avatars.githubusercontent.com/u/12345?v=4"
-                }
+                src={data?.picture || generateProfileImage(data.name)}
               />
             </div>
           </div>

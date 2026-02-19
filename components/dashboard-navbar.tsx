@@ -20,6 +20,7 @@ import {
 import Hamburger from "@/components/ui/hamburger";
 
 import { getUserInfo, logout } from "@/data-service/mutations";
+import { generateProfileImage } from "@/lib/utils";
 
 interface DashboardNavbarProps {
   onMenuToggle: () => void;
@@ -88,7 +89,10 @@ export function DashboardNavbar({
               <button className="rounded-full outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring">
                 <Avatar className="h-8 w-8 cursor-pointer">
                   <AvatarImage
-                    src={user?.picture || ""}
+                    src={
+                      user?.picture ||
+                      generateProfileImage(user?.name || "User")
+                    }
                     alt={user?.name || "User avatar"}
                   />
 
