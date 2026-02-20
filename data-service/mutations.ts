@@ -8,10 +8,49 @@ export type UserInfo = {
   updated_at: string;
   subscription: {
     plan: string;
-    current_period_end: string;
-    current_period_start: string;
-    cancel_at_period_end: boolean;
+    currentPeriodEnd: string;
+    currentPeriodStart: string;
+    cancelAtPeriodEnd: boolean;
   };
+};
+
+type Plan = {
+  amount: number;
+  currency: string;
+  productId: string;
+  name: string;
+  benefits: string[];
+  interval: string;
+};
+
+export type PlanInfo = {
+  currency: string;
+  provider: string;
+  plans: Plan[];
+};
+
+export type PlanIntervals = {
+  month: PlanInfo[];
+  year: PlanInfo[];
+};
+
+type Plans = {
+  data: PlanIntervals;
+};
+
+export type SubscriptionInfo = {
+  id: string;
+  status: string;
+  plan: string;
+  amount: number;
+  currency: string;
+  productId: string;
+  provider: string;
+  cancelledAt: string | null;
+  currentPeriodEnd: string;
+  currentPeriodStart: string;
+  cancelAtPeriodEnd: boolean;
+  providerSubscriptionId: string;
 };
 
 async function handleRequestError(response: Response) {
@@ -44,6 +83,63 @@ export async function getUserInfo() {
   }
 
   return response.json() as Promise<UserInfo>;
+}
+
+export async function getSubscriptionInfo(): Promise<SubscriptionInfo | null> {
+  const response = await fetchWithAuth(`${backendUrl}/subscriptions/current`);
+
+  if (!response.ok) {
+    throw await handleRequestError(response);
+  }
+
+  const data = (await response.json()) as { data: SubscriptionInfo | null };
+
+  return data.data;
+}
+
+export async function cancelSubscription() {
+  const response = await fetchWithAuth(`${backendUrl}/subscriptions/current`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw await handleRequestError(response);
+  }
+
+  return response.json() as Promise<{ message: string }>;
+}
+
+export async function getSubscriptionPlans(): Promise<PlanIntervals> {
+  const response = await fetchWithAuth(`${backendUrl}/subscriptions/plans`);
+
+  if (!response.ok) {
+    throw await handleRequestError(response);
+  }
+
+  const data = (await response.json()) as Plans;
+
+  return data.data;
+}
+
+export async function initiateCheckout({
+  productId,
+  provider,
+}: {
+  productId: string;
+  provider: string;
+}) {
+  const response = await fetchWithAuth(`${backendUrl}/subscriptions/checkout`, {
+    method: "POST",
+    body: JSON.stringify({ productId, provider }),
+  });
+
+  if (!response.ok) {
+    throw await handleRequestError(response);
+  }
+
+  const data = (await response.json()) as { url: string };
+  console.log("redirect");
+  return data;
 }
 
 export async function deleteAccount() {
@@ -116,6 +212,9 @@ export async function fetchWithAuth(
   retries = 0,
 ): Promise<Response> {
   const response = await fetch(url, {
+    headers: {
+      "Content-Type": "application/json",
+    },
     ...options,
     credentials: "include",
   });

@@ -135,3 +135,17 @@
     @apply bg-orange-500! text-white!;
   }
 }
+
+@layer components {
+  .primary-btn {
+    background-color: var(--color-orange-500) !important;
+    color: var(--color-white) !important;
+    cursor: pointer !important;
+  }
+
+  .primary-btn:hover {
+    background-color: oklch(
+      from var(--color-orange-500) calc(l * 0.8) c h
+    ) !important;
+  }
+}

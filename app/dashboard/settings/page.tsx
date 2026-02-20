@@ -53,7 +53,7 @@ export default function SettingsPage() {
 
     onSuccess: async () => {
       toast.success("Account updated successfully");
-      await queryClient.invalidateQueries({ queryKey: ["account-info"] });
+      await queryClient.invalidateQueries({ queryKey: ["user"] });
     },
 
     onError: (error) => {
