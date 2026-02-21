@@ -206,6 +206,134 @@ export async function logout() {
   return response.json();
 }
 
+//files
+export async function getFiles(cursor?: string) {
+  const url = new URL(`${backendUrl}/files`);
+
+  if (cursor) {
+    url.searchParams.append("cursor", cursor);
+  }
+
+  const response = await fetchWithAuth(url.toString());
+
+  if (!response.ok) {
+    throw await handleRequestError(response);
+  }
+
+  return response.json();
+}
+
+export type Lifetimes = "short" | "medium" | "long";
+
+export async function uploadFile({
+  file,
+  name,
+  lifetime,
+  description,
+}: {
+  file: File;
+  name: string;
+  lifetime: Lifetimes;
+  description: string;
+}) {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("name", name);
+  formData.append("lifetime", lifetime);
+  formData.append("description", description);
+
+  const response = await fetchWithAuth(`${backendUrl}/files`, {
+    method: "POST",
+    body: formData,
+    headers: {},
+  });
+
+  if (!response.ok) {
+    throw await handleRequestError(response);
+  }
+
+  return response.json();
+}
+
+export async function deleteFile(id: string) {
+  const response = await fetchWithAuth(`${backendUrl}/files/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw await handleRequestError(response);
+  }
+
+  return response.json();
+}
+
+//file links
+export async function getFileLinks({
+  fileId,
+  cursor,
+}: {
+  fileId: string;
+  cursor?: string;
+}) {
+  const url = new URL(`${backendUrl}/files/${fileId}/links`);
+
+  if (cursor) {
+    url.searchParams.append("cursor", cursor);
+  }
+
+  const response = await fetchWithAuth(url.toString());
+
+  if (!response.ok) {
+    throw await handleRequestError(response);
+  }
+
+  return response.json();
+}
+
+export async function createFileLink({
+  fileId,
+  data,
+}: {
+  fileId: string;
+  data: {
+    expiresAt?: Date;
+    password?: string;
+    description: string;
+  };
+}) {
+  const response = await fetchWithAuth(`${backendUrl}/files/${fileId}/links`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw await handleRequestError(response);
+  }
+
+  return response.json();
+}
+
+export async function revokeFileLink({
+  fileId,
+  linkId,
+}: {
+  fileId: string;
+  linkId: string;
+}) {
+  const response = await fetchWithAuth(
+    `${backendUrl}/files/${fileId}/links/${linkId}`,
+    {
+      method: "DELETE",
+    },
+  );
+
+  if (!response.ok) {
+    throw await handleRequestError(response);
+  }
+
+  return response.json();
+}
+
 export async function fetchWithAuth(
   url: string,
   options: RequestInit = {},

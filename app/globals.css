@@ -141,11 +141,12 @@
     background-color: var(--color-orange-500) !important;
     color: var(--color-white) !important;
     cursor: pointer !important;
+    font-family: var(--font-mono);
   }
 
   .primary-btn:hover {
     background-color: oklch(
-      from var(--color-orange-500) calc(l * 0.8) c h
+      from var(--color-orange-500) calc(l * 0.9) c h
     ) !important;
   }
 }

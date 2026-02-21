@@ -341,10 +341,7 @@ export default function Home() {
                 </li>
               </ul>
 
-              <Button
-                asChild
-                className="w-full bg-orange-500 hover:bg-orange-500/80 cursor-pointer text-white font-medium"
-              >
+              <Button asChild className="w-full primary-btn font-medium">
                 <Link href="/auth/sign-in">Subscribe Now</Link>
               </Button>
             </div>
