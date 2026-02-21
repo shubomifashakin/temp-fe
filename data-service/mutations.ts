@@ -38,6 +38,24 @@ type Plans = {
   data: PlanIntervals;
 };
 
+export type FileDetails = {
+  id: string;
+  description: string;
+  expiresAt: string;
+  size: number;
+  status: "pending" | "safe" | "unsafe";
+  contentType: string;
+  name: string;
+  totalLinks: number;
+  totalClicks: number;
+};
+
+type GetFilesResponse = {
+  hasNextPage: boolean;
+  cursor: string;
+  data: FileDetails[];
+};
+
 export type SubscriptionInfo = {
   id: string;
   status: string;
@@ -75,6 +93,7 @@ async function handleRequestError(response: Response) {
   return new Error("Internal Server Error", { cause: 500 });
 }
 
+//users stuff
 export async function getUserInfo() {
   const response = await fetchWithAuth(`${backendUrl}/users/me`);
 
@@ -85,6 +104,59 @@ export async function getUserInfo() {
   return response.json() as Promise<UserInfo>;
 }
 
+export async function deleteAccount() {
+  const response = await fetchWithAuth(`${backendUrl}/users/me`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw await handleRequestError(response);
+  }
+
+  return response.json() as Promise<{
+    name: string;
+    email: string;
+    created_at: string;
+    picture: string | null;
+    updated_at: string;
+    subscription: {
+      plan: string;
+      current_period_end: string;
+      current_period_start: string;
+      cancel_at_period_end: boolean;
+    };
+  }>;
+}
+
+export async function updateAccountInfo({ name }: { name: string }) {
+  const response = await fetchWithAuth(`${backendUrl}/users/me`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name }),
+  });
+
+  if (!response.ok) {
+    throw await handleRequestError(response);
+  }
+
+  return response.json() as Promise<{
+    name: string;
+    email: string;
+    created_at: string;
+    picture: string | null;
+    updated_at: string;
+    subscription: {
+      plan: string;
+      current_period_end: string;
+      current_period_start: string;
+      cancel_at_period_end: boolean;
+    };
+  }>;
+}
+
+//subscription stuff
 export async function getSubscriptionInfo(): Promise<SubscriptionInfo | null> {
   const response = await fetchWithAuth(`${backendUrl}/subscriptions/current`);
 
@@ -142,58 +214,7 @@ export async function initiateCheckout({
   return data;
 }
 
-export async function deleteAccount() {
-  const response = await fetchWithAuth(`${backendUrl}/users/me`, {
-    method: "DELETE",
-  });
-
-  if (!response.ok) {
-    throw await handleRequestError(response);
-  }
-
-  return response.json() as Promise<{
-    name: string;
-    email: string;
-    created_at: string;
-    picture: string | null;
-    updated_at: string;
-    subscription: {
-      plan: string;
-      current_period_end: string;
-      current_period_start: string;
-      cancel_at_period_end: boolean;
-    };
-  }>;
-}
-
-export async function updateAccountInfo({ name }: { name: string }) {
-  const response = await fetchWithAuth(`${backendUrl}/users/me`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ name }),
-  });
-
-  if (!response.ok) {
-    throw await handleRequestError(response);
-  }
-
-  return response.json() as Promise<{
-    name: string;
-    email: string;
-    created_at: string;
-    picture: string | null;
-    updated_at: string;
-    subscription: {
-      plan: string;
-      current_period_end: string;
-      current_period_start: string;
-      cancel_at_period_end: boolean;
-    };
-  }>;
-}
-
+//auth
 export async function logout() {
   const response = await fetchWithAuth(`${backendUrl}/auth/logout`, {
     method: "POST",
@@ -207,11 +228,11 @@ export async function logout() {
 }
 
 //files
-export async function getFiles(cursor?: string) {
+export async function getFiles(pageParam?: string) {
   const url = new URL(`${backendUrl}/files`);
 
-  if (cursor) {
-    url.searchParams.append("cursor", cursor);
+  if (pageParam) {
+    url.searchParams.append("cursor", pageParam);
   }
 
   const response = await fetchWithAuth(url.toString());
@@ -220,7 +241,7 @@ export async function getFiles(cursor?: string) {
     throw await handleRequestError(response);
   }
 
-  return response.json();
+  return response.json() as Promise<GetFilesResponse>;
 }
 
 export type Lifetimes = "short" | "medium" | "long";

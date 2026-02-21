@@ -1,0 +1,156 @@
+import { FileDetails } from "@/data-service/mutations";
+import {
+  Check,
+  File,
+  Image,
+  Link2,
+  Music,
+  Video,
+  FileText,
+  CircleDashed,
+  OctagonAlert,
+  MousePointerClick,
+} from "lucide-react";
+
+interface FilesListProps {
+  files: FileDetails[];
+  onFileSelect: (file: FileDetails) => void;
+}
+
+function getFileIcon(mimeType: string, fileName: string): React.ReactNode {
+  if (mimeType.startsWith("image/")) return <Image strokeWidth={1.5} />;
+  if (mimeType === "application/pdf") return <FileText strokeWidth={1.5} />;
+  if (mimeType.includes("word")) return <FileText strokeWidth={1.5} />;
+  if (mimeType.includes("video")) return <Video strokeWidth={1.5} />;
+  if (mimeType.includes("audio")) return <Music strokeWidth={1.5} />;
+  if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls"))
+    return <FileText strokeWidth={1.5} />;
+  return <FileText strokeWidth={1.5} />;
+}
+
+function formatFileSize(bytes: number): string {
+  if (bytes === 0) return "0 B";
+  const k = 1024;
+  const sizes = ["B", "KB", "MB", "GB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
+}
+
+function getTimeRemaining(expiresAt: string): string {
+  const now = new Date();
+  const expires = new Date(expiresAt);
+  const diff = expires.getTime() - now.getTime();
+
+  if (diff < 0) return "Expired";
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+
+  if (days > 0) return `${days}d ${hours}h left`;
+  return `${hours}h left`;
+}
+
+export default function FilesList({ files, onFileSelect }: FilesListProps) {
+  if (!files.length) {
+    return (
+      <div className="flex font-mono flex-col items-center justify-center py-16 text-center">
+        <div className="text-6xl mb-4 opacity-30">
+          <File size={64} strokeWidth={1} />
+        </div>
+
+        <div className="space-y-2">
+          <h2 className="text-lg font-semibold tracking-tight text-heading">
+            No files yet
+          </h2>
+
+          <p className="text-sm text-leading tracking-tight">
+            Upload your first file to get started.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="grid grid-cols-1 font-mono md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[calc(100vh-200px)] overflow-y-auto pr-2 no-scrollbar"
+      data-scroll-container="files"
+    >
+      {files.map((file) => (
+        <div
+          key={file.id}
+          onClick={() => onFileSelect(file)}
+          className="bg-card border border-border border-dashed rounded-lg p-4 cursor-pointer hover:border-accent hover:shadow-lg transition-all duration-200 hover:bg-card/80"
+        >
+          <div className="space-y-4">
+            <div className="flex items-start justify-between">
+              <div className="text-3xl">
+                {getFileIcon(file.contentType, file.name)}
+              </div>
+
+              <span
+                className={`px-2 py-1 rounded-sm text-xs font-medium tracking-tight ${
+                  file.status === "safe"
+                    ? "bg-accent/20 text-accent"
+                    : file.status === "pending"
+                      ? "bg-yellow-500/20 text-yellow-400"
+                      : "bg-destructive/20 text-destructive"
+                }`}
+              >
+                {file.status === "safe" ? (
+                  <Check size={16} />
+                ) : file.status === "pending" ? (
+                  <CircleDashed className="animate-spin" size={16} />
+                ) : (
+                  <OctagonAlert size={16} />
+                )}
+              </span>
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="font-semibold tracking-tight text-heading truncate text-sm">
+                {file.name}
+              </h3>
+
+              <p className="text-xs text-leading tracking-tight mt-1 truncate">
+                {file.description}
+              </p>
+            </div>
+
+            <div className="text-xs text-muted-foreground space-y-2 py-2">
+              <div className="flex justify-between">
+                <span>Size:</span>
+
+                <span className="text-leading">
+                  {formatFileSize(file.size)}
+                </span>
+              </div>
+
+              <div className="flex justify-between">
+                <span>Expires:</span>
+
+                <span
+                  className={`${getTimeRemaining(file.expiresAt).includes("Expired") ? "text-destructive" : "text-leading"}`}
+                >
+                  {getTimeRemaining(file.expiresAt)}
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-dashed flex justify-between">
+              <p className="text-xs text-leading font-medium flex gap-x-2">
+                <Link2 className="text-orange-500" size={14} />{" "}
+                {file.totalLinks} {file.totalLinks === 1 ? "link" : "links"}
+              </p>
+
+              <p className="text-xs text-leading font-medium flex gap-x-2">
+                <MousePointerClick className="text-orange-500" size={14} />{" "}
+                {file.totalClicks} {file.totalClicks === 1 ? "click" : "clicks"}
+              </p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
