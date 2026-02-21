@@ -35,6 +35,9 @@ const ALLOWED_EXTENSIONS = [
   "rar",
 ];
 
+const MAX_FILE_SIZE_MB = 150;
+const MAX_FILE_SIZE_IN_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
 const lifetimes: { value: Lifetimes; label: string }[] = [
   { value: "short", label: "7 days" },
   { value: "medium", label: "14 days" },
@@ -60,8 +63,8 @@ export default function UploadModal({
       return toast.error("File type not supported");
     }
 
-    if (selectedFile.size > 500 * 1024 * 1024) {
-      return toast.error("File size exceeds 150MB limit");
+    if (selectedFile.size > MAX_FILE_SIZE_IN_BYTES) {
+      return toast.error(`File size exceeds ${MAX_FILE_SIZE_MB}MB limit`);
     }
 
     setFile(selectedFile);
@@ -128,8 +131,8 @@ export default function UploadModal({
             onClick={() => fileInputRef.current?.click()}
             className={`border border-dashed rounded-lg p-8 text-center cursor-pointer transition-all ${
               isDragging
-                ? "border-accent bg-accent/10"
-                : "border-border/50 hover:border-accent hover:bg-accent/5"
+                ? "border-orange-500 bg-orange-500/10"
+                : "border-border/50 hover:border-orange-500 hover:bg-orange-500/10"
             }`}
           >
             <input
