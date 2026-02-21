@@ -28,15 +28,22 @@ export default function Page() {
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ["dashboard"],
-      initialPageParam: undefined,
-      refetchOnWindowFocus: true,
-      queryFn: ({ pageParam }: { pageParam?: string }) =>
-        getFiles(pageParam || undefined),
-      getNextPageParam: (lastPage) => lastPage.cursor,
-    });
+  const {
+    data,
+    error,
+    status,
+    refetch,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["dashboard"],
+    initialPageParam: undefined,
+    refetchOnWindowFocus: true,
+    queryFn: ({ pageParam }: { pageParam?: string }) =>
+      getFiles(pageParam || undefined),
+    getNextPageParam: (lastPage) => lastPage.cursor,
+  });
 
   const files = data?.pages.flatMap((page) => page.data) || [];
 
@@ -128,7 +135,19 @@ export default function Page() {
         </Button>
       </div>
 
-      <FilesList files={files} onFileSelect={handleFileSelect} />
+      {status === "error" && (
+        <div className="flex items-center gap-4 font-mono text-sm tracking-tight">
+          <p className="text-red-500 font-light">{error.message}</p>
+
+          <button className="cursor-pointer" onClick={() => refetch()}>
+            Retry
+          </button>
+        </div>
+      )}
+
+      {status === "success" && (
+        <FilesList files={files} onFileSelect={handleFileSelect} />
+      )}
 
       <Activity mode={isModalOpen ? "visible" : "hidden"}>
         <UploadModal
