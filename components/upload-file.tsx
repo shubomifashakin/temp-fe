@@ -95,6 +95,14 @@ export default function UploadModal({
     onUpload({ file, description, lifetime, name });
   }
 
+  function handleClose() {
+    setName("");
+    setFile(null);
+    setDescription("");
+    setLifetime("short");
+    onClose();
+  }
+
   const canUpload =
     name.length >= 5 && description.length >= 5 && file && lifetime;
 
@@ -110,7 +118,7 @@ export default function UploadModal({
             </h2>
 
             <button
-              onClick={() => onClose()}
+              onClick={handleClose}
               className="text-lg text-muted-foreground cursor-pointer hover:text-orange-500 transition-colors"
             >
               <X />
@@ -216,7 +224,7 @@ export default function UploadModal({
           <div className="flex gap-3 pt-4 items-center">
             <Button
               variant={"secondary"}
-              onClick={() => onClose()}
+              onClick={handleClose}
               disabled={isUploading}
               className="flex-1 hover:bg-secondary/80 text-foreground font-medium text-sm tracking-tight"
             >
