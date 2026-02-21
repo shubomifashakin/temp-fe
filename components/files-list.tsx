@@ -1,3 +1,5 @@
+import { formatDistanceToNow, isPast } from "date-fns";
+
 import { FileDetails } from "@/data-service/mutations";
 import {
   Check,
@@ -33,21 +35,16 @@ function formatFileSize(bytes: number): string {
   const k = 1024;
   const sizes = ["B", "KB", "MB", "GB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
+  return `${Math.round((bytes / Math.pow(k, i)) * 100) / 100} ${sizes[i]}`;
 }
 
 function getTimeRemaining(expiresAt: string): string {
-  const now = new Date();
   const expires = new Date(expiresAt);
-  const diff = expires.getTime() - now.getTime();
 
-  if (diff < 0) return "Expired";
+  if (isPast(expires)) return "Expired";
 
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-
-  if (days > 0) return `${days}d ${hours}h left`;
-  return `${hours}h left`;
+  const timeLeft = formatDistanceToNow(expires, { addSuffix: false });
+  return `${timeLeft} left`;
 }
 
 export default function FilesList({ files, onFileSelect }: FilesListProps) {

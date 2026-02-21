@@ -33,9 +33,9 @@ export default function Page() {
       queryKey: ["dashboard"],
       initialPageParam: undefined,
       refetchOnWindowFocus: true,
-      getNextPageParam: (lastPage) => lastPage.cursor,
       queryFn: ({ pageParam }: { pageParam?: string }) =>
         getFiles(pageParam || undefined),
+      getNextPageParam: (lastPage) => lastPage.cursor,
     });
 
   const files = data?.pages.flatMap((page) => page.data) || [];
