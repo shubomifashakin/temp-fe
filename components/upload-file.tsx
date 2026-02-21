@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Lifetimes } from "@/data-service/mutations";
 
 interface UploadModalProps {
-  isOpen: boolean;
   isUploading: boolean;
   onClose: () => void;
   onUpload: (data: {
@@ -43,7 +42,6 @@ const lifetimes: { value: Lifetimes; label: string }[] = [
 ];
 
 export default function UploadModal({
-  isOpen,
   onClose,
   onUpload,
   isUploading,
@@ -105,8 +103,6 @@ export default function UploadModal({
 
   const canUpload =
     name.length >= 5 && description.length >= 5 && file && lifetime;
-
-  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 dark font-mono">
