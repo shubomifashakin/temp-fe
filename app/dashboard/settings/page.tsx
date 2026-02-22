@@ -179,7 +179,7 @@ function AccountInfo({
             <Button
               variant="secondary"
               onClick={handleCancelUpdate}
-              className="cursor-pointer hover:bg-secondary/80 text-foreground font-medium"
+              className="font-medium flex-1"
             >
               Cancel
             </Button>
@@ -187,7 +187,7 @@ function AccountInfo({
             <Button
               disabled={isUpdating || isDeleting}
               onClick={() => handleUpdateAccountInfo({ name })}
-              className="primary-btn font-medium"
+              className="primary-btn font-medium flex-1"
             >
               {isUpdating ? "Saving..." : "Save Changes"}
             </Button>
@@ -250,14 +250,14 @@ function DeleteAccount({
               variant={"secondary"}
               disabled={isDeleting}
               onClick={() => setShowDeleteConfirm(false)}
-              className="cursor-pointer hover:bg-secondary/80 text-foreground font-medium"
+              className="font-medium flex-1"
             >
               Cancel
             </Button>
 
             <Button
               variant="destructive"
-              className="cursor-pointer font-medium"
+              className="font-medium flex-1"
               onClick={handleDeleteAccount}
               disabled={isDeleting || isUpdating}
             >
