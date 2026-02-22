@@ -418,7 +418,7 @@ function FileDetails({
           onClick={handleShowDeleteConfirm}
           className="flex-1 font-medium text-sm"
         >
-          {isDeleted ? "Deleted" : "Delete"}
+          {isDeleted ? "Deleted" : "Delete File"}
         </Button>
       </div>
     </div>
