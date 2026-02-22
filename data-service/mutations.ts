@@ -263,9 +263,9 @@ export async function uploadFile({
 }) {
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("name", name);
+  formData.append("name", name.trim());
   formData.append("lifetime", lifetime);
-  formData.append("description", description);
+  formData.append("description", description.trim());
 
   const response = await fetchWithAuth(`${backendUrl}/files`, {
     method: "POST",
@@ -362,7 +362,11 @@ export async function createFileLink({
 }) {
   const response = await fetchWithAuth(`${backendUrl}/files/${fileId}/links`, {
     method: "POST",
-    body: JSON.stringify(data),
+    body: JSON.stringify({
+      description: data.description.trim(),
+      password: data.password,
+      expiresAt: data.expiresAt,
+    }),
   });
 
   if (!response.ok) {

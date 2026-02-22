@@ -56,7 +56,10 @@ export default function UploadModal({
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  function handleFileSelect(selectedFile: File) {
+  function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const selectedFile = e.target.files?.[0];
+    if (!selectedFile) return;
+
     const ext = selectedFile.name.split(".").pop()?.toLowerCase();
 
     if (!ALLOWED_EXTENSIONS.includes(ext || "")) {
@@ -84,16 +87,29 @@ export default function UploadModal({
     e.preventDefault();
     setIsDragging(false);
     if (e.dataTransfer.files.length > 0) {
-      handleFileSelect(e.dataTransfer.files[0]);
+      const event = {
+        target: {
+          files: e.dataTransfer.files,
+        },
+      } as unknown as React.ChangeEvent<HTMLInputElement>;
+      handleFileSelect(event);
     }
   }
 
   function handleSubmit() {
-    if (!file || !name || !description) {
+    const trimmedName = name.trim();
+    const trimmedDescription = description.trim();
+
+    if (!file || !trimmedName.length || !trimmedDescription.length) {
       return toast.error("Please fill in all required fields");
     }
 
-    onUpload({ file, description, lifetime, name });
+    onUpload({
+      file,
+      description: trimmedDescription,
+      lifetime,
+      name: trimmedName,
+    });
   }
 
   function handleClose() {
@@ -105,7 +121,10 @@ export default function UploadModal({
   }
 
   const canUpload =
-    name.length >= 5 && description.length >= 5 && file && lifetime;
+    name.trim().length >= 5 &&
+    description.trim().length >= 5 &&
+    file &&
+    lifetime;
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 dark font-mono">
@@ -131,12 +150,8 @@ export default function UploadModal({
             <input
               type="file"
               ref={fileInputRef}
-              onChange={(e) => {
-                if (e.target.files?.[0]) {
-                  handleFileSelect(e.target.files[0]);
-                }
-              }}
               className="hidden"
+              onChange={handleFileSelect}
               accept={ALLOWED_EXTENSIONS.map((ext) => `.${ext}`).join(",")}
             />
 
