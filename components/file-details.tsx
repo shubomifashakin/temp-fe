@@ -286,11 +286,11 @@ function CreateLinkForm({
         </Popover>
       </InputGroup>
 
-      <div className="flex justify-end items-center gap-2">
+      <div className="flex justify-between gap-4">
         <Button
           disabled={isPending}
           variant={"secondary"}
-          className="min-w-26"
+          className="flex-1"
           onClick={handleShowCreateLinkForm}
         >
           Cancel
@@ -299,7 +299,7 @@ function CreateLinkForm({
         <Button
           type="submit"
           disabled={isPending}
-          className="primary-btn min-w-26"
+          className="primary-btn flex-1"
         >
           Create Link {isPending && <Loader2Icon className="animate-spin" />}
         </Button>
