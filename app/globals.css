@@ -46,8 +46,6 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
-  --color-heading: var(--color-foreground);
-  --color-leading: var(--color-muted-foreground);
 }
 
 :root {
@@ -134,19 +132,24 @@
   ::-moz-selection {
     @apply bg-orange-500! text-white!;
   }
-}
 
-@layer components {
+  .theme-border {
+    @apply border-gray-800;
+  }
+
   .primary-btn {
-    background-color: var(--color-orange-500) !important;
-    color: var(--color-white) !important;
-    cursor: pointer !important;
-    font-family: var(--font-mono);
+    @apply bg-orange-500! text-white! cursor-pointer! font-mono! text-sm! rounded! font-medium!;
   }
 
   .primary-btn:hover {
-    background-color: oklch(
-      from var(--color-orange-500) calc(l * 0.9) c h
-    ) !important;
+    @apply bg-orange-600!;
+  }
+
+  .text-heading {
+    @apply text-foreground!;
+  }
+
+  .text-leading {
+    @apply text-muted-foreground! font-light!;
   }
 }

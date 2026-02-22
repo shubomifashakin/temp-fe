@@ -9,7 +9,7 @@ export default function Page() {
             Terms of Service
           </h1>
 
-          <p className="text-muted-foreground font-light text-sm">
+          <p className="text-leading text-sm">
             Last updated: {LAST_UPDATED_AT}
           </p>
         </div>

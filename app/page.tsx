@@ -13,8 +13,9 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Feature } from "@/components/ui/features";
+import { Feature } from "@/components/features";
 import Hamburger from "@/components/ui/hamburger";
+import { Card } from "@/components/ui/card";
 
 export default function Home() {
   const [activeNav, setActiveNav] = useState("home");
@@ -198,36 +199,40 @@ export default function Home() {
             <Feature
               title="Virus Scanning"
               description="Every file is automatically scanned for viruses and malware before sharing."
-              icon={<LockIcon className="text-foreground" />}
+              icon={<LockIcon className="text-foreground" strokeWidth={1.5} />}
             />
 
             <Feature
               title="Auto Delete"
               description="Files automatically expire and delete after 7, 14, or 31 days."
-              icon={<ClockIcon className="text-foreground" />}
+              icon={<ClockIcon className="text-foreground" strokeWidth={1.5} />}
             />
 
             <Feature
               title="Multiple links"
               description="Generate unlimited share links for each file with individual passwords."
-              icon={<LinkIcon className="text-foreground" />}
+              icon={<LinkIcon className="text-foreground" strokeWidth={1.5} />}
             />
 
             <Feature
               title="Analytics"
               description="Track click count and access times for each shared link."
-              icon={<ChartBarIcon className="text-foreground" />}
+              icon={
+                <ChartBarIcon className="text-foreground" strokeWidth={1.5} />
+              }
             />
 
             <Feature
               title="All File Types"
               description="Support for MP4, PDF, DOCX, PNG, GIF, and all other popular formats."
-              icon={<FolderIcon className="text-foreground" />}
+              icon={
+                <FolderIcon className="text-foreground" strokeWidth={1.5} />
+              }
             />
 
             <Feature
               title="Public Links"
-              icon={<GlobeIcon className="text-foreground" />}
+              icon={<GlobeIcon className="text-foreground" strokeWidth={1.5} />}
               description="Share files with anyone using public links, no account required."
             />
           </div>
@@ -247,7 +252,7 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-8">
-            <div className="bg-card border min-h-[500px] w-full md:w-[300px] border-border/50 rounded-lg p-8 flex flex-col hover:border-accent/50 transition-colors">
+            <Card className="bg-card border min-h-[500px] w-full md:w-[300px] border-border/50 p-8 flex flex-col hover:border-accent/50 transition-colors">
               <div className="mb-6">
                 <h3 className="text-2xl font-playfair font-bold text-heading mb-2">
                   Free
@@ -265,38 +270,23 @@ export default function Home() {
               </div>
 
               <ul className="space-y-3 flex-1 mb-8">
-                <li className="text-sm text-heading flex items-center gap-2">
-                  <span className="text-orange-500">✓</span> Max file size of
-                  25mb
-                </li>
-
-                <li className="text-sm text-heading flex items-center gap-2">
-                  <span className="text-orange-500">✓</span> 7 day retention
-                </li>
-
-                <li className="text-sm text-heading flex items-center gap-2">
-                  <span className="text-orange-500">✓</span> 1 link per file
-                </li>
-
-                <li className="text-sm text-heading flex items-center gap-2">
-                  <span className="text-orange-500">✓</span> Virus scanning
-                </li>
-
-                <li className="text-sm text-heading flex items-center gap-2">
-                  <span className="text-orange-500">✓</span> Click tracking
-                </li>
+                <PricingItem text="Max file size of 25mb" />
+                <PricingItem text="7 day retention" />
+                <PricingItem text="1 link per file" />
+                <PricingItem text="Virus scanning" />
+                <PricingItem text="Click tracking" />
               </ul>
 
               <Button
                 variant={"secondary"}
                 asChild
-                className="w-full cursor-pointer hover:bg-secondary/80 text-foreground font-medium"
+                className="w-full cursor-pointer font-medium"
               >
                 <Link href="/auth/sign-in">Get Started</Link>
               </Button>
-            </div>
+            </Card>
 
-            <div className="bg-card border border-accent rounded-lg p-8 min-h-[500px] w-full md:w-[300px] flex flex-col relative">
+            <Card className="bg-card border border-accent p-8 min-h-[500px] w-full md:w-[300px] flex flex-col relative">
               <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-orange-500 px-3 py-1 rounded-full text-xs font-medium">
                 Recommended
               </div>
@@ -316,35 +306,17 @@ export default function Home() {
               </div>
 
               <ul className="space-y-3 flex-1 mb-8">
-                <li className="text-sm text-heading flex items-center gap-2">
-                  <span className="text-orange-500">✓</span> Everything in free
-                  plan
-                </li>
-
-                <li className="text-sm text-heading flex items-center gap-2">
-                  <span className="text-orange-500">✓</span> 14 & 31 day
-                  retention
-                </li>
-
-                <li className="text-sm text-heading flex items-center gap-2">
-                  <span className="text-orange-500">✓</span> Unlimited links per
-                  file
-                </li>
-
-                <li className="text-sm text-heading flex items-center gap-2">
-                  <span className="text-orange-500">✓</span> Max file size of
-                  150mb
-                </li>
-
-                <li className="text-sm text-heading flex items-center gap-2">
-                  <span className="text-orange-500">✓</span>All new features
-                </li>
+                <PricingItem text="Everything in free plan" />
+                <PricingItem text="14 & 31 day retention" />
+                <PricingItem text="Unlimited links per file" />
+                <PricingItem text="Max file size of 150mb" />
+                <PricingItem text="All new features" />
               </ul>
 
               <Button asChild className="w-full primary-btn font-medium">
                 <Link href="/auth/sign-in">Subscribe Now</Link>
               </Button>
-            </div>
+            </Card>
           </div>
         </div>
       </section>
@@ -415,5 +387,13 @@ export default function Home() {
         </div>
       </footer>
     </main>
+  );
+}
+
+function PricingItem({ text }: { text: string }) {
+  return (
+    <li className="text-sm text-foreground flex items-center gap-2">
+      <span className="text-orange-500">✓</span> {text}
+    </li>
   );
 }
