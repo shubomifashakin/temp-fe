@@ -143,7 +143,7 @@ function ConfirmFileDelete({
   return (
     <div className="p-6 space-y-4">
       <div className="space-y-2">
-        <h2 className="text-3xl font-bold font-playfair text-foreground tracking-tight">
+        <h2 className="text-xl font-bold text-foreground tracking-tight">
           Delete File?
         </h2>
 
@@ -223,7 +223,7 @@ function CreateLinkForm({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-x-4 gap-y-5 p-6">
       <div className="space-y-0.5">
-        <h2 className="text-2xl tracking-tight font-playfair font-bold text-heading">
+        <h2 className="text-xl tracking-tight font-bold text-heading">
           Create Link
         </h2>
 
@@ -332,7 +332,7 @@ function FileDetails({
             </span>
 
             <div>
-              <h2 className="font-bold -mt-1 font-playfair tracking-tight text-heading break-all text-xl">
+              <h2 className="-mt-1 font-bold tracking-tight text-heading break-all text-xl">
                 {file.name}
               </h2>
 
@@ -469,7 +469,7 @@ function FileSafe({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <label className="text-xs font-semibold text-foreground capitalize tracking-tight">
+        <label className="text-sm font-semibold text-foreground capitalize">
           Total Links ({file.totalLinks})
         </label>
 
