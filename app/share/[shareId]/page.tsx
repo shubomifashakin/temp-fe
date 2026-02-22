@@ -51,6 +51,30 @@ export default function LinkDetailsPage() {
     );
   }
 
+  if (status === "error" && error.cause === 404) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <Card className="border p-8 max-w-md w-full gap-y-6 text-center flex flex-col items-center font-mono">
+          <div className="space-y-2">
+            <h1 className="text-lg font-medium text-heading">Link Not Found</h1>
+
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              This share link doesn&apos;t exist or has been deleted by the
+              owner.
+            </p>
+          </div>
+
+          <Link
+            href={"/"}
+            className="text-xs text-leading text-center font-mono flex items-center gap-1"
+          >
+            <ArrowLeft className="mr-1 h-3 w-3" /> Back to Temp
+          </Link>
+        </Card>
+      </div>
+    );
+  }
+
   if (status === "error") {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
@@ -111,137 +135,164 @@ export default function LinkDetailsPage() {
       })
     : null;
 
+  const linkHasExpired =
+    !!data.expiresAt && new Date() > new Date(data.expiresAt);
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4 py-8">
-      <Card className="w-full max-w-lg border rounded p-8 space-y-6 font-mono">
-        <div className="space-y-2 border-b border-dashed pb-6">
-          <div className="flex items-start gap-4">
-            <div className="shrink-0">
-              {data.fileCreatorPicture ? (
-                <Image
-                  src={data.fileCreatorPicture}
-                  alt={data.fileCreator}
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                />
-              ) : (
-                <div className="w-10 h-10 rounded-full flex items-center justify-center text-xs text-leading">
-                  {data.fileCreator.charAt(0).toUpperCase()}
-                </div>
-              )}
+      <Card className="w-full max-w-lg border rounded p-8 space-y-2 font-mono">
+        <Link
+          className="text-xs text-leading font-mono flex items-center gap-1"
+          href={"/"}
+        >
+          <ArrowLeft className="mr-1 h-3 w-3" /> Back to Temp
+        </Link>
+
+        <div className="space-y-6">
+          <div className="space-y-2 border-b border-dashed pb-6">
+            <div className="flex items-start gap-4">
+              <div className="shrink-0">
+                {data.fileCreatorPicture ? (
+                  <Image
+                    src={data.fileCreatorPicture}
+                    alt={data.fileCreator}
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center text-xs text-leading">
+                    {data.fileCreator.charAt(0).toUpperCase()}
+                  </div>
+                )}
+              </div>
+
+              <div className="flex-1">
+                <h1 className="text-lg text-heading truncate">
+                  {data.fileName}
+                </h1>
+
+                <p className="text-xs text-leading">{data.fileCreator}</p>
+              </div>
             </div>
-
-            <div className="flex-1">
-              <h1 className="text-lg text-heading truncate">{data.fileName}</h1>
-
-              <p className="text-xs text-leading">{data.fileCreator}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <div className="flex justify-between">
-            <span className="text-leading text-xs uppercase">Size</span>
-
-            <span className="text-heading text-xs">
-              {formatFileSize(data.fileSize)}
-            </span>
           </div>
 
-          <div className="flex justify-between">
-            <span className="text-leading text-xs uppercase">Content Type</span>
-
-            <span className="text-heading text-xs">{data.fileContentType}</span>
-          </div>
-
-          <div className="flex justify-between">
-            <span className="text-leading text-xs uppercase">Uploaded</span>
-
-            <span className="text-heading text-xs">{uploadedAt}</span>
-          </div>
-
-          {expiresDate && (
+          <div className="space-y-4">
             <div className="flex justify-between">
-              <span className="text-leading text-xs uppercase">Expires</span>
-
-              <span className="text-heading text-xs">{expiresDate}</span>
-            </div>
-          )}
-
-          {data.expiresAt && !data.fileExpired && (
-            <div className="flex justify-between">
-              <span className="text-leading text-xs uppercase">Time Left</span>
+              <span className="text-leading text-xs uppercase">Size</span>
 
               <span className="text-heading text-xs">
-                {getTimeRemaining(data.expiresAt)}
+                {formatFileSize(data.fileSize)}
               </span>
             </div>
-          )}
-        </div>
 
-        <div className="border-t border-dashed" />
+            <div className="flex justify-between">
+              <span className="text-leading text-xs uppercase">
+                Content Type
+              </span>
 
-        <div className="space-y-2">
-          <h3 className="text-xs text-leading uppercase">Description</h3>
-          <p className="text-sm text-heading">{data.fileDescription}</p>
-        </div>
-
-        {data.passwordProtected && (
-          <>
-            <div className="border-t border-dashed" />
-
-            <div className="space-y-3">
-              <h3 className="text-xs text-leading uppercase">
-                Password Required
-              </h3>
-
-              <Input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && password && !isPending) {
-                    handleGetFile();
-                  }
-                }}
-                placeholder="enter password"
-                className="w-full bg-gray-900 text-gray-100 placeholder-gray-600 text-sm font-mono"
-              />
+              <span className="text-heading text-xs">
+                {data.fileContentType}
+              </span>
             </div>
-          </>
-        )}
 
-        <Button
-          onClick={handleGetFile}
-          disabled={isPending || (data.passwordProtected && !password)}
-          className="w-full primary-btn text-white font-mono text-sm  rounded"
-        >
-          {isPending ? (
+            <div className="flex justify-between">
+              <span className="text-leading text-xs uppercase">Uploaded</span>
+
+              <span className="text-heading text-xs">{uploadedAt}</span>
+            </div>
+
+            {expiresDate && (
+              <div className="flex justify-between">
+                <span className="text-leading text-xs uppercase">Expires</span>
+
+                <span className="text-heading text-xs">{expiresDate}</span>
+              </div>
+            )}
+
+            {data.expiresAt && (
+              <div className="flex justify-between">
+                <span className="text-leading text-xs uppercase">
+                  Time Left
+                </span>
+
+                <span className="text-heading text-xs">
+                  {getTimeRemaining(data.expiresAt)}
+                </span>
+              </div>
+            )}
+          </div>
+
+          <div className="border-t border-dashed" />
+
+          <div className="space-y-2">
+            <h3 className="text-xs text-leading uppercase">Description</h3>
+            <p className="text-sm text-heading">{data.fileDescription}</p>
+          </div>
+
+          {data.passwordProtected && (
             <>
-              <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
-              Accessing...
+              <div className="border-t border-dashed" />
+
+              <div className="space-y-3">
+                <h3 className="text-xs text-leading uppercase">
+                  Password Required
+                </h3>
+
+                <Input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && password && !isPending) {
+                      handleGetFile();
+                    }
+                  }}
+                  placeholder="enter password"
+                  className="w-full bg-gray-900 text-gray-100 placeholder-gray-600 text-sm font-mono"
+                />
+              </div>
             </>
-          ) : (
-            "Access File"
           )}
-        </Button>
 
-        <div className="border-t border-dashed pt-4 gap-y-4 text-center flex flex-col items-center">
-          <p className="text-xs text-leading font-mono">
-            Shared securely • Link created{" "}
-            {new Date(data.createdAt).toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-            })}
-          </p>
-
-          <Link
-            className="text-xs text-leading font-mono flex items-center gap-1"
-            href={"/"}
+          <Button
+            onClick={handleGetFile}
+            disabled={
+              isPending ||
+              (data.passwordProtected && !password.length) ||
+              linkHasExpired
+            }
+            className="w-full primary-btn text-white font-mono text-sm"
           >
-            <ArrowLeft className="mr-1 h-3 w-3" /> Back to Temp
-          </Link>
+            {isPending ? (
+              <>
+                <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+                Accessing...
+              </>
+            ) : (
+              "Access File"
+            )}
+          </Button>
+
+          <div className="border-t border-dashed pt-4 gap-y-2 text-center flex flex-col items-center">
+            <p className="text-xs text-leading font-mono">
+              Shared Securely • Link created{" "}
+              {new Date(data.createdAt).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              })}
+            </p>
+
+            <div className="text-xs text-muted-foreground space-y-1">
+              <p>Having issues with this file?</p>
+              <a
+                href="mailto:apps@545plea.xyz"
+                className="text-primary hover:text-primary/80 transition-colors font-medium"
+              >
+                Contact us
+              </a>
+            </div>
+          </div>
         </div>
       </Card>
     </div>
