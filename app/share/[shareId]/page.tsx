@@ -6,13 +6,14 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Loader2Icon, FileX, Clock } from "lucide-react";
+import { Loader2Icon, FileX, Clock, ArrowLeft } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 import { formatFileSize, getTimeRemaining } from "@/lib/utils";
 import { getLinkDetails, getLinkedFile } from "@/data-service/mutations";
+import { Card } from "@/components/ui/card";
 
 export default function LinkDetailsPage() {
   const { shareId } = useParams<{ shareId: string }>();
@@ -44,9 +45,7 @@ export default function LinkDetailsPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4 font-mono">
           <Loader2Icon className="h-8 w-8 animate-spin text-orange-500" />
-          <span className="text-gray-400 text-sm">
-            Fetching link details...
-          </span>
+          <span className="text-leading text-sm">Fetching link details...</span>
         </div>
       </div>
     );
@@ -75,20 +74,21 @@ export default function LinkDetailsPage() {
   if (data.fileDeleted || data.fileExpired) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="border border-gray-700 rounded-lg p-8 max-w-md w-full space-y-4 text-center font-mono">
+        <Card className="border rounded p-8 max-w-md w-full gap-y-2 text-center font-mono">
           <div className="flex justify-center">
-            <Clock size={26} className=" text-yellow-600" />
+            <Clock size={32} className=" text-yellow-600" />
           </div>
 
-          <h1 className="text-xl text-gray-100">
+          <h1 className="text-lg text-heading">
             {data.fileDeleted ? "File Deleted" : "Link Expired"}
           </h1>
-          <p className="text-sm text-gray-400">
+
+          <p className="text-sm text-leading">
             {data.fileDeleted
               ? "This file has been deleted by the owner."
               : "This share link has expired and is no longer accessible."}
           </p>
-        </div>
+        </Card>
       </div>
     );
   }
@@ -113,8 +113,8 @@ export default function LinkDetailsPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 py-8">
-      <div className="w-full max-w-lg border border-gray-800 rounded-lg p-8 bg-neutral-950 space-y-6 font-mono">
-        <div className="space-y-2 border-b border-gray-800 pb-6">
+      <Card className="w-full max-w-lg border rounded p-8 space-y-6 font-mono">
+        <div className="space-y-2 border-b pb-6">
           <div className="flex items-start gap-4">
             <div className="shrink-0">
               {data.fileCreatorPicture ? (
@@ -126,58 +126,54 @@ export default function LinkDetailsPage() {
                   className="rounded-full"
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-xs text-gray-400">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center text-xs text-leading">
                   {data.fileCreator.charAt(0).toUpperCase()}
                 </div>
               )}
             </div>
 
             <div className="flex-1">
-              <h1 className="text-lg text-gray-100 truncate">
-                {data.fileName}
-              </h1>
+              <h1 className="text-lg text-heading truncate">{data.fileName}</h1>
 
-              <p className="text-xs text-gray-500">{data.fileCreator}</p>
+              <p className="text-xs text-leading">{data.fileCreator}</p>
             </div>
           </div>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-4">
           <div className="flex justify-between">
-            <span className="text-gray-500 text-sm">Size</span>
+            <span className="text-leading text-xs uppercase">Size</span>
 
-            <span className="text-gray-100 text-sm">
+            <span className="text-heading text-xs">
               {formatFileSize(data.fileSize)}
             </span>
           </div>
 
           <div className="flex justify-between">
-            <span className="text-gray-500 text-sm">Content Type</span>
+            <span className="text-leading text-xs uppercase">Content Type</span>
 
-            <span className="text-gray-100 text-sm">
-              {data.fileContentType}
-            </span>
+            <span className="text-heading text-xs">{data.fileContentType}</span>
           </div>
 
           <div className="flex justify-between">
-            <span className="text-gray-500 text-sm">Uploaded</span>
+            <span className="text-leading text-xs uppercase">Uploaded</span>
 
-            <span className="text-gray-100 text-sm">{uploadedAt}</span>
+            <span className="text-heading text-xs">{uploadedAt}</span>
           </div>
 
           {expiresDate && (
             <div className="flex justify-between">
-              <span className="text-gray-500 text-sm">Expires</span>
+              <span className="text-leading text-xs uppercase">Expires</span>
 
-              <span className="text-gray-100 text-sm">{expiresDate}</span>
+              <span className="text-heading text-xs">{expiresDate}</span>
             </div>
           )}
 
           {data.expiresAt && !data.fileExpired && (
             <div className="flex justify-between">
-              <span className="text-gray-500 text-sm">Time Left</span>
+              <span className="text-leading text-xs uppercase">Time Left</span>
 
-              <span className="text-gray-100 text-sm">
+              <span className="text-heading text-xs">
                 {getTimeRemaining(data.expiresAt)}
               </span>
             </div>
@@ -186,23 +182,24 @@ export default function LinkDetailsPage() {
 
         {data.fileDescription && (
           <>
-            <div className="border-t border-gray-800" />
+            <div className="border-t" />
 
             <div className="space-y-2">
-              <h3 className="text-xs text-gray-500 uppercase">Description</h3>
-              <p className="text-sm text-gray-300">{data.fileDescription}</p>
+              <h3 className="text-xs text-leading uppercase">Description</h3>
+              <p className="text-sm text-heading">{data.fileDescription}</p>
             </div>
           </>
         )}
 
         {data.passwordProtected && (
           <>
-            <div className="border-t border-gray-800" />
+            <div className="border-t" />
 
             <div className="space-y-3">
-              <h3 className="text-xs text-gray-500 uppercase">
+              <h3 className="text-xs text-leading uppercase">
                 Password Required
               </h3>
+
               <Input
                 type="password"
                 value={password}
@@ -213,7 +210,7 @@ export default function LinkDetailsPage() {
                   }
                 }}
                 placeholder="enter password"
-                className="w-full bg-gray-900 border-gray-800 text-gray-100 placeholder-gray-600 text-sm font-mono"
+                className="w-full bg-gray-900 text-gray-100 placeholder-gray-600 text-sm font-mono"
               />
             </div>
           </>
@@ -234,8 +231,8 @@ export default function LinkDetailsPage() {
           )}
         </Button>
 
-        <div className="border-t border-gray-800 pt-4 space-y-2 text-center">
-          <p className="text-xs text-gray-600 font-mono">
+        <div className="border-t pt-4 gap-y-4 text-center flex flex-col items-center">
+          <p className="text-xs text-leading font-mono">
             Shared securely • Link created{" "}
             {new Date(data.createdAt).toLocaleDateString("en-US", {
               month: "short",
@@ -243,11 +240,14 @@ export default function LinkDetailsPage() {
             })}
           </p>
 
-          <Link className="text-xs text-gray-600 font-mono" href={"/"}>
-            Back to Temp
+          <Link
+            className="text-xs text-leading font-mono flex items-center gap-1"
+            href={"/"}
+          >
+            <ArrowLeft className="mr-1 h-3 w-3" /> Back to Temp
           </Link>
         </div>
-      </div>
+      </Card>
     </div>
   );
 }
