@@ -30,6 +30,7 @@ import {
   getFileLinks,
   createFileLink,
   type FileDetails,
+  revokeFileLink,
 } from "@/data-service/mutations";
 
 import { formatFileSize, getTimeRemaining } from "@/lib/utils";
@@ -416,7 +417,7 @@ function FileDetails({
           onClick={handleShowDeleteConfirm}
           className="flex-1 font-medium text-sm"
         >
-          Delete
+          {isDeleted ? "Deleted" : "Delete"}
         </Button>
       </div>
     </div>
@@ -490,7 +491,9 @@ function FileSafe({
             <LinkItem
               key={link.id}
               id={link.id}
+              fileId={file.id}
               createdAt={link.createdAt}
+              revokedAt={link.revokedAt}
               clickCount={link.clickCount}
               lastAccessedAt={link.lastAccessedAt}
               passwordProtected={link.passwordProtected}
@@ -501,7 +504,7 @@ function FileSafe({
 
       {!links.length && (
         <div className="p-3 bg-secondary/20 border border-border/30 rounded-lg text-xs text-muted-foreground text-center">
-          No links created yet. Create one to start sharing.
+          No link has been created yet!
         </div>
       )}
     </div>
@@ -509,19 +512,30 @@ function FileSafe({
 }
 
 function LinkItem({
+  fileId,
   id,
+  revokedAt,
   clickCount,
   createdAt,
   lastAccessedAt,
   passwordProtected,
 }: {
+  fileId: string;
   id: string;
   createdAt: string;
   clickCount: number;
+  revokedAt: string | null;
   passwordProtected: boolean;
   lastAccessedAt: string | null;
 }) {
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const [copiedLinkId, setCopiedLinkId] = useState<string | null>(null);
+
+  const domain =
+    typeof window !== "undefined"
+      ? window.location.origin
+      : "https://temp.545plea.xyz";
 
   function handleCopy(linkId: string) {
     const shareUrl = `${domain}/share/${linkId}`;
@@ -530,10 +544,29 @@ function LinkItem({
     setTimeout(() => setCopiedLinkId(null), 2000);
   }
 
-  const domain =
-    typeof window !== "undefined"
-      ? window.location.origin
-      : "https://temp.545plea.xyz";
+  const { mutate, isPending } = useMutation({
+    mutationFn: revokeFileLink,
+    mutationKey: ["revoke-link"],
+
+    onSuccess: async () => {
+      toast.success("Link Revoked");
+
+      await queryClient.invalidateQueries({ queryKey: ["file-links"] });
+    },
+
+    onError: (error) => {
+      toast.error(error.message);
+      if (error.cause === 401) {
+        return router.push("/");
+      }
+    },
+  });
+
+  function handleRevoke({ id }: { id: string }) {
+    mutate({ fileId, linkId: id });
+  }
+
+  const isRevoked = !!revokedAt;
 
   return (
     <div
@@ -545,16 +578,35 @@ function LinkItem({
           readOnly
           type="text"
           value={`${domain}/share/${id}`}
-          className="flex-1 px-2 py-1 rounded text-xs bg-secondary/50 border border-border/30 text-foreground"
+          className="flex-1 px-2 py-2.5 rounded text-xs bg-secondary/50 border border-border/30 text-foreground"
         />
 
-        <Button
-          variant={"secondary"}
-          onClick={() => handleCopy(id)}
-          className={`px-3 py-1 text-xs rounded min-w-14 transition-all `}
-        >
-          {copiedLinkId === id ? "✓" : "Copy"}
-        </Button>
+        {!isRevoked && (
+          <>
+            <Button
+              variant={"secondary"}
+              onClick={() => handleCopy(id)}
+              className={`px-3 py-1 text-xs rounded min-w-14 transition-all `}
+            >
+              {copiedLinkId === id ? "✓" : "Copy"}
+            </Button>
+
+            <Button
+              variant={"destructive"}
+              disabled={isPending || isRevoked}
+              onClick={() => handleRevoke({ id })}
+              className="px-3 py-1 text-xs rounded min-w-14 transition-all"
+            >
+              {isPending ? (
+                <Loader2Icon className="animate-spin" />
+              ) : isRevoked ? (
+                "Revoked"
+              ) : (
+                "Revoke"
+              )}
+            </Button>
+          </>
+        )}
       </div>
 
       <div className="flex gap-2 justify-between">

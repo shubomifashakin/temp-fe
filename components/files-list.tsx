@@ -107,7 +107,7 @@ export default function FilesList({ files, onFileSelect }: FilesListProps) {
               </div>
 
               <div className="flex justify-between">
-                <span>Expires:</span>
+                <span>Time Left:</span>
 
                 <span
                   className={`${getTimeRemaining(file.expiresAt).includes("Expired") ? "text-destructive" : "text-leading"}`}

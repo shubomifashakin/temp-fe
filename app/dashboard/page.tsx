@@ -86,6 +86,11 @@ export default function Page() {
     setSelectedFile(file);
   }
 
+  function onFileDeleteCb() {
+    setSelectedFile(null);
+    queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+  }
+
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isModalOpen) {
@@ -153,8 +158,8 @@ export default function Page() {
       {selectedFile && (
         <FileDetailsModal
           file={selectedFile}
+          deleteCb={onFileDeleteCb}
           onClose={() => setSelectedFile(null)}
-          deleteCb={() => setSelectedFile(null)}
         />
       )}
 
