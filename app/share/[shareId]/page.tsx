@@ -18,7 +18,7 @@ export default function LinkDetailsPage() {
   const { shareId } = useParams<{ shareId: string }>();
   const [password, setPassword] = useState("");
 
-  const { data, status, error } = useQuery({
+  const { data, status, error, refetch } = useQuery({
     refetchOnWindowFocus: true,
     queryKey: ["share-link", shareId],
     queryFn: () => getLinkDetails({ linkId: shareId }),
@@ -52,20 +52,21 @@ export default function LinkDetailsPage() {
     );
   }
 
-  //   FIXME: CREATE ERROR COMPONENT
-  if (status === "error" || !data) {
+  if (status === "error") {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="border border-gray-700 rounded-lg p-8 max-w-md w-full space-y-4 text-center font-mono">
           <div className="flex justify-center">
-            <FileX className="h-12 w-12 text-red-600" />
+            <FileX size={38} strokeWidth={1.5} />
           </div>
 
-          <h1 className="text-xl text-gray-100">link not found</h1>
+          <h1 className="text-base text-gray-100 tracking-tight">
+            Oops! Something went wrong...
+          </h1>
 
-          <p className="text-sm text-gray-400">
-            this share link does not exist or has been removed.
-          </p>
+          <Button className="rounded" onClick={() => refetch()}>
+            Try Again
+          </Button>
         </div>
       </div>
     );
