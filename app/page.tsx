@@ -41,8 +41,8 @@ export default function Home() {
               onClick={() => scrollToSection("home")}
               className={`text-sm cursor-pointer font-medium transition-colors ${
                 activeNav === "home"
-                  ? "text-orange-500 border-dashed border-orange-500 border-b"
-                  : "text-muted-foreground hover:text-orange-500 hover:border-orange-500 hover:border-b border-dashed"
+                  ? "text-orange-500"
+                  : "text-muted-foreground hover:text-orange-500"
               }`}
             >
               Home
@@ -52,8 +52,8 @@ export default function Home() {
               onClick={() => scrollToSection("features")}
               className={`text-sm cursor-pointer font-medium transition-colors ${
                 activeNav === "features"
-                  ? "text-orange-500 border-dashed border-orange-500 border-b"
-                  : "text-muted-foreground hover:text-orange-500 hover:border-orange-500 hover:border-b border-dashed"
+                  ? "text-orange-500"
+                  : "text-muted-foreground hover:text-orange-500"
               }`}
             >
               Features
@@ -63,8 +63,8 @@ export default function Home() {
               onClick={() => scrollToSection("pricing")}
               className={`text-sm cursor-pointer font-medium transition-colors ${
                 activeNav === "pricing"
-                  ? "text-orange-500 border-dashed border-orange-500 border-b"
-                  : "text-muted-foreground hover:text-orange-500 hover:border-orange-500 hover:border-b border-dashed"
+                  ? "text-orange-500"
+                  : "text-muted-foreground hover:text-orange-500"
               }`}
             >
               Pricing
@@ -75,7 +75,7 @@ export default function Home() {
             <Button
               variant={"link"}
               asChild
-              className="w-fit font-medium! cursor-pointer text-sm no-underline! border-b rounded-none p-0! h-fit border-dashed border-transparent hover:border-orange-500 hover:text-orange-500 transition-colors"
+              className="w-fit font-medium! cursor-pointer text-sm! no-underline! rounded-none p-0! h-fit hover:text-orange-500 transition-colors"
             >
               <Link href="/auth/sign-in">Sign In</Link>
             </Button>
@@ -181,7 +181,7 @@ export default function Home() {
 
       <section
         id="features"
-        className="py-24 px-4 bg-secondary/10 border-y border-dashed border-border/50"
+        className="py-24 px-4 bg-secondary/10 border-y border-border/50"
       >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
@@ -247,7 +247,7 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-8">
-            <div className="bg-card border-dashed border min-h-[500px] w-full md:w-[300px] border-border/50 rounded-lg p-8 flex flex-col hover:border-accent/50 transition-colors">
+            <div className="bg-card border min-h-[500px] w-full md:w-[300px] border-border/50 rounded-lg p-8 flex flex-col hover:border-accent/50 transition-colors">
               <div className="mb-6">
                 <h3 className="text-2xl font-playfair font-bold text-heading mb-2">
                   Free
@@ -296,8 +296,8 @@ export default function Home() {
               </Button>
             </div>
 
-            <div className="bg-card border-dashed border border-accent rounded-lg p-8 min-h-[500px] w-full md:w-[300px] flex flex-col relative">
-              <div className="absolute -top-4 left-8 bg-accent text-orange-500 px-3 py-1 rounded-full text-xs font-medium">
+            <div className="bg-card border border-accent rounded-lg p-8 min-h-[500px] w-full md:w-[300px] flex flex-col relative">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-orange-500 px-3 py-1 rounded-full text-xs font-medium">
                 Recommended
               </div>
 
@@ -386,14 +386,14 @@ export default function Home() {
           <div className="flex items-center gap-4">
             <Link
               href="/terms-of-service"
-              className="text-xs text-leading hover:text-orange-500 hover:border-orange-500 border-b border-transparent duration-150 border-dashed transition-colors"
+              className="text-xs text-leading hover:text-orange-500 duration-150 transition-colors"
             >
               Terms of Service
             </Link>
 
             <Link
               href="/privacy-policy"
-              className="text-xs text-leading hover:text-orange-500 hover:border-orange-500 border-b border-transparent duration-150 border-dashed transition-colors"
+              className="text-xs text-leading hover:text-orange-500 duration-150 transition-colors"
             >
               Privacy Policy
             </Link>

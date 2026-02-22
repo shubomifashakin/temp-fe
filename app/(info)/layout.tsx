@@ -20,21 +20,21 @@ export default function InfoLayout({ children }: { children: ReactNode }) {
           <div className="hidden md:flex items-center gap-8">
             <Link
               href={"/"}
-              className={`text-sm cursor-pointer font-medium transition-colors ${"text-muted-foreground hover:text-orange-500 hover:border-orange-500 hover:border-b border-dashed"}`}
+              className={`text-sm cursor-pointer font-medium transition-colors ${"text-muted-foreground hover:text-orange-500"}`}
             >
               Home
             </Link>
 
             <Link
               href={"/#features"}
-              className={`text-sm cursor-pointer font-medium transition-colors ${"text-muted-foreground hover:text-orange-500 hover:border-orange-500 hover:border-b border-dashed"}`}
+              className={`text-sm cursor-pointer font-medium transition-colors ${"text-muted-foreground hover:text-orange-500"}`}
             >
               Features
             </Link>
 
             <Link
               href={"/#pricing"}
-              className={`text-sm cursor-pointer font-medium transition-colors ${"text-muted-foreground hover:text-orange-500 hover:border-orange-500 hover:border-b border-dashed"}`}
+              className={`text-sm cursor-pointer font-medium transition-colors ${"text-muted-foreground hover:text-orange-500"}`}
             >
               Pricing
             </Link>
@@ -44,7 +44,7 @@ export default function InfoLayout({ children }: { children: ReactNode }) {
             <Button
               variant={"link"}
               asChild
-              className="w-fit font-medium! cursor-pointer text-sm no-underline! border-b rounded-none p-0! h-fit border-dashed border-transparent hover:border-orange-500 hover:text-orange-500 transition-colors"
+              className="w-fit font-medium! cursor-pointer text-sm no-underline! rounded-none p-0! h-fit hover:text-orange-500 transition-colors"
             >
               <Link href="/auth/sign-in">Sign In</Link>
             </Button>
@@ -110,14 +110,14 @@ export default function InfoLayout({ children }: { children: ReactNode }) {
           <div className="flex items-center gap-4">
             <Link
               href="/terms-of-service"
-              className="text-xs text-muted-foreground hover:text-orange-500 hover:border-orange-500 border-b border-transparent duration-150 border-dashed transition-colors"
+              className="text-xs text-muted-foreground hover:text-orange-500 duration-150 transition-colors"
             >
               Terms of Service
             </Link>
 
             <Link
               href="/privacy-policy"
-              className="text-xs text-muted-foreground hover:text-orange-500 hover:border-orange-500 border-b border-transparent duration-150 border-dashed transition-colors"
+              className="text-xs text-muted-foreground hover:text-orange-500 duration-150 transition-colors"
             >
               Privacy Policy
             </Link>

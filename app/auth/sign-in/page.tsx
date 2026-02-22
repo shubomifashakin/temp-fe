@@ -11,7 +11,7 @@ export default function SignInPage() {
   return (
     <main className="min-h-screen font-mono bg-background flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
-        <div className="bg-card border border-dashed border-border rounded-lg p-8 space-y-8">
+        <div className="bg-card border border-border rounded-lg p-8 space-y-8">
           <div className="space-y-4">
             <h1 className="text-5xl font-playfair font-bold text-foreground tracking-tight">
               Temp

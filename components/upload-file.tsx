@@ -132,7 +132,7 @@ export default function UploadModal({
             className={`border border-dashed rounded-lg p-8 text-center cursor-pointer transition-all ${
               isDragging
                 ? "border-orange-500 bg-orange-500/10"
-                : "border-border/50 hover:border-orange-500 hover:bg-orange-500/10"
+                : "border-border/50 hover:border-orange-500 hover:bg-orange-500/10 hover:border-solid"
             }`}
           >
             <input

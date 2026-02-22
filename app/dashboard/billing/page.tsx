@@ -96,7 +96,7 @@ function SubscriptionInfo({ data }: { data: SubscriptionInfo | null }) {
   });
 
   return (
-    <Card className="p-6 bg-card border-dashed border border-border shadow-none gap-y-4">
+    <Card className="p-6 bg-card border border-border shadow-none gap-y-4">
       <div className="space-y-0.5">
         <h2 className="text-3xl font-bold text-heading font-playfair tracking-tighter">
           Billing Information
@@ -224,7 +224,7 @@ function ErrorState({
   onRetry: () => void;
 }) {
   return (
-    <Card className="p-6 bg-card border border-border border-dashed shadow-none font-mono">
+    <Card className="p-6 bg-card border border-border shadow-none font-mono">
       <div className="text-center space-y-1">
         <AlertTriangle className="size-10 mx-auto" />
 
