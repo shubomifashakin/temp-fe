@@ -19,6 +19,7 @@ import {
   updateAccountInfo,
 } from "@/data-service/mutations";
 import { generateProfileImage } from "@/lib/utils";
+import { InputGroup } from "@/components/input-group";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -139,14 +140,7 @@ function AccountInfo({
           </div>
         </div>
 
-        <div>
-          <label
-            htmlFor="name"
-            className="block text-sm font-light text-heading mb-2"
-          >
-            Name
-          </label>
-
+        <InputGroup label="Name" showRequired={false}>
           <input
             id="name"
             type="text"
@@ -156,13 +150,9 @@ function AccountInfo({
             onChange={(e) => setName(e.target.value)}
             className="w-full px-3 py-2 border rounded text-sm border-border bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
           />
-        </div>
+        </InputGroup>
 
-        <div>
-          <label htmlFor="email" className="block text-sm text-heading mb-2">
-            Email
-          </label>
-
+        <InputGroup label="Email" showRequired={false}>
           <input
             id="email"
             type="email"
@@ -172,7 +162,7 @@ function AccountInfo({
           />
 
           <p className="text-xs text-leading mt-2">Email cannot be changed.</p>
-        </div>
+        </InputGroup>
 
         {name !== data.name && (
           <div className="flex gap-4 justify-end pt-4">

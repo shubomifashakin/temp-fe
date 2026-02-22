@@ -14,7 +14,7 @@ export function InputGroup({
       <div className="flex justify-between">
         <label
           title={label}
-          className="text-sm font-medium text-heading capitalize tracking-tight"
+          className="text-sm font-medium text-heading capitalize"
         >
           {label}
         </label>
