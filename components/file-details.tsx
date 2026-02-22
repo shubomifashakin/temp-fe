@@ -620,7 +620,7 @@ function LinkItem({
         <LinkDetail
           heading="Clicks"
           icon={<MousePointerClick size={16} />}
-          leading={clickCount.toString()}
+          leading={clickCount > 100 ? "100+" : clickCount.toString()}
         />
 
         <LinkDetail
