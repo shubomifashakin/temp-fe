@@ -51,7 +51,7 @@ export default function FilesList({ files, onFileSelect }: FilesListProps) {
 
   return (
     <div
-      className="grid grid-cols-1 font-mono md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[calc(100vh-200px)] overflow-y-auto pr-2 no-scrollbar"
+      className="grid grid-cols-1 font-mono md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[calc(100vh-200px)] overflow-y-auto  no-scrollbar"
       data-scroll-container="files"
     >
       {files.map((file) => (

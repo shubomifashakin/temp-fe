@@ -120,8 +120,8 @@ export default function Page() {
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center">
+    <div className="space-y-4 font-mono">
+      <div className="flex justify-between items-start">
         <div className="space-y-0.5">
           <h2 className="text-3xl font-bold text-heading font-playfair tracking-tight">
             Files
@@ -131,7 +131,9 @@ export default function Page() {
         </div>
 
         <Button
-          className={"primary-btn font-mono text-sm tracking-tight px-6!"}
+          className={
+            "primary-btn font-mono text-sm tracking-tight px-2 md:px-6!"
+          }
           onClick={() => setIsModalOpen(true)}
         >
           Upload File
