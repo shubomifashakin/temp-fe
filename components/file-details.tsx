@@ -331,12 +331,12 @@ function FileDetails({
               {getFileIcon(file.contentType, file.name)}
             </span>
 
-            <div>
+            <div className="space-y-1">
               <h2 className="-mt-1 font-bold tracking-tight text-heading break-all text-xl">
                 {file.name}
               </h2>
 
-              <p className="text-xs text-leading font-light tracking-tight">
+              <p className="text-sm text-leading font-light tracking-tight">
                 {file.description}
               </p>
             </div>
