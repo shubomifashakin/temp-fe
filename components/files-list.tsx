@@ -1,5 +1,4 @@
-import { formatDistanceToNow, isPast } from "date-fns";
-
+import { formatFileSize, getTimeRemaining } from "@/lib/utils";
 import { FileDetails } from "@/data-service/mutations";
 import {
   Check,
@@ -20,6 +19,7 @@ interface FilesListProps {
 }
 
 function getFileIcon(mimeType: string, fileName: string): React.ReactNode {
+  // eslint-disable-next-line jsx-a11y/alt-text
   if (mimeType.startsWith("image/")) return <Image strokeWidth={1.5} />;
   if (mimeType === "application/pdf") return <FileText strokeWidth={1.5} />;
   if (mimeType.includes("word")) return <FileText strokeWidth={1.5} />;
@@ -28,23 +28,6 @@ function getFileIcon(mimeType: string, fileName: string): React.ReactNode {
   if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls"))
     return <FileText strokeWidth={1.5} />;
   return <FileText strokeWidth={1.5} />;
-}
-
-function formatFileSize(bytes: number): string {
-  if (bytes === 0) return "0 B";
-  const k = 1024;
-  const sizes = ["B", "KB", "MB", "GB"];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${Math.round((bytes / Math.pow(k, i)) * 100) / 100} ${sizes[i]}`;
-}
-
-function getTimeRemaining(expiresAt: string): string {
-  const expires = new Date(expiresAt);
-
-  if (isPast(expires)) return "Expired";
-
-  const timeLeft = formatDistanceToNow(expires, { addSuffix: false });
-  return `${timeLeft} left`;
 }
 
 export default function FilesList({ files, onFileSelect }: FilesListProps) {
@@ -77,7 +60,7 @@ export default function FilesList({ files, onFileSelect }: FilesListProps) {
         <div
           key={file.id}
           onClick={() => onFileSelect(file)}
-          className="bg-card border border-border border-dashed rounded-lg p-4 cursor-pointer hover:border-accent hover:shadow-lg transition-all duration-200 hover:bg-card/80"
+          className="bg-card border border-border rounded-lg p-4 cursor-pointer hover:border-accent hover:shadow-lg transition-all duration-200 hover:bg-card/80"
         >
           <div className="space-y-4">
             <div className="flex items-start justify-between">

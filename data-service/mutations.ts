@@ -48,6 +48,8 @@ export type FileDetails = {
   name: string;
   totalLinks: number;
   totalClicks: number;
+  createdAt: string;
+  deletedAt: string | null;
 };
 
 type GetFilesResponse = {
@@ -276,7 +278,7 @@ export async function uploadFile({
   return response.json();
 }
 
-export async function deleteFile(id: string) {
+export async function deleteFile({ id }: { id: string }) {
   const response = await fetchWithAuth(`${backendUrl}/files/${id}`, {
     method: "DELETE",
   });
@@ -287,6 +289,23 @@ export async function deleteFile(id: string) {
 
   return response.json();
 }
+
+type LinkDetails = {
+  id: string;
+  revokedAt?: boolean;
+  createdAt: string;
+  clickCount: number;
+  expiresAt?: string;
+  description: string;
+  lastAccessedAt?: string;
+  passwordProtected: boolean;
+};
+
+export type FileLinksResponse = {
+  data: LinkDetails[];
+  hasNextPage: boolean;
+  cursor: string | null;
+};
 
 //file links
 export async function getFileLinks({
@@ -308,7 +327,7 @@ export async function getFileLinks({
     throw await handleRequestError(response);
   }
 
-  return response.json();
+  return response.json() as Promise<FileLinksResponse>;
 }
 
 export async function createFileLink({

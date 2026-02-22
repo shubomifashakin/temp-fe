@@ -20,13 +20,15 @@ import {
 } from "@/data-service/mutations";
 
 import { Button } from "@/components/ui/button";
-import UploadModal from "@/components/upload-file";
 import FilesList from "@/components/files-list";
+import UploadModal from "@/components/upload-file";
+import FileDetailsModal from "@/components/flie-details";
 
 export default function Page() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<FileDetails | null>(null);
 
   const {
     data,
@@ -81,8 +83,7 @@ export default function Page() {
   }
 
   function handleFileSelect(file: FileDetails) {
-    console.log(file);
-    //FIXME: HANDLE THIS
+    setSelectedFile(file);
   }
 
   useEffect(() => {
@@ -147,6 +148,14 @@ export default function Page() {
 
       {status === "success" && (
         <FilesList files={files} onFileSelect={handleFileSelect} />
+      )}
+
+      {selectedFile && (
+        <FileDetailsModal
+          file={selectedFile}
+          onClose={() => setSelectedFile(null)}
+          deleteCb={() => setSelectedFile(null)}
+        />
       )}
 
       <Activity mode={isModalOpen ? "visible" : "hidden"}>
