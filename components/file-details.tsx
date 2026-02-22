@@ -301,7 +301,7 @@ function CreateLinkForm({
           disabled={isPending}
           className="primary-btn min-w-26"
         >
-          Create Link
+          Create Link {isPending && <Loader2Icon className="animate-spin" />}
         </Button>
       </div>
     </form>

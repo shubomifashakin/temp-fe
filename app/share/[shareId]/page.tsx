@@ -114,7 +114,7 @@ export default function LinkDetailsPage() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 py-8">
       <Card className="w-full max-w-lg border rounded p-8 space-y-6 font-mono">
-        <div className="space-y-2 border-b pb-6">
+        <div className="space-y-2 border-b border-dashed pb-6">
           <div className="flex items-start gap-4">
             <div className="shrink-0">
               {data.fileCreatorPicture ? (
@@ -180,20 +180,16 @@ export default function LinkDetailsPage() {
           )}
         </div>
 
-        {data.fileDescription && (
-          <>
-            <div className="border-t" />
+        <div className="border-t border-dashed" />
 
-            <div className="space-y-2">
-              <h3 className="text-xs text-leading uppercase">Description</h3>
-              <p className="text-sm text-heading">{data.fileDescription}</p>
-            </div>
-          </>
-        )}
+        <div className="space-y-2">
+          <h3 className="text-xs text-leading uppercase">Description</h3>
+          <p className="text-sm text-heading">{data.fileDescription}</p>
+        </div>
 
         {data.passwordProtected && (
           <>
-            <div className="border-t" />
+            <div className="border-t border-dashed" />
 
             <div className="space-y-3">
               <h3 className="text-xs text-leading uppercase">
@@ -231,7 +227,7 @@ export default function LinkDetailsPage() {
           )}
         </Button>
 
-        <div className="border-t pt-4 gap-y-4 text-center flex flex-col items-center">
+        <div className="border-t border-dashed pt-4 gap-y-4 text-center flex flex-col items-center">
           <p className="text-xs text-leading font-mono">
             Shared securely • Link created{" "}
             {new Date(data.createdAt).toLocaleDateString("en-US", {

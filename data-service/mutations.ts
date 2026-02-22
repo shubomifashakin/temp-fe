@@ -360,15 +360,9 @@ export async function createFileLink({
     description: string;
   };
 }) {
-  // Remove expiresAt if it's null, otherwise convert to Date object
-  const payload = {
-    ...data,
-    ...(data.expiresAt && { expiresAt: new Date(data.expiresAt) }),
-  };
-
   const response = await fetchWithAuth(`${backendUrl}/files/${fileId}/links`, {
     method: "POST",
-    body: JSON.stringify(payload),
+    body: JSON.stringify(data),
   });
 
   if (!response.ok) {
