@@ -154,7 +154,7 @@ function AccountInfo({
             minLength={3}
             maxLength={30}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-3 py-2 border border-border text-sm rounded bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full px-3 py-2 border rounded text-sm border-border bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
 
@@ -168,7 +168,7 @@ function AccountInfo({
             type="email"
             disabled
             value={data?.email}
-            className="w-full px-3 py-2 border text-sm border-border bg-muted text-muted-foreground cursor-not-allowed"
+            className="w-full px-3 py-2 border rounded text-sm border-border bg-muted text-muted-foreground cursor-not-allowed"
           />
 
           <p className="text-xs text-leading mt-2">Email cannot be changed</p>
