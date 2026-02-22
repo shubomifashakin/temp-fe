@@ -3,7 +3,7 @@
 import React, { useState, useRef, ReactNode } from "react";
 import { toast } from "sonner";
 
-import { FileUp, Loader2Icon, X } from "lucide-react";
+import { FileUp, Loader2Icon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Lifetimes } from "@/data-service/mutations";
@@ -109,19 +109,12 @@ export default function UploadModal({
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 dark font-mono">
-      <div className="w-full max-w-md bg-card border border-border/50 rounded-lg shadow-2xl">
+      <div className="w-full max-w-md bg-card border border-border/50 rounded shadow-2xl">
         <div className="p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl tracking-tighter font-playfair font-bold text-heading">
+            <h2 className="text-2xl tracking-tight font-playfair font-bold text-heading">
               Upload File
             </h2>
-
-            <button
-              onClick={handleClose}
-              className="text-lg text-muted-foreground cursor-pointer hover:text-orange-500 transition-colors"
-            >
-              <X />
-            </button>
           </div>
 
           <div
@@ -129,7 +122,7 @@ export default function UploadModal({
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onClick={() => fileInputRef.current?.click()}
-            className={`border border-dashed rounded-lg p-8 text-center cursor-pointer transition-all ${
+            className={`border border-dashed rounded p-8 text-center cursor-pointer transition-all ${
               isDragging
                 ? "border-orange-500 bg-orange-500/10"
                 : "border-border/50 hover:border-orange-500 hover:bg-orange-500/10 hover:border-solid"
@@ -165,7 +158,7 @@ export default function UploadModal({
           </div>
 
           {file && (
-            <div className="bg-secondary/30 border border-border/30 p-3 rounded-lg text-sm text-foreground">
+            <div className="bg-secondary/30 border border-border/30 p-3 rounded text-sm text-foreground">
               <div className="flex justify-between text-sm tracking-tight">
                 <span className="text-leading">Size:</span>
 
@@ -185,7 +178,7 @@ export default function UploadModal({
               maxLength={50}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter a name for this file..."
-              className="w-full p-3 rounded-lg border border-border/50 bg-secondary/20 text-foreground placeholder:text-muted-foreground placeholder:text-xs tracking-tight focus:outline-none focus:ring-1 focus:ring-accent text-sm"
+              className="w-full p-3 rounded border border-border/50 bg-secondary/20 text-foreground placeholder:text-muted-foreground placeholder:text-xs tracking-tight focus:outline-none focus:ring-1 focus:ring-accent text-sm"
             />
           </InputGroup>
 
@@ -196,7 +189,7 @@ export default function UploadModal({
               value={description}
               placeholder="Why did you upload this file?"
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full p-3 rounded-lg  border border-border/50 placeholder:text-xs tracking-tight max-h-24 min-h-20 bg-secondary/20 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent text-sm"
+              className="w-full p-3 rounded  border border-border/50 placeholder:text-xs tracking-tight max-h-24 min-h-20 bg-secondary/20 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent text-sm"
             />
           </InputGroup>
 
@@ -206,7 +199,7 @@ export default function UploadModal({
                 <button
                   key={option.value}
                   onClick={() => setLifetime(option.value as Lifetimes)}
-                  className={`p-3 rounded-lg cursor-pointer border transition-colors duration-150 text-center ${
+                  className={`p-3 rounded cursor-pointer border transition-colors duration-150 text-center ${
                     lifetime === option.value
                       ? "border-orange-500 bg-orange-500/10"
                       : "border-border/50 hover:border-orange-500 hover:bg-orange-500/10"

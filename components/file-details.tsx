@@ -38,6 +38,7 @@ import { formatFileSize, getTimeRemaining } from "@/lib/utils";
 import { InputGroup } from "./input-group";
 import { Calendar } from "./ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Card } from "./ui/card";
 
 interface FileDetailsModalProps {
   file: FileDetails;
@@ -87,8 +88,8 @@ export default function FileDetailsModal({
   }
 
   return (
-    <div className="fixed font-mono inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 dark">
-      <div className="w-full max-w-md bg-card border border-border rounded-lg">
+    <div className="fixed font-mono inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <Card className="w-full max-w-xl bg-card border border-border gap-0 p-0 rounded">
         {showDeleteConfirm && (
           <ConfirmFileDelete
             fileId={file.id}
@@ -112,7 +113,7 @@ export default function FileDetailsModal({
             handleShowCreateLinkForm={handleShowCreateLinkForm}
           />
         )}
-      </div>
+      </Card>
     </div>
   );
 }
@@ -142,7 +143,7 @@ function ConfirmFileDelete({
   return (
     <div className="p-6 space-y-4">
       <div className="space-y-2">
-        <h2 className="text-3xl font-bold font-playfair text-foreground tracking-tighter">
+        <h2 className="text-3xl font-bold font-playfair text-foreground tracking-tight">
           Delete File?
         </h2>
 
@@ -240,7 +241,7 @@ function CreateLinkForm({
           maxLength={100}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Enter a description..."
-          className="w-full p-3 rounded-lg border border-border/50 bg-secondary/20 text-foreground placeholder:text-muted-foreground placeholder:text-xs tracking-tight focus:outline-none focus:ring-1 focus:ring-accent text-sm"
+          className="w-full p-3 rounded border border-border/50 bg-secondary/20 text-foreground placeholder:text-muted-foreground placeholder:text-xs tracking-tight focus:outline-none focus:ring-1 focus:ring-accent text-sm"
         />
       </InputGroup>
 
@@ -251,7 +252,7 @@ function CreateLinkForm({
           value={password || ""}
           placeholder="Enter a password (optional)..."
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-3 rounded-lg border border-border/50 bg-secondary/20 text-foreground placeholder:text-muted-foreground placeholder:text-xs tracking-tight focus:outline-none focus:ring-1 focus:ring-accent text-sm"
+          className="w-full p-3 rounded border border-border/50 bg-secondary/20 text-foreground placeholder:text-muted-foreground placeholder:text-xs tracking-tight focus:outline-none focus:ring-1 focus:ring-accent text-sm"
         />
       </InputGroup>
 
@@ -260,7 +261,7 @@ function CreateLinkForm({
           <PopoverTrigger asChild>
             <button
               data-empty={!expiresAt}
-              className="w-full data-[empty=true]:text-muted-foreground flex justify-between items-center p-3 rounded-lg border border-border/50 bg-secondary/20 text-foreground placeholder:text-muted-foreground tracking-tight focus:outline-none focus:ring-1 focus:ring-accent text-sm"
+              className="w-full data-[empty=true]:text-muted-foreground flex justify-between items-center p-3 rounded border border-border/50 bg-secondary/20 text-foreground placeholder:text-muted-foreground tracking-tight focus:outline-none focus:ring-1 focus:ring-accent text-sm"
             >
               {expiresAt ? (
                 format(expiresAt, "PPP")
@@ -331,7 +332,7 @@ function FileDetails({
             </span>
 
             <div>
-              <h2 className="font-bold -mt-1 font-playfair tracking-tighter text-heading break-all text-xl">
+              <h2 className="font-bold -mt-1 font-playfair tracking-tight text-heading break-all text-xl">
                 {file.name}
               </h2>
 
@@ -343,7 +344,7 @@ function FileDetails({
         </div>
       </div>
 
-      <div className="space-y-4 bg-secondary/30 border border-border/30 p-4 rounded-lg">
+      <div className="space-y-4 bg-secondary/30 border border-border/30 p-4 rounded">
         <div className="flex justify-between text-xs">
           <span className="text-muted-foreground">Size</span>
 
@@ -466,7 +467,7 @@ function FileSafe({
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
         <label className="text-xs font-semibold text-foreground capitalize tracking-tight">
           Total Links ({file.totalLinks})
@@ -485,7 +486,7 @@ function FileSafe({
       {status === "success" && links.length ? (
         <div
           ref={linkListContainerRef}
-          className="space-y-2 max-h-64 overflow-y-auto no-scrollbar"
+          className="space-y-4 max-h-64 overflow-y-auto no-scrollbar"
         >
           {links.map((link) => (
             <LinkItem
@@ -503,7 +504,7 @@ function FileSafe({
       ) : null}
 
       {!links.length && (
-        <div className="p-3 bg-secondary/20 border border-border/30 rounded-lg text-xs text-muted-foreground text-center">
+        <div className="p-3 bg-secondary/20 border border-border/30 rounded text-xs text-muted-foreground text-center">
           No link has been created yet!
         </div>
       )}
@@ -571,7 +572,7 @@ function LinkItem({
   return (
     <div
       key={id}
-      className="bg-secondary/30 border border-border/30 rounded-lg p-3 space-y-3"
+      className="bg-secondary/30 border border-border/30 rounded p-3 space-y-3"
     >
       <div className="flex gap-2">
         <input
@@ -663,7 +664,7 @@ function LinkDetail({
 
 function FileUnsafe() {
   return (
-    <div className="p-3 bg-destructive/5 border items-start flex gap-x-2 border-destructive/20 gap-y-4 shadow-none rounded-lg text-xs text-red-400 tracking-tight font-light">
+    <div className="p-3 bg-destructive/5 border items-start flex gap-x-2 border-destructive/20 gap-y-4 shadow-none rounded text-xs text-red-400 tracking-tight font-light">
       <OctagonAlert size={24} /> This file was flagged as unsafe and has been
       automatically deleted. Links cannot be generated.
     </div>
@@ -672,7 +673,7 @@ function FileUnsafe() {
 
 function FilePending() {
   return (
-    <div className="p-3 bg-yellow-500/10 border items-start flex gap-x-2 border-yellow-500/30 rounded-lg text-xs text-yellow-400 tracking-tight font-light">
+    <div className="p-3 bg-yellow-500/10 border items-start flex gap-x-2 border-yellow-500/30 rounded text-xs text-yellow-400 tracking-tight font-light">
       <CircleDashed size={24} className="animate-spin -mt-0.5" /> Scanning in
       progress. Share links will be available once scanning completes.
     </div>
