@@ -587,7 +587,7 @@ function LinkItem({
             <Button
               variant={"secondary"}
               onClick={() => handleCopy(id)}
-              className={`px-3 py-1 text-xs rounded min-w-14 transition-all `}
+              className={`px-3 py-1 text-xs rounded min-w-14 md:min-w-22 transition-all `}
             >
               {copiedLinkId === id ? "✓" : "Copy"}
             </Button>
@@ -596,7 +596,7 @@ function LinkItem({
               variant={"destructive"}
               disabled={isPending || isRevoked}
               onClick={() => handleRevoke({ id })}
-              className="px-3 py-1 text-xs rounded min-w-14 transition-all"
+              className="px-3 py-1 text-xs rounded min-w-14 md:min-w-22 transition-all"
             >
               {isPending ? (
                 <Loader2Icon className="animate-spin" />
