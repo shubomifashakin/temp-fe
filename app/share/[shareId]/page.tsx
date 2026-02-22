@@ -39,13 +39,14 @@ export default function LinkDetailsPage() {
     mutate({ linkId: shareId, password: password || null });
   }
 
-  //FIXME: CORRECT THIS
   if (status === "pending") {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4 font-mono">
           <Loader2Icon className="h-8 w-8 animate-spin text-orange-500" />
-          <span className="text-gray-400 text-sm">loading...</span>
+          <span className="text-gray-400 text-sm">
+            Fetching link details...
+          </span>
         </div>
       </div>
     );
@@ -129,10 +130,12 @@ export default function LinkDetailsPage() {
                 </div>
               )}
             </div>
+
             <div className="flex-1">
               <h1 className="text-lg text-gray-100 truncate">
                 {data.fileName}
               </h1>
+
               <p className="text-xs text-gray-500">{data.fileCreator}</p>
             </div>
           </div>
@@ -141,6 +144,7 @@ export default function LinkDetailsPage() {
         <div className="space-y-3">
           <div className="flex justify-between">
             <span className="text-gray-500 text-sm">Size</span>
+
             <span className="text-gray-100 text-sm">
               {formatFileSize(data.fileSize)}
             </span>
@@ -148,6 +152,7 @@ export default function LinkDetailsPage() {
 
           <div className="flex justify-between">
             <span className="text-gray-500 text-sm">Content Type</span>
+
             <span className="text-gray-100 text-sm">
               {data.fileContentType}
             </span>
@@ -155,12 +160,14 @@ export default function LinkDetailsPage() {
 
           <div className="flex justify-between">
             <span className="text-gray-500 text-sm">Uploaded</span>
+
             <span className="text-gray-100 text-sm">{uploadedAt}</span>
           </div>
 
           {expiresDate && (
             <div className="flex justify-between">
               <span className="text-gray-500 text-sm">Expires</span>
+
               <span className="text-gray-100 text-sm">{expiresDate}</span>
             </div>
           )}
@@ -168,6 +175,7 @@ export default function LinkDetailsPage() {
           {data.expiresAt && !data.fileExpired && (
             <div className="flex justify-between">
               <span className="text-gray-500 text-sm">Time Left</span>
+
               <span className="text-gray-100 text-sm">
                 {getTimeRemaining(data.expiresAt)}
               </span>
@@ -178,6 +186,7 @@ export default function LinkDetailsPage() {
         {data.fileDescription && (
           <>
             <div className="border-t border-gray-800" />
+
             <div className="space-y-2">
               <h3 className="text-xs text-gray-500 uppercase">Description</h3>
               <p className="text-sm text-gray-300">{data.fileDescription}</p>
@@ -188,6 +197,7 @@ export default function LinkDetailsPage() {
         {data.passwordProtected && (
           <>
             <div className="border-t border-gray-800" />
+
             <div className="space-y-3">
               <h3 className="text-xs text-gray-500 uppercase">
                 Password Required
