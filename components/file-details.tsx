@@ -332,7 +332,7 @@ function FileDetails({
             </span>
 
             <div className="space-y-1">
-              <h2 className="-mt-1 font-bold tracking-tight text-heading break-all text-xl">
+              <h2 className="-mt-1 font-medium tracking-tight text-heading break-all text-lg">
                 {file.name}
               </h2>
 

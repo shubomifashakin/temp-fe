@@ -130,10 +130,14 @@ export default function UploadModal({
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 dark font-mono">
       <div className="w-full max-w-md bg-card border border-border/50 rounded shadow-2xl">
         <div className="p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl tracking-tight font-playfair font-bold text-heading">
+          <div className="flex flex-col gap-y-1">
+            <h2 className="text-lg tracking-tight font-medium text-heading">
               Upload File
             </h2>
+
+            <p className="text-leading text-xs">
+              Upload any supported file type.
+            </p>
           </div>
 
           <div
