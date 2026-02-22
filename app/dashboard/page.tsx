@@ -22,7 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import FilesList from "@/components/files-list";
 import UploadModal from "@/components/upload-file";
-import FileDetailsModal from "@/components/flie-details";
+import FileDetailsModal from "@/components/file-details";
 
 export default function Page() {
   const router = useRouter();

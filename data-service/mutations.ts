@@ -295,9 +295,9 @@ type LinkDetails = {
   revokedAt?: boolean;
   createdAt: string;
   clickCount: number;
-  expiresAt?: string;
+  expiresAt: string | null;
   description: string;
-  lastAccessedAt?: string;
+  lastAccessedAt: string | null;
   passwordProtected: boolean;
 };
 
@@ -305,6 +305,17 @@ export type FileLinksResponse = {
   data: LinkDetails[];
   hasNextPage: boolean;
   cursor: string | null;
+};
+
+export type LinkDetailsResponse = {
+  createdAt: Date;
+  expiresAt: Date | null;
+  description: string;
+  passwordProtected: boolean;
+  fileCreator: string;
+  fileStatus: "safe" | "unsafe";
+  fileDescription: string;
+  fileDeleted: boolean;
 };
 
 //file links
@@ -336,8 +347,8 @@ export async function createFileLink({
 }: {
   fileId: string;
   data: {
-    expiresAt?: Date;
-    password?: string;
+    expiresAt: Date | null;
+    password: string | null;
     description: string;
   };
 }) {
@@ -374,6 +385,40 @@ export async function revokeFileLink({
   return response.json();
 }
 
+//links
+export async function getLinkDetails({ linkId }: { linkId: string }) {
+  const url = new URL(`${backendUrl}/links/${linkId}`);
+
+  const response = await fetchWithAuth(url.toString());
+
+  if (!response.ok) {
+    throw await handleRequestError(response);
+  }
+
+  return response.json() as Promise<LinkDetailsResponse>;
+}
+
+export async function getLinkedFile({
+  linkId,
+  data,
+}: {
+  linkId: string;
+  data: { password: string | null };
+}) {
+  const url = new URL(`${backendUrl}/links/${linkId}`);
+
+  const response = await fetchWithAuth(url.toString(), {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw await handleRequestError(response);
+  }
+
+  return response.json() as Promise<LinkDetailsResponse>;
+}
+
 export async function fetchWithAuth(
   url: string,
   options: RequestInit = {},
@@ -387,7 +432,7 @@ export async function fetchWithAuth(
     credentials: "include",
   });
 
-  if ((response.status === 403 || response.status === 401) && retries < 1) {
+  if (response.status === 401 && retries < 1) {
     const refreshRes = await fetch(`${backendUrl}/auth/refresh`, {
       method: "POST",
       credentials: "include",
