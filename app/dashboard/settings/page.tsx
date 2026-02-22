@@ -171,7 +171,7 @@ function AccountInfo({
             className="w-full px-3 py-2 border rounded text-sm border-border bg-muted text-muted-foreground cursor-not-allowed"
           />
 
-          <p className="text-xs text-leading mt-2">Email cannot be changed</p>
+          <p className="text-xs text-leading mt-2">Email cannot be changed.</p>
         </div>
 
         {name !== data.name && (
