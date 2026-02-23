@@ -88,7 +88,7 @@ export default function FileDetailsModal({
   }
 
   return (
-    <div className="fixed font-mono inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="fixed font-mono inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 my-0">
       <Card className="w-full max-w-xl bg-card border border-border gap-0 p-0 rounded">
         {showDeleteConfirm && (
           <ConfirmFileDelete

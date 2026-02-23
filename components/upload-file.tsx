@@ -114,7 +114,7 @@ export default function UploadModal({
     lifetime;
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 dark font-mono">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 font-mono">
       <div className="w-full max-w-md bg-card border border-border/50 rounded shadow-2xl">
         <div className="p-6 space-y-4">
           <div className="flex flex-col gap-y-1">
