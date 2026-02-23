@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, Activity } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";
@@ -82,6 +82,10 @@ export default function Page() {
   }
 
   function handleFileSelect(file: FileDetails) {
+    if (file.status === "pending") {
+      return toast.warning("Please wait!");
+    }
+
     setSelectedFile(file);
   }
 
@@ -162,13 +166,13 @@ export default function Page() {
         />
       )}
 
-      <Activity mode={isModalOpen ? "visible" : "hidden"}>
+      {isModalOpen && (
         <UploadModal
           onUpload={handleUpload}
           isUploading={isUploading}
           onClose={() => setIsModalOpen(false)}
         />
-      </Activity>
+      )}
     </div>
   );
 }
