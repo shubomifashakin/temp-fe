@@ -208,7 +208,7 @@ export default function UploadModal({
               value={description}
               placeholder="Enter a description for this file..."
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full p-3 rounded  border border-border/50 placeholder:text-xs tracking-tight max-h-24 min-h-20 bg-secondary/20 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent text-sm"
+              className="w-full p-3 rounded  border border-border/50 placeholder:text-xs tracking-tight max-h-16 min-h-10 no-scrollbar bg-secondary/20 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent text-sm"
             />
           </InputGroup>
 
