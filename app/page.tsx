@@ -270,7 +270,7 @@ export default function Home() {
               </div>
 
               <ul className="space-y-3 flex-1 mb-8">
-                <PricingItem text="Max file size of 25mb" />
+                <PricingItem text="Max file size of 25MB" />
                 <PricingItem text="7 day retention" />
                 <PricingItem text="1 link per file" />
                 <PricingItem text="Virus scanning" />
@@ -309,7 +309,7 @@ export default function Home() {
                 <PricingItem text="Everything in free plan" />
                 <PricingItem text="14 & 31 day retention" />
                 <PricingItem text="Unlimited links per file" />
-                <PricingItem text="Max file size of 150mb" />
+                <PricingItem text="Max file size of 150MB" />
                 <PricingItem text="All new features" />
               </ul>
 
