@@ -62,7 +62,7 @@ export default function LinkDetailsPage() {
             <h1 className="text-lg font-medium text-heading">Link Not Found</h1>
 
             <p className="text-sm text-muted-foreground leading-relaxed">
-              This share link doesn&apos;t exist or has been deleted by the
+              This link either doesn&apos;t exist or has been revoked by the
               owner.
             </p>
           </div>
