@@ -145,10 +145,10 @@ export default function UploadModal({
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onClick={() => fileInputRef.current?.click()}
-            className={`border border-dashed rounded p-8 text-center cursor-pointer transition-all ${
+            className={`border rounded p-8 text-center cursor-pointer transition-all ${
               isDragging
                 ? "border-orange-500 bg-orange-500/10"
-                : "border-border/50 hover:border-orange-500 hover:bg-orange-500/10 hover:border-solid"
+                : "border-border/50 hover:border-orange-500 hover:bg-orange-500/10"
             }`}
           >
             <input
@@ -218,7 +218,7 @@ export default function UploadModal({
                 <button
                   key={option.value}
                   onClick={() => setLifetime(option.value as Lifetimes)}
-                  className={`p-3 rounded cursor-pointer border transition-colors duration-150 text-center ${
+                  className={`p-2 rounded cursor-pointer border transition-colors duration-150 text-center ${
                     lifetime === option.value
                       ? "border-orange-500 bg-orange-500/10"
                       : "border-border/50 hover:border-orange-500 hover:bg-orange-500/10"

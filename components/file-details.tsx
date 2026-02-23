@@ -346,7 +346,7 @@ function FileDetails({
 
       <div className="space-y-4 bg-secondary/30 border border-border/30 p-4 rounded">
         <div className="flex justify-between text-xs">
-          <span className="text-muted-foreground">Size</span>
+          <span className="text-leading uppercase">Size</span>
 
           <span className="text-foreground font-medium">
             {formatFileSize(file.size)}
@@ -354,7 +354,7 @@ function FileDetails({
         </div>
 
         <div className="flex justify-between text-xs border-t border-border/20 pt-2">
-          <span className="text-muted-foreground">Uploaded</span>
+          <span className="text-leading uppercase">Uploaded</span>
 
           <span className="text-foreground font-medium">
             {formatDate(file.createdAt)}
@@ -362,7 +362,7 @@ function FileDetails({
         </div>
 
         <div className="flex justify-between text-xs border-t border-border/20 pt-2">
-          <span className="text-muted-foreground">Expires</span>
+          <span className="text-leading uppercase">Expires</span>
 
           <span
             className={`font-medium ${isExpired ? "text-destructive" : "text-foreground"}`}
@@ -373,7 +373,7 @@ function FileDetails({
 
         {!isExpired && (
           <div className="flex justify-between text-xs border-t border-border/20 pt-2">
-            <span className="text-leading">Time Left</span>
+            <span className="text-leading uppercase">Time Left</span>
 
             <span className="text-foreground font-medium">
               {getTimeRemaining(file.expiresAt)}
@@ -469,7 +469,7 @@ function FileSafe({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <label className="text-sm font-semibold text-foreground capitalize">
+        <label className="text-sm font-medium text-heading tracking-tight capitalize">
           Total Links ({file.totalLinks})
         </label>
 
@@ -655,7 +655,7 @@ function LinkDetail({
   return (
     <div className="text-xs text-center flex md:flex-col items-center gap-x-2 gap-y-2">
       <span className="text-leading block md:hidden">{icon}</span>
-      <span className="text-leading hidden md:block">{heading}</span>
+      <span className="text-leading hidden md:block uppercase">{heading}</span>
 
       <p className="text-heading font-medium">{leading}</p>
     </div>
