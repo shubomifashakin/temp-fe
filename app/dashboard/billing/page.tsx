@@ -10,13 +10,13 @@ import { AlertTriangle } from "lucide-react";
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { AvailablePlans } from "@/components/available-plans";
 import {
   cancelSubscription,
   getSubscriptionInfo,
   getSubscriptionPlans,
   type SubscriptionInfo,
 } from "@/data-service/mutations";
-import { AvailablePlans } from "@/components/available-plans";
 
 export default function SettingsPage() {
   const {
@@ -96,9 +96,9 @@ function SubscriptionInfo({ data }: { data: SubscriptionInfo | null }) {
   });
 
   return (
-    <Card className="p-6 bg-card border border-border shadow-none gap-y-4">
+    <Card className="p-6 border border-border shadow-none gap-y-4">
       <div className="space-y-0.5">
-        <h2 className="text-3xl font-bold text-heading font-playfair tracking-tighter">
+        <h2 className="text-3xl font-bold text-heading font-playfair tracking-tight">
           Billing Information
         </h2>
 
@@ -228,11 +228,11 @@ function ErrorState({
       <div className="text-center space-y-1">
         <AlertTriangle className="size-10 mx-auto" />
 
-        <h3 className="text-xl md:text-3xl tracking-tighter font-playfair font-medium text-heading">
+        <h3 className="text-lg font-medium text-heading">
           Oops! Something went wrong...
         </h3>
 
-        <p className="text-leading text-sm tracking-tight">{message}</p>
+        <p className="text-leading text-sm">{message}</p>
 
         <Button variant="secondary" onClick={onRetry} className="mt-4">
           Try Again

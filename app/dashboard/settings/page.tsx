@@ -19,6 +19,7 @@ import {
   updateAccountInfo,
 } from "@/data-service/mutations";
 import { generateProfileImage } from "@/lib/utils";
+import { InputGroup } from "@/components/input-group";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -119,11 +120,11 @@ function AccountInfo({
   return (
     <Card className="p-6 bg-card border border-border shadow-none gap-y-6">
       <div className="space-y-0.5">
-        <h2 className="text-3xl font-bold text-heading font-playfair tracking-tighter">
+        <h2 className="text-3xl font-bold text-heading font-playfair tracking-tight">
           Account Information
         </h2>
 
-        <p className="text-sm text-leading tracking-tight font-light">
+        <p className="text-sm text-leading font-light">
           Manage your account information.
         </p>
       </div>
@@ -139,14 +140,7 @@ function AccountInfo({
           </div>
         </div>
 
-        <div>
-          <label
-            htmlFor="name"
-            className="block text-sm font-light text-heading mb-2"
-          >
-            Name
-          </label>
-
+        <InputGroup label="Name" showRequired={false}>
           <input
             id="name"
             type="text"
@@ -154,37 +148,28 @@ function AccountInfo({
             minLength={3}
             maxLength={30}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-3 py-2 border border-border text-sm rounded-lg bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full px-3 py-2 border rounded text-sm border-border bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
           />
-        </div>
+        </InputGroup>
 
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-light text-heading mb-2"
-          >
-            Email
-          </label>
-
+        <InputGroup label="Email" showRequired={false}>
           <input
             id="email"
             type="email"
             disabled
             value={data?.email}
-            className="w-full px-3 py-2 border text-sm border-border rounded-lg bg-muted text-muted-foreground cursor-not-allowed"
+            className="w-full px-3 py-2 border rounded text-sm border-border bg-muted text-muted-foreground cursor-not-allowed"
           />
 
-          <p className="text-xs text-leading mt-1.5 font-light">
-            Email cannot be changed
-          </p>
-        </div>
+          <p className="text-xs text-leading mt-2">Email cannot be changed.</p>
+        </InputGroup>
 
         {name !== data.name && (
-          <div className="flex gap-2 justify-end pt-4">
+          <div className="flex gap-4 justify-end pt-4">
             <Button
               variant="secondary"
               onClick={handleCancelUpdate}
-              className="cursor-pointer hover:bg-secondary/80 text-foreground font-medium"
+              className="font-medium flex-1"
             >
               Cancel
             </Button>
@@ -192,7 +177,7 @@ function AccountInfo({
             <Button
               disabled={isUpdating || isDeleting}
               onClick={() => handleUpdateAccountInfo({ name })}
-              className="bg-primary text-primary-foreground cursor-pointer hover:bg-primary/90 tracking-tight font-medium"
+              className="primary-btn font-medium flex-1"
             >
               {isUpdating ? "Saving..." : "Save Changes"}
             </Button>
@@ -219,11 +204,11 @@ function DeleteAccount({
   return (
     <Card className="p-6 bg-destructive/5 border border-destructive/20 gap-y-4 shadow-none">
       <div className="space-y-2">
-        <h2 className="text-2xl font-bold font-playfair text-heading tracking-tighter">
+        <h2 className="text-2xl font-bold font-playfair text-heading tracking-tight">
           Danger Zone
         </h2>
 
-        <p className="text-sm text-leading font-light">
+        <p className="text-sm text-leading">
           Permanently delete your account and all associated data. This action
           cannot be undone.
         </p>
@@ -240,29 +225,29 @@ function DeleteAccount({
       )}
 
       {showDeleteConfirm && (
-        <div className="space-y-4 p-4 bg-background border border-destructive/20 rounded-lg">
+        <div className="space-y-4 p-4 bg-background border border-destructive/20 rounded">
           <p className="text-sm font-light text-heading">
             Are you sure you want to delete your account?
           </p>
 
-          <p className="text-xs text-leading font-light tracking-tight">
+          <p className="text-xs text-leading">
             This will permanently delete your account and all your data. This
             action cannot be undone.
           </p>
 
-          <div className="flex gap-2">
+          <div className="flex gap-4">
             <Button
               variant={"secondary"}
               disabled={isDeleting}
               onClick={() => setShowDeleteConfirm(false)}
-              className="cursor-pointer hover:bg-secondary/80 text-foreground font-medium"
+              className="font-medium flex-1"
             >
               Cancel
             </Button>
 
             <Button
               variant="destructive"
-              className="cursor-pointer font-medium"
+              className="font-medium flex-1"
               onClick={handleDeleteAccount}
               disabled={isDeleting || isUpdating}
             >

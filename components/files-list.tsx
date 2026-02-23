@@ -1,7 +1,6 @@
 import { formatFileSize, getTimeRemaining } from "@/lib/utils";
 import { FileDetails } from "@/data-service/mutations";
 import {
-  Check,
   File,
   Image,
   Link2,
@@ -12,6 +11,7 @@ import {
   OctagonAlert,
   MousePointerClick,
 } from "lucide-react";
+import { Card } from "./ui/card";
 
 interface FilesListProps {
   files: FileDetails[];
@@ -39,11 +39,9 @@ export default function FilesList({ files, onFileSelect }: FilesListProps) {
         </div>
 
         <div className="space-y-2">
-          <h2 className="text-lg font-semibold tracking-tight text-heading">
-            No files yet
-          </h2>
+          <h2 className="text-lg font-semibold text-heading">No files yet</h2>
 
-          <p className="text-sm text-leading tracking-tight">
+          <p className="text-sm text-leading">
             Upload your first file to get started.
           </p>
         </div>
@@ -53,14 +51,14 @@ export default function FilesList({ files, onFileSelect }: FilesListProps) {
 
   return (
     <div
-      className="grid grid-cols-1 font-mono md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[calc(100vh-200px)] overflow-y-auto pr-2 no-scrollbar"
+      className="grid grid-cols-1 font-mono md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[calc(100vh-200px)] overflow-y-auto  no-scrollbar"
       data-scroll-container="files"
     >
       {files.map((file) => (
-        <div
+        <Card
           key={file.id}
           onClick={() => onFileSelect(file)}
-          className="bg-card border border-border rounded-lg p-4 cursor-pointer hover:border-accent hover:shadow-lg transition-all duration-200 hover:bg-card/80"
+          className="border border-border p-4 cursor-pointer transition-all duration-200 hover:bg-card/80"
         >
           <div className="space-y-4">
             <div className="flex items-start justify-between">
@@ -68,31 +66,27 @@ export default function FilesList({ files, onFileSelect }: FilesListProps) {
                 {getFileIcon(file.contentType, file.name)}
               </div>
 
-              <span
-                className={`px-2 py-1 rounded-sm text-xs font-medium tracking-tight ${
-                  file.status === "safe"
-                    ? "bg-accent/20 text-accent"
-                    : file.status === "pending"
+              {file.status !== "safe" && (
+                <span
+                  className={`px-2 py-1 rounded-sm text-xs font-medium tracking-tight ${
+                    file.status === "pending"
                       ? "bg-yellow-500/20 text-yellow-400"
                       : "bg-destructive/20 text-destructive"
-                }`}
-              >
-                {file.status === "safe" ? (
-                  <Check size={16} />
-                ) : file.status === "pending" ? (
-                  <CircleDashed className="animate-spin" size={16} />
-                ) : (
-                  <OctagonAlert size={16} />
-                )}
-              </span>
+                  }`}
+                >
+                  {file.status === "pending" ? (
+                    <CircleDashed className="animate-spin" size={16} />
+                  ) : (
+                    <OctagonAlert size={16} />
+                  )}
+                </span>
+              )}
             </div>
 
             <div className="space-y-2">
-              <h3 className="font-semibold tracking-tight text-heading truncate text-sm">
-                {file.name}
-              </h3>
+              <h3 className="text-heading truncate text-sm">{file.name}</h3>
 
-              <p className="text-xs text-leading tracking-tight mt-1 truncate">
+              <p className="text-xs text-leading mt-1 truncate">
                 {file.description}
               </p>
             </div>
@@ -118,18 +112,18 @@ export default function FilesList({ files, onFileSelect }: FilesListProps) {
             </div>
 
             <div className="pt-4 border-t border-dashed flex justify-between">
-              <p className="text-xs text-leading font-medium flex gap-x-2">
+              <p className="text-xs text-leading flex gap-x-2">
                 <Link2 className="text-orange-500" size={14} />{" "}
                 {file.totalLinks} {file.totalLinks === 1 ? "link" : "links"}
               </p>
 
-              <p className="text-xs text-leading font-medium flex gap-x-2">
+              <p className="text-xs text-leading flex gap-x-2">
                 <MousePointerClick className="text-orange-500" size={14} />{" "}
                 {file.totalClicks} {file.totalClicks === 1 ? "click" : "clicks"}
               </p>
             </div>
           </div>
-        </div>
+        </Card>
       ))}
     </div>
   );

@@ -9,7 +9,7 @@ export default function Page() {
             Terms of Service
           </h1>
 
-          <p className="text-muted-foreground font-light text-sm">
+          <p className="text-sm text-orange-500! border-b border-dashed border-orange-500! w-fit">
             Last updated: {LAST_UPDATED_AT}
           </p>
         </div>
@@ -141,7 +141,6 @@ export default function Page() {
             </p>
           </div>
 
-          {/* Section 7 */}
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-foreground font-playfair tracking-tight">
               7. Virus Scanning
@@ -150,7 +149,17 @@ export default function Page() {
               All uploaded files are scanned for viruses and malware. Files
               flagged as unsafe cannot be shared. However, we do not guarantee
               that all threats will be detected. Users are responsible for
-              ensuring uploaded content is safe.
+              ensuring uploaded content is safe. If content uploaded by you
+              causes damage to our systems or other users, you may be held
+              liable. If you suspect that a file shared to you is malicious,
+              please report it immediately to{" "}
+              <a
+                href="mailto:apps@545plea.xyz"
+                className="text-sm font-light border-b border-orange-500 transition-colors duration-150 border-dashed text-orange-500"
+              >
+                apps@545plea.xyz
+              </a>
+              .
             </p>
           </div>
 
@@ -222,18 +231,15 @@ export default function Page() {
             </h2>
 
             <p className="text-foreground font-light text-sm leading-relaxed">
-              If you have any questions about these Terms, please contact us at:
-            </p>
-
-            <div className="space-y-2 text-foreground">
+              If you have any questions about these Terms, please contact us at:{" "}
               <a
                 href="mailto:apps@545plea.xyz"
-                className="block text-sm font-light border-b border-orange-500 transition-colors duration-150 w-fit border-dashed text-orange-500"
+                className="text-sm font-light border-b border-orange-500 transition-colors duration-150 w-fit border-dashed text-orange-500"
               >
-                <span className="font-medium text-sm">Email:</span>{" "}
                 apps@545plea.xyz
               </a>
-            </div>
+              .
+            </p>
           </div>
         </div>
       </div>

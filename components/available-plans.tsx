@@ -88,11 +88,11 @@ export function AvailablePlans({ plans, currentPlanId }: AvailablePlansProps) {
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="space-y-2">
-          <h2 className="text-3xl tracking-tighter text-heading font-playfair font-semibold">
+          <h2 className="text-3xl tracking-tight text-heading font-playfair font-semibold">
             Available Plans
           </h2>
 
-          <p className="text-sm text-leading font-light tracking-tight mt-0.5">
+          <p className="text-sm text-leading tracking-tight">
             Available plans across all payment providers.
           </p>
         </div>
@@ -127,7 +127,7 @@ export function AvailablePlans({ plans, currentPlanId }: AvailablePlansProps) {
       </div>
 
       {!allPlans.length ? (
-        <p className="text-muted-foreground text-sm font-light tracking-tight">
+        <p className="text-leading text-sm tracking-tight">
           No plans available for this interval.
         </p>
       ) : (
@@ -184,7 +184,7 @@ export function AvailablePlans({ plans, currentPlanId }: AvailablePlansProps) {
                       {plan.benefits.map((benefit, i) => (
                         <li
                           key={i}
-                          className="flex items-center gap-2.5 text-sm text-muted-foreground"
+                          className="flex items-center gap-2.5 text-sm text-foreground"
                         >
                           <Check className="h-4 w-4 shrink-0 text-orange-500" />
 

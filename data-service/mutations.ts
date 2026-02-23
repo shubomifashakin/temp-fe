@@ -38,12 +38,14 @@ type Plans = {
   data: PlanIntervals;
 };
 
+type FileStatus = "safe" | "pending" | "unsafe";
+
 export type FileDetails = {
   id: string;
   description: string;
   expiresAt: string;
   size: number;
-  status: "pending" | "safe" | "unsafe";
+  status: FileStatus;
   contentType: string;
   name: string;
   totalLinks: number;
@@ -261,9 +263,9 @@ export async function uploadFile({
 }) {
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("name", name);
+  formData.append("name", name.trim());
   formData.append("lifetime", lifetime);
-  formData.append("description", description);
+  formData.append("description", description.trim());
 
   const response = await fetchWithAuth(`${backendUrl}/files`, {
     method: "POST",
@@ -308,14 +310,20 @@ export type FileLinksResponse = {
 };
 
 export type LinkDetailsResponse = {
-  createdAt: Date;
-  expiresAt: Date | null;
+  createdAt: string;
+  expiresAt: string | null;
   description: string;
   passwordProtected: boolean;
   fileCreator: string;
-  fileStatus: "safe" | "unsafe";
+  fileStatus: FileStatus;
   fileDescription: string;
   fileDeleted: boolean;
+  fileName: string;
+  fileContentType: string;
+  fileSize: number;
+  fileExpired: boolean;
+  fileUploadedAt: string;
+  fileCreatorPicture: string | null;
 };
 
 //file links
@@ -354,7 +362,11 @@ export async function createFileLink({
 }) {
   const response = await fetchWithAuth(`${backendUrl}/files/${fileId}/links`, {
     method: "POST",
-    body: JSON.stringify(data),
+    body: JSON.stringify({
+      description: data.description.trim(),
+      password: data.password,
+      expiresAt: data.expiresAt,
+    }),
   });
 
   if (!response.ok) {
@@ -400,23 +412,23 @@ export async function getLinkDetails({ linkId }: { linkId: string }) {
 
 export async function getLinkedFile({
   linkId,
-  data,
+  password,
 }: {
   linkId: string;
-  data: { password: string | null };
+  password: string | null;
 }) {
   const url = new URL(`${backendUrl}/links/${linkId}`);
 
   const response = await fetchWithAuth(url.toString(), {
     method: "POST",
-    body: JSON.stringify(data),
+    body: JSON.stringify({ password }),
   });
 
   if (!response.ok) {
     throw await handleRequestError(response);
   }
 
-  return response.json() as Promise<LinkDetailsResponse>;
+  return response.json() as Promise<{ url: string }>;
 }
 
 export async function fetchWithAuth(

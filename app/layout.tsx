@@ -60,7 +60,7 @@ export default function RootLayout({
         <QueryClientProvider>
           {children}
 
-          <Toaster />
+          <Toaster className="font-mono! font-light! tracking-tight" />
         </QueryClientProvider>
       </body>
     </html>

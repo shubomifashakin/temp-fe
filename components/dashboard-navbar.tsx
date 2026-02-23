@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 import { LogOut, Settings } from "lucide-react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -32,6 +32,7 @@ export function DashboardNavbar({
   sidebarOpen,
 }: DashboardNavbarProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationFn: logout,
@@ -39,6 +40,7 @@ export function DashboardNavbar({
 
     onSuccess: () => {
       router.replace("/auth/sign-in");
+      queryClient.clear();
     },
 
     onError: (error) => {
@@ -105,7 +107,7 @@ export function DashboardNavbar({
 
             <DropdownMenuContent
               align="end"
-              className="w-60 bg-card border-border font-mono border-dashed px-0 py-2"
+              className="w-60 bg-card border-border font-mono rounded px-0 py-2"
             >
               <DropdownMenuLabel className="font-normal font-mono px-4">
                 <div className="flex flex-col gap-1">
@@ -119,10 +121,10 @@ export function DashboardNavbar({
                 </div>
               </DropdownMenuLabel>
 
-              <div className="border-t border-border my-2 border-dashed" />
+              <div className="border-t border-border my-2 " />
 
               <DropdownMenuItem
-                className="cursor-pointer gap-2 px-4 text-sm hover:bg-transparent! font-light tracking-tight hover:text-orange-500! duration-150 transition-colors"
+                className="cursor-pointer gap-2 px-4 text-sm! hover:bg-transparent! font-light tracking-tight hover:text-orange-500! duration-150 transition-colors"
                 asChild
               >
                 <Link href="/dashboard/settings">
@@ -131,7 +133,7 @@ export function DashboardNavbar({
                 </Link>
               </DropdownMenuItem>
 
-              <div className="border-t border-border my-2 border-dashed" />
+              <div className="border-t border-border my-2 " />
 
               <DropdownMenuItem
                 onClick={handleLogout}

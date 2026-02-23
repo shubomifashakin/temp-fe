@@ -9,7 +9,7 @@ export default function Page() {
             Privacy Policy
           </h1>
 
-          <p className="text-muted-foreground font-light text-sm">
+          <p className="text-sm text-orange-500! border-b border-dashed border-orange-500! w-fit">
             Last updated: {LAST_UPDATED_AT}
           </p>
         </div>
@@ -228,18 +228,14 @@ export default function Page() {
 
             <p className="text-foreground font-light text-sm leading-relaxed">
               If you have questions about this Privacy Policy or our privacy
-              practices, please contact us at:
-            </p>
-
-            <div className="space-y-2 text-foreground">
+              practices, please contact us at:{" "}
               <a
                 href="mailto:apps@545plea.xyz"
                 className="block text-sm font-light border-b border-orange-500 transition-colors duration-150 w-fit border-dashed text-orange-500"
               >
-                <span className="font-medium text-sm">Email:</span>{" "}
                 apps@545plea.xyz
               </a>
-            </div>
+            </p>
           </div>
         </div>
       </div>
