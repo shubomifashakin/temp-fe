@@ -37,6 +37,7 @@ export default function Page() {
     fetchNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
+    staleTime: 15 * 1000,
     queryKey: ["dashboard"],
     initialPageParam: undefined,
     refetchOnWindowFocus: true,
