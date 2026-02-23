@@ -41,7 +41,7 @@ export default function SignInPage() {
             Continue with Google
           </Button>
 
-          <p className="text-xs font-light tracking-tight text-center text-leading">
+          <p className="text-xs font-light tracking-tight text-center text-leading leading-5">
             By signing in, you agree to our{" "}
             <Link
               href="/terms-of-service"
