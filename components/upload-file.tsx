@@ -192,6 +192,8 @@ export default function UploadModal({
             <textarea
               rows={3}
               required
+              minLength={5}
+              maxLength={100}
               value={description}
               placeholder="Enter a description for this file..."
               onChange={(e) => setDescription(e.target.value)}
