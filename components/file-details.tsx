@@ -381,15 +381,16 @@ function FileDetails({
           </div>
         )}
 
-        {isDeleted && (
-          <div className="flex justify-between text-xs border-t border-border/20 pt-2">
-            <span className="text-leading">Deleted At</span>
+        {isDeleted ||
+          (file.status === "unsafe" && (
+            <div className="flex justify-between text-xs border-t border-border/20 pt-2">
+              <span className="text-leading uppercase">Deleted At</span>
 
-            <span className="text-foreground font-medium">
-              {formatDate(file.deletedAt!)}
-            </span>
-          </div>
-        )}
+              <span className="text-foreground font-medium">
+                {formatDate(file?.deletedAt || file.createdAt)}
+              </span>
+            </div>
+          ))}
       </div>
 
       {file.status === "safe" && (
@@ -666,7 +667,7 @@ function FileUnsafe() {
   return (
     <div className="p-3 bg-destructive/5 border items-start flex gap-x-2 border-destructive/20 gap-y-4 shadow-none rounded text-xs text-red-400 tracking-tight font-light">
       <OctagonAlert size={24} /> This file was flagged as unsafe and has been
-      automatically deleted. Links cannot be generated.
+      deleted. Links cannot be generated.
     </div>
   );
 }
