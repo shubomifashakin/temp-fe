@@ -19,24 +19,11 @@ interface UploadModalProps {
   }) => void;
 }
 
-const ALLOWED_EXTENSIONS = [
-  "mp4",
-  "pdf",
-  "docx",
-  "doc",
-  "png",
-  "jpg",
-  "jpeg",
-  "gif",
-  "txt",
-  "xlsx",
-  "xls",
-  "zip",
-  "rar",
-];
-
-const MAX_FILE_SIZE_MB = 150;
-const MAX_FILE_SIZE_IN_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+import {
+  MAX_FILE_SIZE_MB,
+  ALLOWED_EXTENSIONS,
+  MAX_FILE_SIZE_IN_BYTES,
+} from "@/lib/constants";
 
 const lifetimes: { value: Lifetimes; label: string }[] = [
   { value: "short", label: "7 days" },
