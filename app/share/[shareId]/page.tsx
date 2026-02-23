@@ -32,6 +32,9 @@ export default function LinkDetailsPage() {
       window.location.href = data.url;
     },
     onError: (error) => {
+      if (error.cause === 401) {
+        return toast.error("Invalid Credentials");
+      }
       toast.error(error.message);
     },
   });
@@ -248,7 +251,7 @@ export default function LinkDetailsPage() {
                       handleGetFile();
                     }
                   }}
-                  placeholder="enter password"
+                  placeholder="Enter password"
                   className="w-full bg-gray-900 text-gray-100 placeholder-gray-600 text-sm font-mono"
                 />
               </div>
@@ -283,13 +286,13 @@ export default function LinkDetailsPage() {
               })}
             </p>
 
-            <div className="text-xs text-muted-foreground space-y-1">
+            <div className="text-xs text-muted-foreground space-y-2">
               <p>Having issues with this file?</p>
               <a
                 href="mailto:apps@545plea.xyz"
-                className="text-primary hover:text-primary/80 transition-colors font-medium"
+                className="text-orange-500 border-b border-dashed border-orange-500 transition-colors font-medium"
               >
-                Contact us
+                Contact Us
               </a>
             </div>
           </div>
