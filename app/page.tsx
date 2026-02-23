@@ -323,8 +323,9 @@ export default function Home() {
 
       <section className="py-16 px-4 border-t border-border/50 text-center min-h-[60vh] flex items-center justify-center">
         <div className="max-w-2xl mx-auto">
-          <h3 className="text-6xl tracking-tight font-playfair font-bold text-heading mb-4">
-            Start Sharing With Confidence!
+          <h3 className="text-6xl tracking-tighter font-playfair font-bold text-heading mb-4">
+            Start Sharing With{" "}
+            <span className="tracking-tight">Confidence</span>!
           </h3>
 
           <p className="text-sm font-light text-leading mb-8">

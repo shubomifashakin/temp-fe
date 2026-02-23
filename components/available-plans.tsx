@@ -158,8 +158,7 @@ export function AvailablePlans({ plans, currentPlanId }: AvailablePlansProps) {
 
                 <Card
                   className={cn(
-                    "flex flex-col h-full transition-all bg-card duration-200 border border-dashed",
-                    isRecommended ? "border-solid" : "hover:border-border/80",
+                    "flex flex-col h-full transition-all duration-200 border hover:bg-card/80",
                   )}
                 >
                   <CardHeader className="pb-2">
