@@ -146,7 +146,7 @@ export default function Home() {
             <h1 className="text-7xl md:text-9xl font-playfair font-bold text-heading text-balance tracking-tighter">
               Share With <br />
               <span className="text-shadow-white/20 text-shadow-lg inline-block tracking-tight text-foreground">
-                Confidence.
+                Confidence!
               </span>
             </h1>
 
@@ -326,7 +326,7 @@ export default function Home() {
         <div className="max-w-2xl mx-auto">
           <h3 className="text-6xl tracking-tighter font-playfair font-bold text-heading mb-4">
             Start Sharing With{" "}
-            <span className="tracking-tight">Confidence</span>!
+            <span className="tracking-tight">Confidence!</span>
           </h3>
 
           <p className="text-sm font-light text-leading mb-8">
