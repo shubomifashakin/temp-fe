@@ -10,7 +10,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: (failureCount, error) => {
-        if ([401, 404, 400].includes(error.cause as number)) {
+        if ([401, 404, 400, 403].includes(error.cause as number)) {
           return false;
         }
 
