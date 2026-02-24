@@ -274,6 +274,7 @@ export default function Home() {
                 <PricingItem text="7 day retention" />
                 <PricingItem text="1 link per file" />
                 <PricingItem text="Virus scanning" />
+
                 <PricingItem text="Click tracking" />
               </ul>
 
