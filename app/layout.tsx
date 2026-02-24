@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Playfair } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import QueryClientProvider from "@/providers/query-client.provider";
 import { Toaster } from "@/components/ui/sonner";
@@ -61,6 +62,7 @@ export default function RootLayout({
           {children}
 
           <Toaster className="font-mono! font-light! tracking-tight" />
+          <Analytics />
         </QueryClientProvider>
       </body>
     </html>
