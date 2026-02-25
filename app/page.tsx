@@ -159,7 +159,7 @@ export default function Home() {
               >
                 supported file type
               </Link>
-              , we scan for security, then automatically delete it after your
+              , we scan for malware, then automatically delete it after your
               chosen period expires.
             </p>
           </div>
