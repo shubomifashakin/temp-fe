@@ -231,7 +231,7 @@ export default function Page() {
               practices, please contact us at:{" "}
               <a
                 href="mailto:apps@545plea.xyz"
-                className="block text-sm font-light border-b border-orange-500 transition-colors duration-150 w-fit border-dashed text-orange-500"
+                className="text-sm font-light border-b border-orange-500 transition-colors duration-150 w-fit border-dashed text-orange-500"
               >
                 apps@545plea.xyz
               </a>
