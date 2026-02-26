@@ -236,6 +236,9 @@ function CreateLinkForm({
         <input
           required
           type="text"
+          autoComplete="off"
+          autoCapitalize="none"
+          autoCorrect="off"
           value={description}
           minLength={5}
           maxLength={100}
@@ -247,6 +250,9 @@ function CreateLinkForm({
 
       <InputGroup label="Password" showRequired={false}>
         <input
+          autoCapitalize="none"
+          autoComplete="off"
+          autoCorrect="off"
           type="password"
           minLength={6}
           value={password || ""}
