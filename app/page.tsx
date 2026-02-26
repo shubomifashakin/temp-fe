@@ -233,7 +233,7 @@ export default function Home() {
             <Feature
               title="Public Links"
               icon={<GlobeIcon className="text-foreground" strokeWidth={1.5} />}
-              description="Share files with anyone using public links, no account required."
+              description="Share files with anyone using public links, no password required."
             />
           </div>
         </div>
