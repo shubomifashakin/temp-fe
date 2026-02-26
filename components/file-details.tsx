@@ -33,12 +33,13 @@ import {
   revokeFileLink,
 } from "@/data-service/mutations";
 
+import { APP_URL } from "@/lib/constants";
 import { formatFileSize, getTimeRemaining } from "@/lib/utils";
 
 import { InputGroup } from "./input-group";
+import { Card } from "./ui/card";
 import { Calendar } from "./ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Card } from "./ui/card";
 
 interface FileDetailsModalProps {
   file: FileDetails;
@@ -541,9 +542,7 @@ function LinkItem({
   const [copiedLinkId, setCopiedLinkId] = useState<string | null>(null);
 
   const domain =
-    typeof window !== "undefined"
-      ? window.location.origin
-      : "https://temp.545plea.xyz";
+    typeof window !== "undefined" ? window.location.origin : APP_URL;
 
   function handleCopy(linkId: string) {
     const shareUrl = `${domain}/share/${linkId}`;
