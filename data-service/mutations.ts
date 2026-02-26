@@ -250,6 +250,11 @@ export async function getFiles(pageParam?: string) {
 
 export type Lifetimes = "short" | "medium" | "long";
 
+type UploadFileResponse = {
+  url: string;
+  fields: Record<string, string>;
+};
+
 export async function uploadFile({
   file,
   name,
@@ -261,23 +266,39 @@ export async function uploadFile({
   lifetime: Lifetimes;
   description: string;
 }) {
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("name", name.trim());
-  formData.append("lifetime", lifetime);
-  formData.append("description", description.trim());
-
   const response = await fetchWithAuth(`${backendUrl}/files`, {
     method: "POST",
-    body: formData,
-    headers: {},
+    body: JSON.stringify({
+      name,
+      lifetime,
+      description,
+      contentType: file.type,
+      fileSizeBytes: file.size,
+    }),
   });
 
   if (!response.ok) {
     throw await handleRequestError(response);
   }
 
-  return response.json();
+  const { url, fields } = (await response.json()) as UploadFileResponse;
+
+  const formData = new FormData();
+  Object.entries(fields).forEach(([key, value]) => {
+    formData.append(key, value);
+  });
+  formData.append("file", file);
+
+  const presignedUrlResponse = await fetch(url, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!presignedUrlResponse.ok) {
+    throw new Error("Failed to upload file", { cause: 500 });
+  }
+
+  return { message: "Success" };
 }
 
 export async function deleteFile({ id }: { id: string }) {
