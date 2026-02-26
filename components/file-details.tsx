@@ -191,10 +191,10 @@ function CreateLinkForm({
   const { mutate, isPending } = useMutation({
     mutationFn: createFileLink,
     mutationKey: ["create-link", fileId],
-    onSuccess: () => {
+    onSuccess: async () => {
       handleShowCreateLinkForm();
 
-      queryClient.invalidateQueries({ queryKey: ["file-links", fileId] });
+      await queryClient.invalidateQueries({ queryKey: ["file-links", fileId] });
       toast.success("Link Created!");
     },
     onError: (error) => {
