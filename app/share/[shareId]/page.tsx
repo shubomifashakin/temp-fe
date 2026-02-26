@@ -8,12 +8,12 @@ import { toast } from "sonner";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Loader2Icon, FileX, Clock, ArrowLeft } from "lucide-react";
 
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 import { formatFileSize, getTimeRemaining } from "@/lib/utils";
 import { getLinkDetails, getLinkedFile } from "@/data-service/mutations";
-import { Card } from "@/components/ui/card";
 
 export default function LinkDetailsPage() {
   const { shareId } = useParams<{ shareId: string }>();
@@ -81,7 +81,7 @@ export default function LinkDetailsPage() {
   if (status === "error") {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="border border-gray-700 rounded-lg p-8 max-w-md w-full space-y-4 text-center font-mono">
+        <Card className="border p-8 max-w-md w-full gap-y-4 text-center font-mono">
           <div className="flex justify-center">
             <FileX size={38} strokeWidth={1.5} />
           </div>
@@ -93,7 +93,7 @@ export default function LinkDetailsPage() {
           <Button className="rounded" onClick={() => refetch()}>
             Try Again
           </Button>
-        </div>
+        </Card>
       </div>
     );
   }
