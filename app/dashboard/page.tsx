@@ -49,6 +49,7 @@ export default function Page() {
   const files = data?.pages.flatMap((page) => page.data) || [];
 
   const { mutate, isPending: isUploading } = useMutation({
+    retry: 0,
     mutationFn: uploadFile,
     mutationKey: ["upload-file"],
 
@@ -89,9 +90,9 @@ export default function Page() {
     setSelectedFile(file);
   }
 
-  function onFileDeleteCb() {
+  async function onFileDeleteCb() {
     setSelectedFile(null);
-    queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+    await queryClient.invalidateQueries({ queryKey: ["dashboard"] });
   }
 
   useEffect(() => {

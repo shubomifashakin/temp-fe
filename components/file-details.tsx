@@ -44,7 +44,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 interface FileDetailsModalProps {
   file: FileDetails;
   onClose: () => void;
-  deleteCb: () => void;
+  deleteCb: () => Promise<void>;
 }
 
 function formatDate(dateString: string): string {
@@ -125,14 +125,14 @@ function ConfirmFileDelete({
   cancelShowDeleteConfirm,
 }: {
   fileId: string;
-  onDelete: () => void;
+  onDelete: () => Promise<void>;
   cancelShowDeleteConfirm: () => void;
 }) {
   const { mutate, isPending } = useMutation({
     mutationFn: deleteFile,
     mutationKey: ["delete-file", fileId],
-    onSuccess: () => {
-      onDelete();
+    onSuccess: async () => {
+      await onDelete();
       toast.success("File deleted successfully");
     },
   });
