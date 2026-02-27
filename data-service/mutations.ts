@@ -1,3 +1,5 @@
+import { fetchWithRetry, fetchWithAuth } from "@/lib/utils";
+
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL!;
 
 export type UserInfo = {
@@ -289,10 +291,15 @@ export async function uploadFile({
   });
   formData.append("file", file);
 
-  const presignedUrlResponse = await fetch(url, {
-    method: "POST",
-    body: formData,
-  });
+  const presignedUrlResponse = await fetchWithRetry(
+    url,
+    {
+      method: "POST",
+      body: formData,
+    },
+    2,
+    1000,
+  );
 
   if (!presignedUrlResponse.ok) {
     throw new Error("Failed to upload file", { cause: 500 });
@@ -450,31 +457,4 @@ export async function getLinkedFile({
   }
 
   return response.json() as Promise<{ url: string }>;
-}
-
-export async function fetchWithAuth(
-  url: string,
-  options: RequestInit = {},
-  retries = 0,
-): Promise<Response> {
-  const response = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    ...options,
-    credentials: "include",
-  });
-
-  if (response.status === 401 && retries < 1) {
-    const refreshRes = await fetch(`${backendUrl}/auth/refresh`, {
-      method: "POST",
-      credentials: "include",
-    });
-
-    if (refreshRes.ok) {
-      return fetchWithAuth(url, options, retries + 1);
-    }
-  }
-
-  return response;
 }
