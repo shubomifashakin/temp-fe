@@ -501,6 +501,7 @@ function FileSafe({
               key={link.id}
               id={link.id}
               fileId={file.id}
+              shareId={link.shareId}
               createdAt={link.createdAt}
               revokedAt={link.revokedAt}
               clickCount={link.clickCount}
@@ -523,6 +524,7 @@ function FileSafe({
 function LinkItem({
   fileId,
   id,
+  shareId,
   revokedAt,
   clickCount,
   createdAt,
@@ -531,6 +533,7 @@ function LinkItem({
 }: {
   fileId: string;
   id: string;
+  shareId: string;
   createdAt: string;
   clickCount: number;
   revokedAt: string | null;
@@ -544,10 +547,10 @@ function LinkItem({
   const domain =
     typeof window !== "undefined" ? window.location.origin : APP_URL;
 
-  function handleCopy(linkId: string) {
-    const shareUrl = `${domain}/share/${linkId}`;
+  function handleCopy(shareId: string) {
+    const shareUrl = `${domain}/share/${shareId}`;
     navigator.clipboard.writeText(shareUrl);
-    setCopiedLinkId(linkId);
+    setCopiedLinkId(shareId);
     setTimeout(() => setCopiedLinkId(null), 2000);
   }
 
@@ -584,7 +587,7 @@ function LinkItem({
         <input
           readOnly
           type="text"
-          value={`${domain}/share/${id}`}
+          value={`${domain}/share/${shareId}`}
           className="flex-1 px-2 py-2.5 rounded text-xs bg-secondary/50 border border-border/30 text-foreground"
         />
 
@@ -592,10 +595,10 @@ function LinkItem({
           <>
             <Button
               variant={"secondary"}
-              onClick={() => handleCopy(id)}
+              onClick={() => handleCopy(shareId)}
               className={`px-3 py-1 text-xs rounded min-w-14 md:min-w-22 transition-all `}
             >
-              {copiedLinkId === id ? "✓" : "Copy"}
+              {copiedLinkId === shareId ? "✓" : "Copy"}
             </Button>
 
             <Button

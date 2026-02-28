@@ -322,6 +322,7 @@ export async function deleteFile({ id }: { id: string }) {
 
 type LinkDetails = {
   id: string;
+  shareId: string;
   revokedAt: string | null;
   createdAt: string;
   clickCount: number;
