@@ -159,8 +159,8 @@ export default function Home() {
               >
                 supported file type
               </Link>
-              , we scan for malware, then automatically delete it after your
-              chosen period expires.
+              , we scan it for malware and securely delete it once your selected
+              retention period ends.
             </p>
           </div>
 
@@ -191,7 +191,7 @@ export default function Home() {
             </h2>
 
             <p className="text-sm font-light text-leading max-w-2xl mx-auto">
-              Everything you need for secure, temporary file sharing.
+              Everything you need for secure, ephemeral file sharing.
             </p>
           </div>
 
