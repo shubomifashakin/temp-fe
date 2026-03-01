@@ -221,6 +221,9 @@ function CreateLinkForm({
     mutate({ fileId, data: { password, description, expiresAt } });
   }
 
+  const isStrongPasswordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$/;
+
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-x-4 gap-y-5 p-6">
       <div className="space-y-0.5">
@@ -233,7 +236,14 @@ function CreateLinkForm({
         </p>
       </div>
 
-      <InputGroup label="Description">
+      <InputGroup
+        label="Description"
+        error={
+          description.length > 0 && description.length < 5
+            ? "Description must be at least 5 characters"
+            : undefined
+        }
+      >
         <input
           required
           type="text"
@@ -249,7 +259,15 @@ function CreateLinkForm({
         />
       </InputGroup>
 
-      <InputGroup label="Password" showRequired={false}>
+      <InputGroup
+        label="Password"
+        showRequired={false}
+        error={
+          password && !isStrongPasswordRegex.test(password)
+            ? "Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter and one number."
+            : undefined
+        }
+      >
         <input
           autoCapitalize="none"
           autoComplete="off"

@@ -1,12 +1,18 @@
 "use client";
 
-import React, { useState, useRef, ReactNode } from "react";
-import { toast } from "sonner";
+import React, { useState, useRef } from "react";
 
+import { toast } from "sonner";
 import { FileUp, Loader2Icon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Lifetimes } from "@/data-service/mutations";
+import {
+  MAX_FILE_SIZE_MB,
+  ALLOWED_EXTENSIONS,
+  MAX_FILE_SIZE_IN_BYTES,
+} from "@/lib/constants";
+import { InputGroup } from "./input-group";
 
 interface UploadModalProps {
   isUploading: boolean;
@@ -18,12 +24,6 @@ interface UploadModalProps {
     lifetime: Lifetimes;
   }) => void;
 }
-
-import {
-  MAX_FILE_SIZE_MB,
-  ALLOWED_EXTENSIONS,
-  MAX_FILE_SIZE_IN_BYTES,
-} from "@/lib/constants";
 
 const lifetimes: { value: Lifetimes; label: string }[] = [
   { value: "short", label: "7 days" },
@@ -175,7 +175,14 @@ export default function UploadModal({
             </div>
           )}
 
-          <InputGroup label="Name">
+          <InputGroup
+            label="Name"
+            error={
+              name.length > 0 && name.length < 5
+                ? "Name must be at least 5 characters"
+                : undefined
+            }
+          >
             <input
               required
               type="text"
@@ -188,7 +195,14 @@ export default function UploadModal({
             />
           </InputGroup>
 
-          <InputGroup label="Description">
+          <InputGroup
+            label="Description"
+            error={
+              description.length > 0 && description.length < 5
+                ? "Description must be at least 5 characters"
+                : undefined
+            }
+          >
             <textarea
               rows={3}
               required
@@ -246,35 +260,6 @@ export default function UploadModal({
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-function InputGroup({
-  label,
-  children,
-  showRequired = true,
-}: {
-  label: string;
-  children: ReactNode;
-  showRequired?: boolean;
-}) {
-  return (
-    <div className="space-y-2">
-      <div className="flex justify-between">
-        <label
-          title={label}
-          className="text-sm  font-medium text-heading capitalize tracking-tight"
-        >
-          {label}
-        </label>
-
-        {showRequired && (
-          <p className="text-xs text-muted-foreground mt-1">Required</p>
-        )}
-      </div>
-
-      {children}
     </div>
   );
 }
