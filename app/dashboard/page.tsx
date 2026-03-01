@@ -140,8 +140,8 @@ export default function Page() {
           }
           onClick={() => setIsModalOpen(true)}
         >
-          Upload File
           <FileUp />
+          Upload File
         </Button>
       </div>
 
