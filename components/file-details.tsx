@@ -221,8 +221,9 @@ function CreateLinkForm({
     mutate({ fileId, data: { password, description, expiresAt } });
   }
 
-  const isStrongPasswordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$/;
+  const isPasswordWeak = password
+    ? !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$/.test(password)
+    : false;
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-x-4 gap-y-5 p-6">
@@ -263,7 +264,7 @@ function CreateLinkForm({
         label="Password"
         showRequired={false}
         error={
-          password && !isStrongPasswordRegex.test(password)
+          isPasswordWeak
             ? "Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter and one number."
             : undefined
         }
