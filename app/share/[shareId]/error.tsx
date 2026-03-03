@@ -8,7 +8,13 @@ import { FileX } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-export default function ErrorComponent({ reset }: { reset: () => void }) {
+export default function ErrorComponent({
+  error,
+  reset,
+}: {
+  error: Error;
+  reset: () => void;
+}) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -20,7 +26,7 @@ export default function ErrorComponent({ reset }: { reset: () => void }) {
         </div>
 
         <h1 className="text-base text-gray-100 tracking-tight">
-          Oops! Something went wrong...
+          {error?.message || "Oops! Something went wrong..."}
         </h1>
 
         <Button
