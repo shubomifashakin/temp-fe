@@ -23,7 +23,8 @@ const playfair = Playfair({
 
 export const metadata: Metadata = {
   title: "Temp - File Sharing Made Easy",
-  description: "Secure ephemeral file sharing made easy.",
+  description:
+    "Secure ephemeral file sharing made easy, every upload is scanned for malware and automatically deleted after your specified retention period ends.",
   keywords: [
     "temp",
     "temporary",
@@ -31,6 +32,12 @@ export const metadata: Metadata = {
     "file sharing",
     "secure",
     "easy",
+    "file upload",
+    "public links",
+    "private links",
+    "download",
+    "upload",
+    "malware scanning",
   ],
   authors: [{ name: "Fashakin Olashubomi" }],
   creator: "Fashakin Olashubomi",
@@ -40,11 +47,14 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Temp - File Sharing Made Easy",
     url: "https://temp.545plea.xyz",
+    description:
+      "Secure ephemeral file sharing made easy, every upload is scanned for malware and automatically deleted after your specified retention period ends.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Temp - File Sharing Made Easy",
-    description: "Secure ephemeral file sharing made easy.",
+    description:
+      "Secure ephemeral file sharing made easy, every upload is scanned for malware and automatically deleted after your specified retention period ends.",
     creator: "@545plea",
   },
 };
