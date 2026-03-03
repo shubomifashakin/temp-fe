@@ -16,29 +16,36 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { shareId } = await params;
+  try {
+    const { shareId } = await params;
 
-  const linkDetails = await getLinkDetails({ linkId: shareId });
+    const linkDetails = await getLinkDetails({ linkId: shareId });
 
-  return {
-    category: "File",
-    applicationName: "Temp",
-    title: linkDetails.fileName,
-    keywords: ["Temp", "File", "Link"],
-    description: linkDetails.description,
-    authors: [{ name: linkDetails.fileCreator }],
-    openGraph: {
-      type: "website",
+    return {
+      category: "File",
+      applicationName: "Temp",
       title: linkDetails.fileName,
+      keywords: ["Temp", "File", "Link"],
       description: linkDetails.description,
-    },
-    twitter: {
-      card: "summary",
-      title: linkDetails.fileName,
-      creator: linkDetails.fileCreator,
-      description: linkDetails.description,
-    },
-  };
+      authors: [{ name: linkDetails.fileCreator }],
+      openGraph: {
+        type: "website",
+        title: linkDetails.fileName,
+        description: linkDetails.description,
+      },
+      twitter: {
+        card: "summary",
+        title: linkDetails.fileName,
+        creator: linkDetails.fileCreator,
+        description: linkDetails.description,
+      },
+    };
+  } catch {
+    return {
+      title: "Temp - File Sharing Made Easy",
+      description: "Secure ephemeral file sharing made easy!",
+    };
+  }
 }
 
 export default async function LinkDetailsPage({ params }: Props) {
