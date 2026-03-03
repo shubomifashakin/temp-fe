@@ -1,104 +1,79 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useParams } from "next/navigation";
-import { toast } from "sonner";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { Loader2Icon, FileX, Clock, ArrowLeft } from "lucide-react";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+
+import { Clock, ArrowLeft } from "lucide-react";
 
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import LinkAccessForm from "@/components/link-access-form";
 
-import { formatFileSize, getTimeRemaining } from "@/lib/utils";
-import { getLinkDetails, getLinkedFile } from "@/data-service/mutations";
+import { getLinkDetails } from "@/data-service/mutations";
+import { formatDate, formatFileSize, getTimeRemaining } from "@/lib/utils";
 
-export default function LinkDetailsPage() {
-  const { shareId } = useParams<{ shareId: string }>();
-  const [password, setPassword] = useState("");
+type Props = {
+  params: Promise<{ shareId: string }>;
+};
 
-  const { data, status, error, refetch } = useQuery({
-    refetchOnWindowFocus: true,
-    queryKey: ["share-link", shareId],
-    queryFn: () => getLinkDetails({ linkId: shareId }),
-  });
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { shareId } = await params;
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: getLinkedFile,
-    mutationKey: ["get-linked-file", shareId],
-    onSuccess: (data) => {
-      window.location.href = data.url;
+  const linkDetails = await getLinkDetails({ linkId: shareId });
+
+  return {
+    category: "File",
+    applicationName: "Temp",
+    title: linkDetails.fileName,
+    keywords: ["Temp", "File", "Link"],
+    description: linkDetails.description,
+    authors: [{ name: linkDetails.fileCreator }],
+    openGraph: {
+      type: "website",
+      title: linkDetails.fileName,
+      description: linkDetails.description,
     },
-    onError: (error) => {
-      if (error.cause === 401) {
-        return toast.error("Invalid Credentials");
+    twitter: {
+      card: "summary",
+      title: linkDetails.fileName,
+      creator: linkDetails.fileCreator,
+      description: linkDetails.description,
+    },
+  };
+}
+
+export default async function LinkDetailsPage({ params }: Props) {
+  const { shareId } = await params;
+
+  const data = await getLinkDetails({ linkId: shareId }).catch((error) => {
+    if (error instanceof Error) {
+      if (error.cause === 404) {
+        notFound();
       }
-      toast.error(error.message);
-    },
+    }
+
+    throw error;
   });
 
-  function handleGetFile() {
-    mutate({ linkId: shareId, password: password || null });
-  }
+  const linkHasExpired =
+    !!data.expiresAt && new Date() > new Date(data.expiresAt);
 
-  if (status === "pending") {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4 font-mono">
-          <Loader2Icon className="h-8 w-8 animate-spin text-orange-500" />
-          <span className="text-leading text-sm">Fetching link details...</span>
-        </div>
-      </div>
-    );
-  }
+  const uploadedAt = formatDate(data.fileUploadedAt);
 
-  if (status === "error" && error.cause === 404) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <Card className="border p-8 max-w-md w-full gap-y-6 text-center flex flex-col items-center font-mono">
-          <div className="space-y-2">
-            <h1 className="text-lg font-medium text-heading">Link Not Found</h1>
+  const expiresDate = data.expiresAt ? formatDate(data.expiresAt) : null;
 
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              This link either doesn&apos;t exist or has been revoked by the
-              owner.
-            </p>
-          </div>
+  if (data.fileDeleted || data.fileExpired || linkHasExpired) {
+    const heading = data.fileDeleted
+      ? "File Deleted"
+      : data.fileExpired
+        ? "File Expired"
+        : "Link Expired";
 
-          <Link
-            href={"/"}
-            className="text-xs text-leading text-center font-mono flex items-center gap-1"
-          >
-            <ArrowLeft className="mr-1 h-3 w-3" /> Back to Temp
-          </Link>
-        </Card>
-      </div>
-    );
-  }
+    const leading = data.fileDeleted
+      ? "This file has been deleted by the owner."
+      : data.fileExpired
+        ? "This file has expired and is no longer accessible."
+        : "This link has expired and is no longer accessible.";
 
-  if (status === "error") {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <Card className="border p-8 max-w-md w-full gap-y-4 text-center font-mono">
-          <div className="flex justify-center">
-            <FileX size={38} strokeWidth={1.5} />
-          </div>
-
-          <h1 className="text-base text-gray-100 tracking-tight">
-            Oops! Something went wrong...
-          </h1>
-
-          <Button className="rounded" onClick={() => refetch()}>
-            Try Again
-          </Button>
-        </Card>
-      </div>
-    );
-  }
-
-  if (data.fileDeleted || data.fileExpired) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <Card className="border rounded p-8 max-w-md w-full gap-y-2 text-center font-mono">
@@ -106,40 +81,13 @@ export default function LinkDetailsPage() {
             <Clock size={32} className=" text-yellow-600" />
           </div>
 
-          <h1 className="text-lg text-heading">
-            {data.fileDeleted ? "File Deleted" : "Link Expired"}
-          </h1>
+          <h1 className="text-lg text-heading">{heading}</h1>
 
-          <p className="text-sm text-leading">
-            {data.fileDeleted
-              ? "This file has been deleted by the owner."
-              : "This share link has expired and is no longer accessible."}
-          </p>
+          <p className="text-sm text-leading">{leading}</p>
         </Card>
       </div>
     );
   }
-
-  const uploadedAt = new Date(data.fileUploadedAt).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-  const expiresDate = data.expiresAt
-    ? new Date(data.expiresAt).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      })
-    : null;
-
-  const linkHasExpired =
-    !!data.expiresAt && new Date() > new Date(data.expiresAt);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 py-8">
@@ -233,49 +181,10 @@ export default function LinkDetailsPage() {
             <p className="text-sm text-heading">{data.fileDescription}</p>
           </div>
 
-          {data.passwordProtected && (
-            <>
-              <div className="border-t border-dashed" />
-
-              <div className="space-y-3">
-                <h3 className="text-xs text-leading uppercase">
-                  Password Required
-                </h3>
-
-                <Input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && password && !isPending) {
-                      handleGetFile();
-                    }
-                  }}
-                  placeholder="Enter password"
-                  className="w-full bg-gray-900 text-gray-100 placeholder-gray-600 text-sm font-mono"
-                />
-              </div>
-            </>
-          )}
-
-          <Button
-            onClick={handleGetFile}
-            disabled={
-              isPending ||
-              (data.passwordProtected && !password.length) ||
-              linkHasExpired
-            }
-            className="w-full primary-btn text-white font-mono text-sm"
-          >
-            {isPending ? (
-              <>
-                <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
-                Accessing...
-              </>
-            ) : (
-              "Access File"
-            )}
-          </Button>
+          <LinkAccessForm
+            shareId={shareId}
+            isPasswordProtected={data.passwordProtected}
+          />
 
           <div className="border-t border-dashed pt-4 gap-y-2 text-center flex flex-col items-center">
             <p className="text-xs text-leading font-mono">
