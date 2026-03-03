@@ -1,0 +1,8 @@
+User-Agent: *
+Allow: /
+Disallow: /private/
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /auth/
+
+Sitemap: https://temp.545plea.xyz/sitemap.xml
