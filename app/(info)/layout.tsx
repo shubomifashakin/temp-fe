@@ -1,97 +1,12 @@
-"use client";
-
 import Link from "next/link";
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 
-import { Button } from "@/components/ui/button";
-import Hamburger from "@/components/ui/hamburger";
+import { Navbar } from "@/components/navbar";
 
 export default function InfoLayout({ children }: { children: ReactNode }) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
   return (
     <main className="min-h-screen bg-background font-mono">
-      <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h2 className="text-2xl font-playfair font-bold text-foreground">
-            Temp
-          </h2>
-
-          <div className="hidden md:flex items-center gap-8">
-            <Link
-              href={"/"}
-              className={`text-sm cursor-pointer font-medium transition-colors ${"text-muted-foreground hover:text-orange-500"}`}
-            >
-              Home
-            </Link>
-
-            <Link
-              href={"/#features"}
-              className={`text-sm cursor-pointer font-medium transition-colors ${"text-muted-foreground hover:text-orange-500"}`}
-            >
-              Features
-            </Link>
-
-            <Link
-              href={"/#pricing"}
-              className={`text-sm cursor-pointer font-medium transition-colors ${"text-muted-foreground hover:text-orange-500"}`}
-            >
-              Pricing
-            </Link>
-          </div>
-
-          <div className="hidden md:flex items-center gap-8">
-            <Button
-              variant={"link"}
-              asChild
-              className="w-fit font-medium! cursor-pointer text-sm no-underline! rounded-none p-0! h-fit hover:text-orange-500 transition-colors"
-            >
-              <Link href="/auth/sign-in">Sign In</Link>
-            </Button>
-          </div>
-
-          <Hamburger
-            opened={mobileMenuOpen}
-            onMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)}
-          />
-        </div>
-
-        <div
-          className={`pointer-events-none opacity-0 transition-opacity md:hidden md:pointer-events-none! ${mobileMenuOpen ? "opacity-100 pointer-events-auto!" : ""} absolute w-full top-full border-t border-border/50 bg-background/95 backdrop-blur-sm`}
-        >
-          <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col gap-3">
-            <Link
-              href={"/"}
-              className={`text-sm cursor-pointer font-medium transition-colors text-left py-2 ${"text-muted-foreground hover:text-orange-500"}`}
-            >
-              Home
-            </Link>
-
-            <Link
-              href={"/#features"}
-              className={`text-sm cursor-pointer font-medium transition-colors text-left py-2 ${"text-muted-foreground hover:text-orange-500"}`}
-            >
-              Features
-            </Link>
-
-            <Link
-              href={"/#pricing"}
-              className={`text-sm cursor-pointer font-medium transition-colors text-left py-2 ${"text-muted-foreground hover:text-orange-500"}`}
-            >
-              Pricing
-            </Link>
-
-            <Button
-              asChild
-              variant={"link"}
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full text-left! justify-start font-medium! cursor-pointer text-sm no-underline! rounded-none p-0! hover:text-orange-500 transition-colors"
-            >
-              <Link href="/auth/sign-in">Sign In</Link>
-            </Button>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {children}
 
