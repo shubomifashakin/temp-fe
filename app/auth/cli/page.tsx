@@ -21,18 +21,13 @@ export default function Page() {
     queryFn: () => getUserInfo(),
   });
 
-  useEffect(() => {
-    if (!code || !state) {
-      router.replace("/");
-    }
-  }, [code, state, router]);
-
   useEffect(
     function () {
       if (status === "error" && error?.cause === 401) {
-        router.replace(
-          `/auth/sign-in?next=/auth/cli?code=${code}&state=${state}`,
+        const next = encodeURIComponent(
+          `/auth/cli?code=${code}&state=${state}`,
         );
+        router.replace(`/auth/sign-in?next=${next}`);
       }
     },
     [status, error, router, code, state],
