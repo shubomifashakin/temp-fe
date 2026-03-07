@@ -1,11 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+
 import { Button } from "@/components/ui/button";
 
 export default function SignInPage() {
+  const searchParams = useSearchParams();
+
   const handleGoogleSignIn = async () => {
-    window.location.href = process.env.NEXT_PUBLIC_BACKEND_URL + "/auth/google";
+    const next = searchParams.get("next") ?? "/dashboard";
+    window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google?next=${encodeURIComponent(next)}`;
   };
 
   return (
