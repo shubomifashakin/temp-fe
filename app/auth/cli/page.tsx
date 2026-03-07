@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 import { getUserInfo } from "@/data-service/mutations";
@@ -42,7 +43,31 @@ export default function Page() {
           </div>
         )}
 
-        {status === "success" && (
+        {status === "success" && (!code || !state) && (
+          <div className="bg-card border border-border rounded p-8 space-y-8">
+            <div className="space-y-2">
+              <Link
+                href="/"
+                className="text-xs text-muted-foreground flex items-center gap-1"
+              >
+                <ArrowLeft size={14} /> Back to Temp
+              </Link>
+
+              <h1 className="text-2xl font-playfair font-bold text-foreground">
+                Temp
+              </h1>
+
+              <p className="text-sm text-leading">
+                Invalid CLI authorization request.
+              </p>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              This page can only be accessed from the Temp CLI application.
+            </p>
+          </div>
+        )}
+
+        {status === "success" && code && state && (
           <div className="bg-card border border-border rounded p-8 space-y-8">
             <div className="space-y-2">
               <h1 className="text-3xl font-playfair font-bold text-foreground">
