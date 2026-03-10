@@ -1,11 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { useSearchParams } from "next/navigation";
 
-export default function SignInPage() {
+import { Button } from "@/components/ui/button";
+import { Suspense } from "react";
+
+function SignInContent() {
+  const searchParams = useSearchParams();
+
   const handleGoogleSignIn = async () => {
-    window.location.href = process.env.NEXT_PUBLIC_BACKEND_URL + "/auth/google";
+    const next = searchParams.get("next") ?? "/dashboard";
+    window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google?next=${encodeURIComponent(next)}`;
   };
 
   return (
@@ -60,5 +66,13 @@ export default function SignInPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense>
+      <SignInContent />
+    </Suspense>
   );
 }

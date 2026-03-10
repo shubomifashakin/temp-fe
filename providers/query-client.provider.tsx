@@ -21,6 +21,16 @@ const queryClient = new QueryClient({
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,
     },
+    mutations: {
+      retry: (failureCount, error) => {
+        if ([401, 404, 400, 403].includes(error.cause as number)) {
+          return false;
+        }
+
+        return failureCount < 3;
+      },
+      retryDelay: 3000,
+    },
   },
 });
 

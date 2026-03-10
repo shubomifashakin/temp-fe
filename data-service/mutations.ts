@@ -459,3 +459,25 @@ export async function getLinkedFile({
 
   return response.json() as Promise<{ url: string }>;
 }
+
+//cli
+export async function confirmCli({
+  code,
+  state,
+}: {
+  code: string;
+  state: string;
+}) {
+  const response = await fetchWithAuth(
+    `${backendUrl}/auth/cli/confirm?code=${code}&state=${state}`,
+    {
+      method: "POST",
+    },
+  );
+
+  if (!response.ok) {
+    throw await handleRequestError(response);
+  }
+
+  return response.json();
+}
