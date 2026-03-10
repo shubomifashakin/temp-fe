@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -10,7 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getUserInfo } from "@/data-service/mutations";
 import { CliAuthConfirm } from "@/components/cli-auth-confirm";
 
-export default function Page() {
+function CliAuthContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -96,5 +96,23 @@ export default function Page() {
         )}
       </div>
     </main>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen font-mono bg-background flex items-center justify-center px-4 py-12">
+          <div className="w-full max-w-md">
+            <div className="flex items-center justify-center">
+              <Loader2 className="animate-spin" />
+            </div>
+          </div>
+        </main>
+      }
+    >
+      <CliAuthContent />
+    </Suspense>
   );
 }
