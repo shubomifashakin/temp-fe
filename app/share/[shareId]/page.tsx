@@ -70,18 +70,12 @@ export default async function LinkDetailsPage({ params }: Props) {
 
   const expiresDate = data.expiresAt ? formatDate(data.expiresAt) : null;
 
-  if (data.fileDeleted || data.fileExpired || linkHasExpired) {
-    const heading = data.fileDeleted
-      ? "File Deleted"
-      : data.fileExpired
-        ? "File Expired"
-        : "Link Expired";
+  if (data.fileExpired || linkHasExpired) {
+    const heading = data.fileExpired ? "File Expired" : "Link Expired";
 
-    const leading = data.fileDeleted
-      ? "This file has been deleted by the owner."
-      : data.fileExpired
-        ? "This file has expired and is no longer accessible."
-        : "This link has expired and is no longer accessible.";
+    const leading = data.fileExpired
+      ? "This file has expired and is no longer accessible."
+      : "This link has expired and is no longer accessible.";
 
     return (
       <div className="min-h-screen flex items-center justify-center p-4">

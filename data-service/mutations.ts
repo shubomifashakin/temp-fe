@@ -53,7 +53,6 @@ export type FileDetails = {
   totalLinks: number;
   totalClicks: number;
   createdAt: string;
-  deletedAt: string | null;
 };
 
 type GetFilesResponse = {
@@ -346,7 +345,6 @@ export type LinkDetailsResponse = {
   fileCreator: string;
   fileStatus: FileStatus;
   fileDescription: string;
-  fileDeleted: boolean;
   fileName: string;
   fileContentType: string;
   fileSize: number;

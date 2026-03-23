@@ -350,7 +350,6 @@ function FileDetails({
   handleShowCreateLinkForm: () => void;
 }) {
   const isExpired = isPast(file.expiresAt);
-  const isDeleted = file.deletedAt ? true : false;
 
   return (
     <div className="p-6 space-y-6">
@@ -410,17 +409,6 @@ function FileDetails({
             </span>
           </div>
         )}
-
-        {isDeleted ||
-          (file.status === "unsafe" && (
-            <div className="flex justify-between text-xs border-t border-border/20 pt-2">
-              <span className="text-leading uppercase">Deleted At</span>
-
-              <span className="text-foreground font-medium">
-                {formatDate(file?.deletedAt || file.createdAt)}
-              </span>
-            </div>
-          ))}
       </div>
 
       {file.status === "safe" && (
@@ -430,9 +418,9 @@ function FileDetails({
         />
       )}
 
-      {!isDeleted && !isExpired && file.status === "unsafe" && <FileUnsafe />}
+      {!isExpired && file.status === "unsafe" && <FileUnsafe />}
 
-      {!isDeleted && !isExpired && file.status === "pending" && <FilePending />}
+      {!isExpired && file.status === "pending" && <FilePending />}
 
       <div className="flex gap-3">
         <Button
@@ -445,11 +433,11 @@ function FileDetails({
 
         <Button
           variant={"destructive"}
-          disabled={isDeleted || isExpired}
+          disabled={isExpired}
           onClick={handleShowDeleteConfirm}
           className="flex-1 font-medium text-sm"
         >
-          {isDeleted ? "Deleted" : "Delete File"}
+          Delete File
         </Button>
       </div>
     </div>
@@ -465,8 +453,7 @@ function FileSafe({
 }) {
   const linkListContainerRef = useRef<HTMLDivElement>(null);
 
-  const cannotCreateNewLink =
-    !!file.deletedAt || new Date() > new Date(file.expiresAt);
+  const cannotCreateNewLink = new Date() > new Date(file.expiresAt);
 
   const { data, status, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery({
