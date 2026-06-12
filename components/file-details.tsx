@@ -141,6 +141,19 @@ function ConfirmFileDelete({
     mutate({ id: fileId });
   }
 
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        cancelShowDeleteConfirm();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [cancelShowDeleteConfirm]);
+
   return (
     <div className="p-6 space-y-4">
       <div className="space-y-2">
@@ -228,6 +241,19 @@ function CreateLinkForm({
 
     mutate({ fileId, data: { password, description, expiresAt } });
   }
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        handleShowCreateLinkForm();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleShowCreateLinkForm]);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-x-4 gap-y-5 p-6">

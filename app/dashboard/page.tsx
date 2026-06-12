@@ -97,14 +97,18 @@ export default function Page() {
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isModalOpen) {
+      if (
+        (e.key === "Escape" && isModalOpen) ||
+        (e.key === "Escape" && selectedFile)
+      ) {
         setIsModalOpen(false);
+        setSelectedFile(null);
       }
     };
 
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [isModalOpen]);
+  }, [isModalOpen, selectedFile]);
 
   useEffect(() => {
     const handleScroll = (e: Event) => {
