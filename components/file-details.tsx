@@ -318,6 +318,7 @@ function CreateLinkForm({
 
       <div className="flex justify-between gap-4">
         <Button
+          type="button"
           disabled={isPending}
           variant={"secondary"}
           className="flex-1"
