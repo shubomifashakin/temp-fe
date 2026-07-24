@@ -111,7 +111,7 @@ export default function Home() {
 
             <Feature
               title="Resumable Uploads"
-              description="Large file uploads can be resumed if interrupted, ensuring no data is lost."
+              description="Interrupted uploads can be resumed within 24 hours, no data lost."
               icon={
                 <RefreshCwIcon className="text-foreground" strokeWidth={1.5} />
               }

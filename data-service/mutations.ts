@@ -296,6 +296,7 @@ interface MultipartUploadState {
   uploadId: string;
   key: string;
   lastModified: number;
+  savedAt: number;
   completedParts: { partNumber: number; etag: string }[];
 }
 
@@ -317,7 +318,11 @@ function loadMultipartState(file: File): MultipartUploadState | null {
 
     const state = JSON.parse(raw) as MultipartUploadState;
 
-    if (state.lastModified !== file.lastModified) {
+    const HOURS_24 = 24 * 60 * 60 * 1000;
+    if (
+      state.lastModified !== file.lastModified ||
+      Date.now() - state.savedAt > HOURS_24
+    ) {
       clearMultipartState(file);
 
       return null;
@@ -376,7 +381,11 @@ async function uploadFileMultipart(
     }
 
     parts.push({ partNumber, etag });
-    saveMultipartState(file, { ...state, completedParts: parts });
+    saveMultipartState(file, {
+      ...state,
+      completedParts: parts,
+      savedAt: Date.now(),
+    });
     onProgress?.(Math.round((partNumber / totalParts) * 100));
   }
 
@@ -441,6 +450,7 @@ export async function uploadFile({
       uploadId: data.uploadId,
       key: data.key,
       lastModified: file.lastModified,
+      savedAt: Date.now(),
       completedParts: [],
     };
 
