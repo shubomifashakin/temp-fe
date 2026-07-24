@@ -1,3 +1,4 @@
+import { PART_SIZE_BYTES } from "@/lib/constants";
 import { fetchWithRetry, fetchWithAuth } from "@/lib/utils";
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL!;
@@ -40,7 +41,7 @@ type Plans = {
   data: PlanIntervals;
 };
 
-type FileStatus = "safe" | "pending" | "unsafe";
+type FileStatus = "safe" | "pending" | "unsafe" | "unscanned";
 
 export type FileDetails = {
   id: string;
@@ -251,22 +252,157 @@ export async function getFiles(pageParam?: string) {
 
 export type Lifetimes = "short" | "medium" | "long";
 
-type UploadFileResponse = {
+type PresignedPostUploadResponse = {
+  type: "presigned-post";
   url: string;
   fields: Record<string, string>;
 };
+
+type MultipartUploadResponse = {
+  type: "multipart";
+  fileId: string;
+  key: string;
+  uploadId: string;
+};
+
+type InitiateUploadResponse =
+  | PresignedPostUploadResponse
+  | MultipartUploadResponse;
+
+async function uploadFilePresignedPost(
+  file: File,
+  data: PresignedPostUploadResponse,
+): Promise<void> {
+  const formData = new FormData();
+  Object.entries(data.fields).forEach(([key, value]) => {
+    formData.append(key, value);
+  });
+  formData.append("file", file);
+
+  const uploadResponse = await fetchWithRetry(
+    data.url,
+    { method: "POST", body: formData },
+    2,
+    1000,
+  );
+
+  if (!uploadResponse.ok) {
+    throw new Error("Failed to upload file", { cause: 500 });
+  }
+}
+
+interface MultipartUploadState {
+  fileId: string;
+  uploadId: string;
+  key: string;
+  completedParts: { partNumber: number; etag: string }[];
+}
+
+function multipartStateKey(file: File): string {
+  return `multipart:${file.name}:${file.size}`;
+}
+
+function saveMultipartState(file: File, state: MultipartUploadState): void {
+  try {
+    localStorage.setItem(multipartStateKey(file), JSON.stringify(state));
+  } catch {}
+}
+
+function loadMultipartState(file: File): MultipartUploadState | null {
+  try {
+    const raw = localStorage.getItem(multipartStateKey(file));
+    return raw ? (JSON.parse(raw) as MultipartUploadState) : null;
+  } catch {
+    return null;
+  }
+}
+
+function clearMultipartState(file: File): void {
+  try {
+    localStorage.removeItem(multipartStateKey(file));
+  } catch {}
+}
+
+async function uploadFileMultipart(
+  file: File,
+  state: MultipartUploadState,
+  onProgress?: (pct: number) => void,
+) {
+  const { fileId, completedParts: resumedParts } = state;
+  const totalParts = Math.ceil(file.size / PART_SIZE_BYTES);
+  const parts: { partNumber: number; etag: string }[] = [...resumedParts];
+  const completedPartNumbers = new Set(resumedParts.map((p) => p.partNumber));
+
+  if (resumedParts.length > 0) {
+    onProgress?.(Math.round((resumedParts.length / totalParts) * 100));
+  }
+
+  for (let i = 0; i < totalParts; i++) {
+    const partNumber = i + 1;
+    if (completedPartNumbers.has(partNumber)) continue;
+
+    const start = i * PART_SIZE_BYTES;
+    const end = Math.min(start + PART_SIZE_BYTES, file.size);
+    const chunk = file.slice(start, end);
+
+    const signRes = await fetchWithAuth(`${backendUrl}/files/${fileId}/parts`, {
+      method: "POST",
+      body: JSON.stringify({ partNumber }),
+    });
+
+    if (!signRes.ok) throw await handleRequestError(signRes);
+    const { url } = (await signRes.json()) as { url: string };
+
+    const uploadRes = await fetch(url, { method: "PUT", body: chunk });
+    if (!uploadRes.ok) {
+      throw new Error("Failed to upload part", { cause: 500 });
+    }
+
+    const etag = uploadRes.headers.get("ETag");
+    if (!etag) {
+      throw new Error("Internal Server Error", { cause: 500 });
+    }
+
+    parts.push({ partNumber, etag });
+    saveMultipartState(file, { ...state, completedParts: parts });
+    onProgress?.(Math.round((partNumber / totalParts) * 100));
+  }
+
+  const completeRes = await fetchWithAuth(
+    `${backendUrl}/files/${fileId}/complete`,
+    {
+      method: "POST",
+      body: JSON.stringify({ parts }),
+    },
+  );
+
+  if (!completeRes.ok) throw await handleRequestError(completeRes);
+
+  clearMultipartState(file);
+}
 
 export async function uploadFile({
   file,
   name,
   lifetime,
   description,
+  onProgress,
 }: {
   file: File;
   name: string;
   lifetime: Lifetimes;
   description: string;
+  onProgress?: (pct: number) => void;
 }) {
+  // get the state it stopped at if it got cancelledd
+  const savedState = loadMultipartState(file);
+
+  if (savedState) {
+    await uploadFileMultipart(file, savedState, onProgress);
+
+    return { message: "Success" };
+  }
+
   const response = await fetchWithAuth(`${backendUrl}/files`, {
     method: "POST",
     body: JSON.stringify({
@@ -282,26 +418,22 @@ export async function uploadFile({
     throw await handleRequestError(response);
   }
 
-  const { url, fields } = (await response.json()) as UploadFileResponse;
+  const data = (await response.json()) as InitiateUploadResponse;
 
-  const formData = new FormData();
-  Object.entries(fields).forEach(([key, value]) => {
-    formData.append(key, value);
-  });
-  formData.append("file", file);
+  if (data.type === "presigned-post") {
+    await uploadFilePresignedPost(file, data);
+  } else {
+    // store tHE initiallstate
+    const state: MultipartUploadState = {
+      fileId: data.fileId,
+      uploadId: data.uploadId,
+      key: data.key,
+      completedParts: [],
+    };
 
-  const presignedUrlResponse = await fetchWithRetry(
-    url,
-    {
-      method: "POST",
-      body: formData,
-    },
-    2,
-    1000,
-  );
+    saveMultipartState(file, state);
 
-  if (!presignedUrlResponse.ok) {
-    throw new Error("Failed to upload file", { cause: 500 });
+    await uploadFileMultipart(file, state, onProgress);
   }
 
   return { message: "Success" };

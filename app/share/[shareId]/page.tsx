@@ -3,7 +3,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { Clock, ArrowLeft } from "lucide-react";
+import { Clock, ArrowLeft, ShieldQuestion } from "lucide-react";
 
 import { Card } from "@/components/ui/card";
 import LinkAccessForm from "@/components/link-access-form";
@@ -183,6 +183,13 @@ export default async function LinkDetailsPage({ params }: Props) {
             <h3 className="text-xs text-leading uppercase">Description</h3>
             <p className="text-sm text-heading">{data.fileDescription}</p>
           </div>
+
+          {data.fileStatus === "unscanned" && (
+            <div className="p-3 bg-secondary/30 border items-center flex gap-x-2 border-border/30 rounded text-xs text-muted-foreground tracking-tight font-light">
+              <ShieldQuestion size={24} className="shrink-0" /> This file might
+              be unsafe. Download and open with caution.
+            </div>
+          )}
 
           <LinkAccessForm
             shareId={shareId}

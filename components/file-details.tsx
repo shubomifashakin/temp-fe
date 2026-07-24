@@ -19,6 +19,7 @@ import {
   Loader2Icon,
   CircleDashed,
   OctagonAlert,
+  ShieldQuestion,
   MousePointerClick,
   ChevronDownIcon,
   Calendar1,
@@ -438,8 +439,10 @@ function FileDetails({
         )}
       </div>
 
-      {file.status === "safe" && (
-        <FileSafe
+      {!isExpired && file.status === "unscanned" && <FileUnscanned />}
+
+      {(file.status === "safe" || file.status === "unscanned") && (
+        <FileAcessible
           file={file}
           handleShowCreateLinkForm={handleShowCreateLinkForm}
         />
@@ -471,7 +474,7 @@ function FileDetails({
   );
 }
 
-function FileSafe({
+function FileAcessible({
   file,
   handleShowCreateLinkForm,
 }: {
@@ -704,6 +707,15 @@ function LinkDetail({
       <span className="text-leading hidden md:block uppercase">{heading}</span>
 
       <p className="text-heading font-medium">{leading}</p>
+    </div>
+  );
+}
+
+function FileUnscanned() {
+  return (
+    <div className="p-3 bg-secondary/30 border items-center flex gap-x-2 border-border/30 rounded text-xs text-muted-foreground tracking-tight font-light">
+      <ShieldQuestion size={24} className="shrink-0" /> This file was not
+      scanned for malware. Exercise caution when sharing files with others.
     </div>
   );
 }
