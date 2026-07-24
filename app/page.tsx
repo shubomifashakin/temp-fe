@@ -185,7 +185,7 @@ export default function Home() {
                 </h3>
 
                 <div className="flex items-baseline gap-1 mb-4">
-                  <span className="text-3xl text-heading font-bold">$2.99</span>
+                  <span className="text-3xl text-heading font-bold">$3.99</span>
 
                   <span className="text-sm text-leading">/month</span>
                 </div>
