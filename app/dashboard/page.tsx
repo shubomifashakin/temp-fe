@@ -26,6 +26,7 @@ export default function Page() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [selectedFile, setSelectedFile] = useState<FileDetails | null>(null);
 
   const {
@@ -54,12 +55,14 @@ export default function Page() {
     mutationKey: ["upload-file"],
 
     onSuccess: async () => {
+      setUploadProgress(0);
       setIsModalOpen(false);
       toast.success("File Uploaded!");
       await queryClient.invalidateQueries({ queryKey: ["dashboard"] });
     },
 
     onError: (error) => {
+      setUploadProgress(0);
       toast.error(error.message);
 
       if (error.cause === 401) {
@@ -79,7 +82,13 @@ export default function Page() {
     lifetime: Lifetimes;
     description: string;
   }) {
-    mutate({ file, name, lifetime, description });
+    mutate({
+      file,
+      name,
+      lifetime,
+      description,
+      onProgress: setUploadProgress,
+    });
   }
 
   function handleFileSelect(file: FileDetails) {
@@ -175,6 +184,7 @@ export default function Page() {
         <UploadModal
           onUpload={handleUpload}
           isUploading={isUploading}
+          uploadProgress={uploadProgress}
           onClose={() => setIsModalOpen(false)}
         />
       )}

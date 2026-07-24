@@ -7,15 +7,13 @@ import { FileUp, Loader2Icon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Lifetimes } from "@/data-service/mutations";
-import {
-  MAX_FILE_SIZE_MB,
-  ALLOWED_EXTENSIONS,
-  MAX_FILE_SIZE_IN_BYTES,
-} from "@/lib/constants";
+import { ALLOWED_EXTENSIONS, MAX_FILE_SIZE_IN_BYTES } from "@/lib/constants";
 import { InputGroup } from "./input-group";
+import { UploadProgress } from "./upload-progress";
 
 interface UploadModalProps {
   isUploading: boolean;
+  uploadProgress: number;
   onClose: () => void;
   onUpload: (data: {
     file: File;
@@ -35,6 +33,7 @@ export default function UploadModal({
   onClose,
   onUpload,
   isUploading,
+  uploadProgress,
 }: UploadModalProps) {
   const [name, setName] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -54,7 +53,7 @@ export default function UploadModal({
     }
 
     if (selectedFile.size > MAX_FILE_SIZE_IN_BYTES) {
-      return toast.error(`File size exceeds ${MAX_FILE_SIZE_MB}MB limit`);
+      return toast.error(`File size exceeds 150GB limit`);
     }
 
     setFile(selectedFile);
@@ -234,6 +233,10 @@ export default function UploadModal({
               ))}
             </div>
           </InputGroup>
+
+          {isUploading && uploadProgress > 0 && (
+            <UploadProgress uploadProgress={uploadProgress} />
+          )}
 
           <div className="flex gap-3 pt-4 items-center">
             <Button

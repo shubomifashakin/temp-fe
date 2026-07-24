@@ -5,7 +5,7 @@ import {
   LockIcon,
   ClockIcon,
   GlobeIcon,
-  FolderIcon,
+  RefreshCwIcon,
   ChartBarIcon,
 } from "lucide-react";
 
@@ -85,7 +85,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Feature
               title="Virus Scanning"
-              description="Every file is automatically scanned for viruses and malware before sharing."
+              description="Files below 500MB are automatically scanned for viruses and malware before sharing."
               icon={<LockIcon className="text-foreground" strokeWidth={1.5} />}
             />
 
@@ -110,10 +110,10 @@ export default function Home() {
             />
 
             <Feature
-              title="All File Types"
-              description="Support for MP4, PDF, DOCX, PNG, GIF, and all other popular formats."
+              title="Resumable Uploads"
+              description="Interrupted uploads can be resumed within 24 hours, no data lost."
               icon={
-                <FolderIcon className="text-foreground" strokeWidth={1.5} />
+                <RefreshCwIcon className="text-foreground" strokeWidth={1.5} />
               }
             />
 
@@ -157,7 +157,7 @@ export default function Home() {
               </div>
 
               <ul className="space-y-3 flex-1 mb-8">
-                <PricingItem text="Max file size of 25MB" />
+                <PricingItem text="Up to 500mb" />
                 <PricingItem text="7 day retention" />
                 <PricingItem text="1 link per file" />
                 <PricingItem text="Virus scanning" />
@@ -185,7 +185,7 @@ export default function Home() {
                 </h3>
 
                 <div className="flex items-baseline gap-1 mb-4">
-                  <span className="text-3xl text-heading font-bold">$2.99</span>
+                  <span className="text-3xl text-heading font-bold">$3.99</span>
 
                   <span className="text-sm text-leading">/month</span>
                 </div>
@@ -197,7 +197,7 @@ export default function Home() {
                 <PricingItem text="Everything in free plan" />
                 <PricingItem text="14 & 31 day retention" />
                 <PricingItem text="Unlimited links per file" />
-                <PricingItem text="Max file size of 150MB" />
+                <PricingItem text="Up to 150GB" />
                 <PricingItem text="All new features" />
               </ul>
 

@@ -9,6 +9,7 @@ import {
   FileText,
   CircleDashed,
   OctagonAlert,
+  ShieldQuestion,
   MousePointerClick,
 } from "lucide-react";
 import { Card } from "./ui/card";
@@ -71,11 +72,15 @@ export default function FilesList({ files, onFileSelect }: FilesListProps) {
                   className={`px-2 py-1 rounded-sm text-xs font-medium tracking-tight ${
                     file.status === "pending"
                       ? "bg-yellow-500/20 text-yellow-400"
-                      : "bg-destructive/20 text-destructive"
+                      : file.status === "unscanned"
+                        ? "bg-secondary/60 text-muted-foreground"
+                        : "bg-destructive/20 text-destructive"
                   }`}
                 >
                   {file.status === "pending" ? (
                     <CircleDashed className="animate-spin" size={16} />
+                  ) : file.status === "unscanned" ? (
+                    <ShieldQuestion size={16} />
                   ) : (
                     <OctagonAlert size={16} />
                   )}

@@ -12,7 +12,13 @@ export async function proxy(request: NextRequest) {
   const accessToken = request.cookies.get("access_token");
 
   const alg = "RS256";
-  const publicKey = await jose.importSPKI(spki, alg);
+  let publicKey: jose.CryptoKey;
+  try {
+    publicKey = await jose.importSPKI(spki, alg);
+  } catch (err) {
+    console.error("Failed to import JWT public key:", err);
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 
   const { payload } = await jose
     .jwtVerify(accessToken?.value || "", publicKey)
