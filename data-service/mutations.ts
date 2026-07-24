@@ -295,6 +295,7 @@ interface MultipartUploadState {
   fileId: string;
   uploadId: string;
   key: string;
+  lastModified: number;
   completedParts: { partNumber: number; etag: string }[];
 }
 
@@ -311,7 +312,18 @@ function saveMultipartState(file: File, state: MultipartUploadState): void {
 function loadMultipartState(file: File): MultipartUploadState | null {
   try {
     const raw = localStorage.getItem(multipartStateKey(file));
-    return raw ? (JSON.parse(raw) as MultipartUploadState) : null;
+
+    if (!raw) return null;
+
+    const state = JSON.parse(raw) as MultipartUploadState;
+
+    if (state.lastModified !== file.lastModified) {
+      clearMultipartState(file);
+
+      return null;
+    }
+
+    return state;
   } catch {
     return null;
   }
@@ -428,6 +440,7 @@ export async function uploadFile({
       fileId: data.fileId,
       uploadId: data.uploadId,
       key: data.key,
+      lastModified: file.lastModified,
       completedParts: [],
     };
 
