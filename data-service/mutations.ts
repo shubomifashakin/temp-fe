@@ -1,7 +1,11 @@
 import hash from "object-hash";
 
 import { PART_SIZE_BYTES } from "@/lib/constants";
-import { fetchWithRetry, fetchWithAuth } from "@/lib/utils";
+import {
+  fetchWithRetry,
+  fetchWithAuth,
+  fetchWithAuthAndRetry,
+} from "@/lib/utils";
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL!;
 
@@ -419,15 +423,16 @@ async function uploadFileMultipart(
     const end = Math.min(start + PART_SIZE_BYTES, file.size);
     const chunk = file.slice(start, end);
 
-    const signRes = await fetchWithRetry(
-      `${backendUrl}/files/${fileId}/parts`,
-      {
-        method: "POST",
-        body: JSON.stringify({ partNumber }),
-        signal,
-      },
-      2,
-      1000,
+    const signRes = await fetchWithAuthAndRetry(
+      () =>
+        fetch(`${backendUrl}/files/${fileId}/parts`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ partNumber }),
+          credentials: "include",
+          signal,
+        }),
+      { maxRetries: 2, delay: 1000, signal },
     );
 
     if (!signRes.ok) throw await handleRequestError(signRes);
