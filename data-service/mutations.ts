@@ -344,6 +344,7 @@ async function uploadFileMultipart(
   file: File,
   state: MultipartUploadState,
   onProgress?: (pct: number) => void,
+  signal?: AbortSignal,
 ) {
   const { fileId, completedParts: resumedParts } = state;
   const totalParts = Math.ceil(file.size / PART_SIZE_BYTES);
@@ -362,15 +363,20 @@ async function uploadFileMultipart(
     const end = Math.min(start + PART_SIZE_BYTES, file.size);
     const chunk = file.slice(start, end);
 
-    const signRes = await fetchWithAuth(`${backendUrl}/files/${fileId}/parts`, {
-      method: "POST",
-      body: JSON.stringify({ partNumber }),
-    });
+    const signRes = await fetchWithAuth(
+      `${backendUrl}/files/${fileId}/parts`,
+      { method: "POST", body: JSON.stringify({ partNumber }), signal },
+    );
 
     if (!signRes.ok) throw await handleRequestError(signRes);
     const { url } = (await signRes.json()) as { url: string };
 
-    const uploadRes = await fetch(url, { method: "PUT", body: chunk });
+    const uploadRes = await fetch(url, {
+      method: "PUT",
+      body: chunk,
+      signal,
+    });
+
     if (!uploadRes.ok) {
       throw new Error("Failed to upload part", { cause: 500 });
     }
@@ -408,24 +414,26 @@ export async function uploadFile({
   lifetime,
   description,
   onProgress,
+  signal,
 }: {
   file: File;
   name: string;
   lifetime: Lifetimes;
   description: string;
   onProgress?: (pct: number) => void;
+  signal?: AbortSignal;
 }) {
-  // get the state it stopped at if it got cancelledd
   const savedState = loadMultipartState(file);
 
   if (savedState) {
-    await uploadFileMultipart(file, savedState, onProgress);
+    await uploadFileMultipart(file, savedState, onProgress, signal);
 
     return { message: "Success" };
   }
 
   const response = await fetchWithAuth(`${backendUrl}/files`, {
     method: "POST",
+    signal,
     body: JSON.stringify({
       name,
       lifetime,
@@ -456,7 +464,7 @@ export async function uploadFile({
 
     saveMultipartState(file, state);
 
-    await uploadFileMultipart(file, state, onProgress);
+    await uploadFileMultipart(file, state, onProgress, signal);
   }
 
   return { message: "Success" };
