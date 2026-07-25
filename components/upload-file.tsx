@@ -234,9 +234,7 @@ export default function UploadModal({
             </div>
           </InputGroup>
 
-          {isUploading && uploadProgress > 0 && (
-            <UploadProgress uploadProgress={uploadProgress} />
-          )}
+          {isUploading && <UploadProgress uploadProgress={uploadProgress} />}
 
           <div className="flex gap-3 pt-4 items-center">
             <Button
