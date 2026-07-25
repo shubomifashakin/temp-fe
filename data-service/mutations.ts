@@ -1,3 +1,5 @@
+import hash from "object-hash";
+
 import { PART_SIZE_BYTES } from "@/lib/constants";
 import { fetchWithRetry, fetchWithAuth } from "@/lib/utils";
 
@@ -295,35 +297,49 @@ interface MultipartUploadState {
   fileId: string;
   uploadId: string;
   key: string;
-  lastModified: number;
   savedAt: number;
   completedParts: { partNumber: number; etag: string }[];
 }
 
-function multipartStateKey(file: File): string {
-  return `multipart:${file.name}:${file.size}`;
+function multipartStateKey(
+  name: string,
+  description: string,
+  file: File,
+): string {
+  return `multipart:${hash({ name, description, fileName: file.name, fileSize: file.size, lastModified: file.lastModified })}`;
 }
 
-function saveMultipartState(file: File, state: MultipartUploadState): void {
+function saveMultipartState(
+  name: string,
+  description: string,
+  file: File,
+  state: MultipartUploadState,
+): void {
   try {
-    localStorage.setItem(multipartStateKey(file), JSON.stringify(state));
+    localStorage.setItem(
+      multipartStateKey(name, description, file),
+      JSON.stringify(state),
+    );
   } catch {}
 }
 
-function loadMultipartState(file: File): MultipartUploadState | null {
+function loadMultipartState(
+  name: string,
+  description: string,
+  file: File,
+): MultipartUploadState | null {
   try {
-    const raw = localStorage.getItem(multipartStateKey(file));
+    const raw = localStorage.getItem(
+      multipartStateKey(name, description, file),
+    );
 
     if (!raw) return null;
 
     const state = JSON.parse(raw) as MultipartUploadState;
 
     const HOURS_24 = 24 * 60 * 60 * 1000;
-    if (
-      state.lastModified !== file.lastModified ||
-      Date.now() - state.savedAt > HOURS_24
-    ) {
-      clearMultipartState(file);
+    if (Date.now() - state.savedAt > HOURS_24) {
+      clearMultipartState(name, description, file);
 
       return null;
     }
@@ -334,13 +350,19 @@ function loadMultipartState(file: File): MultipartUploadState | null {
   }
 }
 
-function clearMultipartState(file: File): void {
+function clearMultipartState(
+  name: string,
+  description: string,
+  file: File,
+): void {
   try {
-    localStorage.removeItem(multipartStateKey(file));
+    localStorage.removeItem(multipartStateKey(name, description, file));
   } catch {}
 }
 
 async function uploadFileMultipart(
+  name: string,
+  description: string,
   file: File,
   state: MultipartUploadState,
   onProgress?: (pct: number) => void,
@@ -363,10 +385,11 @@ async function uploadFileMultipart(
     const end = Math.min(start + PART_SIZE_BYTES, file.size);
     const chunk = file.slice(start, end);
 
-    const signRes = await fetchWithAuth(
-      `${backendUrl}/files/${fileId}/parts`,
-      { method: "POST", body: JSON.stringify({ partNumber }), signal },
-    );
+    const signRes = await fetchWithAuth(`${backendUrl}/files/${fileId}/parts`, {
+      method: "POST",
+      body: JSON.stringify({ partNumber }),
+      signal,
+    });
 
     if (!signRes.ok) throw await handleRequestError(signRes);
     const { url } = (await signRes.json()) as { url: string };
@@ -387,7 +410,7 @@ async function uploadFileMultipart(
     }
 
     parts.push({ partNumber, etag });
-    saveMultipartState(file, {
+    saveMultipartState(name, description, file, {
       ...state,
       completedParts: parts,
       savedAt: Date.now(),
@@ -405,7 +428,7 @@ async function uploadFileMultipart(
 
   if (!completeRes.ok) throw await handleRequestError(completeRes);
 
-  clearMultipartState(file);
+  clearMultipartState(name, description, file);
 }
 
 export async function uploadFile({
@@ -423,10 +446,17 @@ export async function uploadFile({
   onProgress?: (pct: number) => void;
   signal?: AbortSignal;
 }) {
-  const savedState = loadMultipartState(file);
+  const savedState = loadMultipartState(name, description, file);
 
   if (savedState) {
-    await uploadFileMultipart(file, savedState, onProgress, signal);
+    await uploadFileMultipart(
+      name,
+      description,
+      file,
+      savedState,
+      onProgress,
+      signal,
+    );
 
     return { message: "Success" };
   }
@@ -457,14 +487,20 @@ export async function uploadFile({
       fileId: data.fileId,
       uploadId: data.uploadId,
       key: data.key,
-      lastModified: file.lastModified,
       savedAt: Date.now(),
       completedParts: [],
     };
 
-    saveMultipartState(file, state);
+    saveMultipartState(name, description, file, state);
 
-    await uploadFileMultipart(file, state, onProgress, signal);
+    await uploadFileMultipart(
+      name,
+      description,
+      file,
+      state,
+      onProgress,
+      signal,
+    );
   }
 
   return { message: "Success" };
