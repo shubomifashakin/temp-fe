@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";
@@ -28,6 +28,7 @@ export default function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [selectedFile, setSelectedFile] = useState<FileDetails | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const {
     data,
@@ -63,6 +64,9 @@ export default function Page() {
 
     onError: (error) => {
       setUploadProgress(0);
+
+      if (error.name === "AbortError") return;
+
       toast.error(error.message);
 
       if (error.cause === 401) {
@@ -82,13 +86,21 @@ export default function Page() {
     lifetime: Lifetimes;
     description: string;
   }) {
+    abortControllerRef.current = new AbortController();
+
     mutate({
       file,
       name,
       lifetime,
       description,
       onProgress: setUploadProgress,
+      signal: abortControllerRef.current.signal,
     });
+  }
+
+  function handleCancelUpload() {
+    abortControllerRef.current?.abort();
+    setUploadProgress(0);
   }
 
   function handleFileSelect(file: FileDetails) {
@@ -183,6 +195,7 @@ export default function Page() {
       {isModalOpen && (
         <UploadModal
           onUpload={handleUpload}
+          onCancel={handleCancelUpload}
           isUploading={isUploading}
           uploadProgress={uploadProgress}
           onClose={() => setIsModalOpen(false)}
