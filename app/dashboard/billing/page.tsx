@@ -175,7 +175,7 @@ function SubscriptionInfo({ data }: { data: SubscriptionInfo | null }) {
                 onClick={() => setIsCanceling(false)}
                 className="cursor-pointer hover:bg-secondary/80 text-foreground font-medium"
               >
-                Cancel
+                Keep Subscription
               </Button>
 
               <Button
@@ -184,7 +184,7 @@ function SubscriptionInfo({ data }: { data: SubscriptionInfo | null }) {
                 className="cursor-pointer font-medium"
                 onClick={() => mutate()}
               >
-                {isPending ? "Canceling..." : "Cancel"}
+                {isPending ? "Canceling..." : "Confirm Cancellation"}
               </Button>
             </div>
           </div>
