@@ -101,6 +101,65 @@ export async function fetchWithRetry(
   throw lastError;
 }
 
+export async function fetchWithAuthAndRetry(
+  action: () => Promise<Response>,
+  {
+    maxRetries = 2,
+    delay = 1000,
+    signal,
+  }: { maxRetries?: number; delay?: number; signal?: AbortSignal } = {},
+): Promise<Response> {
+  let lastError: Error = new Error("Unknown error");
+  let didRefresh = false;
+  let attempt = 0;
+
+  while (attempt <= maxRetries) {
+    try {
+      const response = await action();
+
+      if (response.ok) {
+        return response;
+      }
+
+      // if it was a 401 and we haven't tried to refresh yet, try to refresh
+      if (response.status === 401 && !didRefresh) {
+        didRefresh = true;
+
+        const refreshRes = await fetch(`${backendUrl}/auth/refresh`, {
+          method: "POST",
+          credentials: "include",
+        });
+
+        // if refresh was successul, continue witht he request without increasing attempts
+        if (refreshRes.ok) continue;
+      }
+
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`, {
+        cause: response.status,
+      });
+    } catch (error) {
+      const err = error as Error;
+
+      // if the user aborted, just stop iimmediatly
+      if (signal?.aborted || err.name === "AbortError") {
+        throw err;
+      }
+
+      lastError = err;
+      attempt++;
+
+      if (attempt <= maxRetries) {
+        const backoffDelay =
+          delay * Math.pow(2, attempt - 1) + Math.random() * 1000;
+
+        await new Promise((resolve) => setTimeout(resolve, backoffDelay));
+      }
+    }
+  }
+
+  throw lastError;
+}
+
 export function formatDate(
   date: string | Date,
   options?: Intl.DateTimeFormatOptions,
