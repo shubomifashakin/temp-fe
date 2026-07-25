@@ -15,6 +15,7 @@ interface UploadModalProps {
   isUploading: boolean;
   uploadProgress: number;
   onClose: () => void;
+  onCancel: () => void;
   onUpload: (data: {
     file: File;
     name: string;
@@ -31,6 +32,7 @@ const lifetimes: { value: Lifetimes; label: string }[] = [
 
 export default function UploadModal({
   onClose,
+  onCancel,
   onUpload,
   isUploading,
   uploadProgress,
@@ -239,8 +241,7 @@ export default function UploadModal({
           <div className="flex gap-3 pt-4 items-center">
             <Button
               variant={"secondary"}
-              onClick={handleClose}
-              disabled={isUploading}
+              onClick={isUploading ? onCancel : handleClose}
               className="flex-1 hover:bg-secondary/80 text-foreground font-medium text-sm tracking-tight"
             >
               Cancel
