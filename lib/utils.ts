@@ -82,7 +82,13 @@ export async function fetchWithRetry(
         cause: response.status,
       });
     } catch (error) {
-      lastError = error as Error;
+      const err = error as Error;
+
+      if (options.signal?.aborted || err.name === "AbortError") {
+        throw err;
+      }
+
+      lastError = err;
 
       if (attempt < maxRetries) {
         const backoffDelay =

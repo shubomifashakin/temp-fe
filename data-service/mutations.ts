@@ -360,6 +360,10 @@ function clearMultipartState(
   } catch {}
 }
 
+const MAX_CONCURRENT_PARTS = 4;
+const SAVE_EVERY_N_PARTS = 5;
+const SAVE_INTERVAL_MS = 3000;
+
 async function uploadFileMultipart(
   name: string,
   description: string,
@@ -370,35 +374,72 @@ async function uploadFileMultipart(
 ) {
   const { fileId, completedParts: resumedParts } = state;
   const totalParts = Math.ceil(file.size / PART_SIZE_BYTES);
-  const parts: { partNumber: number; etag: string }[] = [...resumedParts];
   const completedPartNumbers = new Set(resumedParts.map((p) => p.partNumber));
+  const parts: { partNumber: number; etag: string }[] = [...resumedParts];
 
-  if (resumedParts.length > 0) {
-    onProgress?.(Math.round((resumedParts.length / totalParts) * 100));
+  let completedCount = resumedParts.length;
+  let lastSaveTime = Date.now();
+  let partsSinceLastSave = 0;
+
+  if (completedCount > 0) {
+    onProgress?.(Math.round((completedCount / totalParts) * 100));
   }
+
+  const pendingPartNumbers: number[] = [];
 
   for (let i = 0; i < totalParts; i++) {
     const partNumber = i + 1;
-    if (completedPartNumbers.has(partNumber)) continue;
 
-    const start = i * PART_SIZE_BYTES;
+    if (!completedPartNumbers.has(partNumber)) {
+      pendingPartNumbers.push(partNumber);
+    }
+  }
+
+  function maybeSaveState(force = false) {
+    partsSinceLastSave++;
+    const timeElapsed = Date.now() - lastSaveTime;
+    if (
+      force ||
+      partsSinceLastSave >= SAVE_EVERY_N_PARTS ||
+      timeElapsed >= SAVE_INTERVAL_MS
+    ) {
+      saveMultipartState(name, description, file, {
+        ...state,
+        completedParts: parts,
+        savedAt: Date.now(),
+      });
+
+      lastSaveTime = Date.now();
+      partsSinceLastSave = 0;
+    }
+  }
+
+  async function uploadOnePart(partNumber: number): Promise<void> {
+    const start = (partNumber - 1) * PART_SIZE_BYTES;
     const end = Math.min(start + PART_SIZE_BYTES, file.size);
     const chunk = file.slice(start, end);
 
-    const signRes = await fetchWithAuth(`${backendUrl}/files/${fileId}/parts`, {
-      method: "POST",
-      body: JSON.stringify({ partNumber }),
-      signal,
-    });
+    const signRes = await fetchWithRetry(
+      `${backendUrl}/files/${fileId}/parts`,
+      {
+        method: "POST",
+        body: JSON.stringify({ partNumber }),
+        signal,
+      },
+      2,
+      1000,
+    );
 
     if (!signRes.ok) throw await handleRequestError(signRes);
+
     const { url } = (await signRes.json()) as { url: string };
 
-    const uploadRes = await fetch(url, {
-      method: "PUT",
-      body: chunk,
-      signal,
-    });
+    const uploadRes = await fetchWithRetry(
+      url,
+      { method: "PUT", body: chunk, signal },
+      2,
+      1000,
+    );
 
     if (!uploadRes.ok) {
       throw new Error("Failed to upload part", { cause: 500 });
@@ -410,19 +451,31 @@ async function uploadFileMultipart(
     }
 
     parts.push({ partNumber, etag });
-    saveMultipartState(name, description, file, {
-      ...state,
-      completedParts: parts,
-      savedAt: Date.now(),
-    });
-    onProgress?.(Math.round((partNumber / totalParts) * 100));
+    completedCount++;
+    maybeSaveState();
+    onProgress?.(Math.round((completedCount / totalParts) * 100));
   }
+
+  let cursor = 0;
+  async function worker(): Promise<void> {
+    while (cursor < pendingPartNumbers.length) {
+      const myIndex = cursor++;
+      await uploadOnePart(pendingPartNumbers[myIndex]);
+    }
+  }
+
+  const workerCount = Math.min(MAX_CONCURRENT_PARTS, pendingPartNumbers.length);
+  await Promise.all(Array.from({ length: workerCount }, () => worker()));
+
+  maybeSaveState(true);
 
   const completeRes = await fetchWithAuth(
     `${backendUrl}/files/${fileId}/complete`,
     {
       method: "POST",
-      body: JSON.stringify({ parts }),
+      body: JSON.stringify({
+        parts: parts.sort((a, b) => a.partNumber - b.partNumber),
+      }),
     },
   );
 
