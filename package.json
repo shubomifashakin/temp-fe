@@ -9,8 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.101.2",
-    "@tanstack/react-query-devtools": "^5.101.2",
+    "@tanstack/react-query": "^5.101.4",
+    "@tanstack/react-query-devtools": "^5.101.4",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "class-variance-authority": "^0.7.1",
@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@tanstack/eslint-plugin-query": "^5.101.2",
+    "@tanstack/eslint-plugin-query": "^5.101.4",
     "@types/node": "^20",
     "@types/object-hash": "^3.0.6",
     "@types/react": "19.2.17",
