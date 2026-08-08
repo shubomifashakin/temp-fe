@@ -1,4 +1,4 @@
-const LAST_UPDATED_AT = "February 19, 2025";
+const LAST_UPDATED_AT = "August 8, 2026";
 
 export default function Page() {
   return (
@@ -146,13 +146,18 @@ export default function Page() {
               7. Virus Scanning
             </h2>
             <p className="text-foreground font-light text-sm leading-relaxed">
-              All uploaded files are scanned for viruses and malware. Files
-              flagged as unsafe cannot be shared. However, we do not guarantee
-              that all threats will be detected. Users are responsible for
-              ensuring uploaded content is safe. If content uploaded by you
-              causes damage to our systems or other users, you may be held
-              liable. If you suspect that a file shared to you is malicious,
-              please report it immediately to{" "}
+              Files under 500 MB are automatically scanned for viruses and
+              malware upon upload. Files that exceed this size limit are not
+              scanned and are accepted as-is. Files flagged as unsafe by our
+              scanner cannot be shared and will be made inaccessible. However,
+              we do not guarantee that all threats within scanned files will be
+              detected, and we make no representations regarding the safety of
+              files that fall outside the scanning threshold. Users are
+              responsible for ensuring that all content they upload is safe,
+              regardless of file size. If content uploaded by you causes damage
+              to our systems or other users, you may be held liable. If you
+              suspect that a file shared with you is malicious, please report it
+              immediately to{" "}
               <a
                 href="mailto:apps@545plea.xyz"
                 className="text-sm font-light border-b border-orange-500 transition-colors duration-150 border-dashed text-orange-500"
@@ -208,9 +213,9 @@ export default function Page() {
             </h2>
             <p className="text-foreground font-light text-sm leading-relaxed">
               We may update these Terms at any time. If we make material
-              changes, we will notify you via email or through the Service. Your
-              continued use of the Services after such updates constitutes your
-              acceptance of the revised Terms.
+              changes, we may notify you. Your continued use of the Services
+              after such updates constitutes your acceptance of the revised
+              Terms.
             </p>
           </div>
 
@@ -220,8 +225,9 @@ export default function Page() {
             </h2>
             <p className="text-foreground font-light text-sm leading-relaxed">
               These Terms shall be governed by and construed in accordance with
-              the laws of your jurisdiction, without regard to conflict of law
-              provisions.
+              applicable laws. Any disputes arising out of or relating to these
+              Terms or the Service shall be resolved through good-faith
+              negotiation between the parties.
             </p>
           </div>
 

@@ -1,4 +1,4 @@
-const LAST_UPDATED_AT = "February 19, 2025";
+const LAST_UPDATED_AT = "August 8, 2026";
 
 export default function Page() {
   return (
@@ -92,11 +92,10 @@ export default function Page() {
             </h2>
 
             <p className="text-foreground font-light text-sm leading-relaxed">
-              All files uploaded to Temp are automatically scanned for viruses
-              and malware. We may analyze file contents to ensure compliance
-              with our Terms of Service. Your files are encrypted during
-              transmission and storage, but we cannot guarantee absolute
-              security.
+              Files under 500 MB uploaded to Temp are automatically scanned for
+              viruses and malware. Files exceeding this size are not scanned.
+              Your files are encrypted during transmission and storage, but we
+              cannot guarantee absolute security.
             </p>
           </div>
 
@@ -215,9 +214,9 @@ export default function Page() {
 
             <p className="text-foreground font-light text-sm leading-relaxed">
               We may update this Privacy Policy to reflect changes in our
-              practices or legal requirements. We will notify you of material
-              changes via email or by posting the updated policy on our website.
-              Your continued use constitutes acceptance of the updated policy.
+              practices or legal requirements. Material changes will be posted
+              on our website. Your continued use of the Service after such
+              changes constitutes acceptance of the updated policy.
             </p>
           </div>
 
